@@ -1,0 +1,52 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <p>© {new Date().getFullYear()} Siren Song. Curated with care, built for community.</p>
+    <nav aria-label="Footer navigation">
+      <a href="/">Home</a>
+      <a href="/guides">Gift Guides</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border-soft);
+    margin-top: var(--space-12);
+    padding: var(--space-8) 0;
+  }
+
+  .footer-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  nav {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  nav a {
+    text-decoration: none;
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+
+  nav a:hover {
+    color: var(--color-text-strong);
+  }
+
+  @media (min-width: 48rem) {
+    .footer-grid {
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>

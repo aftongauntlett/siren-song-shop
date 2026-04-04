@@ -1,0 +1,49 @@
+<button type="button" class="theme-toggle" aria-label="Toggle color theme" data-theme-toggle>
+  <span aria-hidden="true" data-theme-label>Dark mode</span>
+</button>
+
+<script>
+  const storageKey = 'siren-song-theme';
+  const root = document.documentElement;
+  const toggle = document.querySelector('[data-theme-toggle]');
+  const label = document.querySelector('[data-theme-label]');
+
+  const getSystemTheme = () => (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+  const applyTheme = (theme: 'light' | 'dark') => {
+    root.dataset.theme = theme;
+    if (label) {
+      label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    }
+  };
+
+  const savedTheme = localStorage.getItem(storageKey);
+  applyTheme(savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : getSystemTheme());
+
+  toggle?.addEventListener('click', () => {
+    const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(storageKey, nextTheme);
+    applyTheme(nextTheme);
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-radius: var(--radius-pill);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+
+  .theme-toggle:hover {
+    background: var(--color-surface-strong);
+    border-color: var(--color-accent-soft);
+    transform: translateY(-1px);
+  }
+</style>

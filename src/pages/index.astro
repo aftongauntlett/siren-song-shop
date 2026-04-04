@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import AccordionItem from '../components/AccordionItem.astro';
+import { Palette, Users, Layers } from 'lucide-astro';
+
+const previewCards = [
+  {
+    eyebrow: 'Artists',
+    title: 'Handmade, Story-Rich Picks',
+    description: 'A growing set of recommendations rooted in craft, provenance, and genuine relationships.',
+    href: '/guides',
+    cta: 'Preview the tone'
+  },
+  {
+    eyebrow: 'Community',
+    title: 'People Doing Good Work',
+    description: 'Highlighting independent shops and values-led communities with an editorial voice you can trust.',
+    href: '/guides',
+    cta: 'See examples'
+  },
+  {
+    eyebrow: 'Design System',
+    title: 'Reusable UI, Ready to Grow',
+    description: 'Components are token-based so visual updates flow instantly from a single theme file.',
+    href: '/guides',
+    cta: 'See tokens in action'
+  }
+] as const;
+
+const accordionItems = [
+  {
+    title: 'Are these recommendations paid or sponsored?',
+    body: 'Never. Every pick is something we genuinely use, love, or would confidently give as a gift. No affiliate pressure, no sponsored placements — just honest taste.'
+  },
+  {
+    title: 'How do you choose what makes the cut?',
+    body: 'We look for things with a real story behind them — independent makers, considered craft, and products that hold up over time. If we wouldn\'t recommend it to a close friend, it doesn\'t appear here.'
+  },
+  {
+    title: 'How often is new content added?',
+    body: 'Slowly and intentionally. We\'d rather have a shorter list of things we truly believe in than a long one padded with noise. New guides and picks are added when they\'ve earned their place.'
+  }
+] as const;
+---
+
+<BaseLayout title="Siren Song | Curated Recommendations">
+  <SiteNav />
+  <SiteHeader />
+  <main id="main-content" class="container">
+    <section aria-labelledby="component-preview-heading" class="component-preview">
+      <h2 id="component-preview-heading" class="section-heading" data-reveal>Component Preview</h2>
+      <p class="section-copy" data-reveal data-reveal-delay="1">A quick system check for cards, buttons, spacing, and color behavior across themes.</p>
+      <div class="grid">
+        <div data-reveal data-reveal-delay="1" class="card-cell">
+          <FeatureCard {...previewCards[0]}>
+            <Palette slot="icon" size={20} />
+          </FeatureCard>
+        </div>
+        <div data-reveal data-reveal-delay="2" class="card-cell">
+          <FeatureCard {...previewCards[1]}>
+            <Users slot="icon" size={20} />
+          </FeatureCard>
+        </div>
+        <div data-reveal data-reveal-delay="3" class="card-cell">
+          <FeatureCard {...previewCards[2]}>
+            <Layers slot="icon" size={20} />
+          </FeatureCard>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="faq-heading" class="faq">
+      <h2 id="faq-heading" class="section-heading" data-reveal>Quick FAQ</h2>
+      <div class="faq-list">
+        {accordionItems.map((item, i) => (
+          <div data-reveal data-reveal-delay={String(i + 1) as '1' | '2' | '3'}>
+            <AccordionItem title={item.title} body={item.body} />
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .component-preview,
+  .faq {
+    margin-top: var(--space-12);
+  }
+
+  .component-preview {
+    margin-top: var(--space-10);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+    align-items: stretch;
+  }
+
+  .card-cell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  @media (min-width: 48rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
+

@@ -1,0 +1,92 @@
+---
+import ButtonLink from './ButtonLink.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  href: string;
+  cta: string;
+}
+
+const { eyebrow, title, description, href, cta } = Astro.props;
+---
+
+<article class="feature-card">
+  <div class="card-icon-wrap" aria-hidden="true">
+    <slot name="icon" />
+  </div>
+  <p class="eyebrow">{eyebrow}</p>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <ButtonLink href={href} variant="ghost">{cta}</ButtonLink>
+</article>
+
+<style>
+  .feature-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    height: 100%;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-soft);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-6) var(--space-5);
+    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease;
+  }
+
+  .feature-card:hover {
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-border);
+    transform: translateY(-2px);
+  }
+
+  .card-icon-wrap {
+    display: flex;
+    width: 2.5rem;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--color-accent-soft) 60%, transparent);
+    color: var(--color-accent);
+    transition: color 200ms ease;
+  }
+
+  .feature-card:hover .card-icon-wrap {
+    color: var(--color-accent-teal);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .feature-card:hover .card-icon-wrap > :global(svg) {
+      animation: wiggle 420ms ease;
+    }
+  }
+
+  .eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent-teal);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.35rem;
+    line-height: 1.25;
+  }
+
+  p:not(.eyebrow) {
+    color: var(--color-text-muted);
+    flex: 1;
+  }
+</style>

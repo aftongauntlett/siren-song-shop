@@ -1,0 +1,128 @@
+---
+interface Props {
+  title: string;
+  body: string;
+}
+
+const { title, body } = Astro.props;
+---
+
+<details class="accordion-item">
+  <summary>
+    <span>{title}</span>
+    <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </summary>
+  <div class="accordion-body">
+    <p>{body}</p>
+  </div>
+</details>
+
+<style>
+  .accordion-item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    cursor: pointer;
+    list-style: none;
+    font-weight: 500;
+    color: var(--color-text-strong);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .chevron {
+      transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  details.is-open .chevron {
+    transform: rotate(180deg);
+  }
+
+  .accordion-body {
+    overflow: hidden;
+  }
+
+  p {
+    margin: 0;
+    padding: 0 var(--space-4) var(--space-4);
+    color: var(--color-text-muted);
+  }
+</style>
+
+<script>
+  function initAccordions() {
+    document.querySelectorAll<HTMLDetailsElement>('details.accordion-item').forEach((details) => {
+      if (details.dataset.jsInit) return;
+      details.dataset.jsInit = 'true';
+
+      const summary = details.querySelector('summary');
+      const body = details.querySelector<HTMLElement>('.accordion-body');
+      if (!summary || !body) return;
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      summary.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (!details.open) {
+          // Open: set open + class immediately so chevron starts rotating right away
+          details.open = true;
+          details.classList.add('is-open');
+          body.style.height = '0px';
+          body.style.overflow = 'hidden';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              body.style.transition = 'height 400ms cubic-bezier(0.22, 1, 0.36, 1)';
+              body.style.height = body.scrollHeight + 'px';
+              body.addEventListener('transitionend', () => {
+                body.style.height = '';
+                body.style.overflow = '';
+                body.style.transition = '';
+              }, { once: true });
+            });
+          });
+        } else {
+          // Close: remove class immediately so chevron rotates back in sync with body
+          details.classList.remove('is-open');
+          body.style.height = body.scrollHeight + 'px';
+          body.style.overflow = 'hidden';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              body.style.transition = 'height 320ms cubic-bezier(0.22, 1, 0.36, 1)';
+              body.style.height = '0px';
+              body.addEventListener('transitionend', () => {
+                details.open = false;
+                body.style.height = '';
+                body.style.overflow = '';
+                body.style.transition = '';
+              }, { once: true });
+            });
+          });
+        }
+      });
+    });
+  }
+
+  initAccordions();
+</script>

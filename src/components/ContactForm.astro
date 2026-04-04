@@ -1,0 +1,68 @@
+<section aria-labelledby="contact-heading" class="contact">
+  <h2 id="contact-heading">Suggest a find</h2>
+  <p>Know a hidden gem? Send a note and we'll review it personally.</p>
+  <form action="/api/contact" method="post">
+    <label>
+      Name
+      <input id="name" name="name" required autocomplete="name" />
+    </label>
+
+    <label>
+      Email
+      <input id="email" type="email" name="email" required autocomplete="email" />
+    </label>
+
+    <label>
+      Message
+      <textarea id="message" name="message" rows="5" required></textarea>
+    </label>
+
+    <button type="submit">Send note</button>
+  </form>
+</section>
+
+<style>
+  .contact {
+    margin-top: var(--space-12);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-muted);
+  }
+
+  form {
+    margin-top: var(--space-4);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  label {
+    font-weight: 600;
+  }
+
+  input,
+  textarea {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: #0b1220;
+    color: var(--color-text);
+    padding: var(--space-3);
+    font: inherit;
+  }
+
+  button {
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    color: #082f49;
+    font: inherit;
+    font-weight: 700;
+    padding: var(--space-3) var(--space-4);
+    width: fit-content;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: var(--color-accent-strong);
+  }
+</style>
