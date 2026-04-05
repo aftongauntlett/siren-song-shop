@@ -121,11 +121,20 @@ export default function WaterCanvas() {
 
     tick();
 
+    const isOverChrome = (e: MouseEvent) =>
+      !!(
+        e.target instanceof Element &&
+        (e.target.closest("nav") || e.target.closest("footer"))
+      );
+
     const onMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
+      if (isOverChrome(e)) {
+        mouseRef.current.active = false;
+        return;
+      }
       mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
+        x: e.clientX,
+        y: e.clientY,
         active: true,
       };
       // Deactivate after a short idle to avoid endless spawn
@@ -139,12 +148,11 @@ export default function WaterCanvas() {
     };
 
     const onTouchMove = (e: TouchEvent) => {
-      const rect = (canvas as HTMLCanvasElement).getBoundingClientRect();
       const touch = e.touches[0];
       if (!touch) return;
       mouseRef.current = {
-        x: touch.clientX - rect.left,
-        y: touch.clientY - rect.top,
+        x: touch.clientX,
+        y: touch.clientY,
         active: true,
       };
       setTimeout(() => {
@@ -152,14 +160,14 @@ export default function WaterCanvas() {
       }, 120);
     };
 
-    canvas.addEventListener("mousemove", onMouseMove);
-    canvas.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
       ro.disconnect();
-      canvas.removeEventListener("mousemove", onMouseMove);
-      canvas.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
     };
   }, []);
 
@@ -167,12 +175,13 @@ export default function WaterCanvas() {
     <canvas
       ref={canvasRef}
       style={{
-        position: "absolute",
+        position: "fixed",
         inset: 0,
         width: "100%",
         height: "100%",
         display: "block",
-        pointerEvents: "auto",
+        pointerEvents: "none",
+        zIndex: 0,
       }}
       aria-hidden="true"
     />

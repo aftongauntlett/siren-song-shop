@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<BaseLayout title="Recommendations | Siren Song Shop" description="Browse personally vetted recommendations — artists, makers, books, tea, spirits, and gifts.">
+  <SiteNav />
+  <main id="main-content" class="container">
+    <section class="page-hero" aria-labelledby="rec-heading">
+      <p class="kicker">The Collection</p>
+      <h1 id="rec-heading">Things genuinely worth sharing.</h1>
+      <p class="intro">
+        Every recommendation here has been personally vetted. Browse by category or scroll to
+        discover something new — no noise, no padding, no affiliate pressure.
+      </p>
+    </section>
+
+    <nav class="category-nav" aria-label="Browse by category">
+      <ul class="category-list">
+        <li><a href="#artists" class="category-chip">Artists &amp; Makers</a></li>
+        <li><a href="#books" class="category-chip">Books</a></li>
+        <li><a href="#tea" class="category-chip">Tea</a></li>
+        <li><a href="#spirits" class="category-chip">Spirits</a></li>
+        <li><a href="#gifts" class="category-chip">Gifts</a></li>
+        <li><a href="#shops" class="category-chip">Independent Shops</a></li>
+      </ul>
+    </nav>
+
+    <section id="artists" aria-labelledby="artists-heading" class="category-section" data-reveal>
+      <h2 id="artists-heading" class="section-heading">Artists &amp; Makers</h2>
+      <p class="section-copy empty-state">Recommendations coming soon — handpicked with care.</p>
+    </section>
+
+    <section id="books" aria-labelledby="books-heading" class="category-section" data-reveal>
+      <h2 id="books-heading" class="section-heading">Books</h2>
+      <p class="section-copy empty-state">Recommendations coming soon — handpicked with care.</p>
+    </section>
+
+    <section id="tea" aria-labelledby="tea-heading" class="category-section" data-reveal>
+      <h2 id="tea-heading" class="section-heading">Tea</h2>
+      <p class="section-copy empty-state">Recommendations coming soon — handpicked with care.</p>
+    </section>
+
+    <section id="spirits" aria-labelledby="spirits-heading" class="category-section" data-reveal>
+      <h2 id="spirits-heading" class="section-heading">Spirits</h2>
+      <p class="section-copy empty-state">Recommendations coming soon — handpicked with care.</p>
+    </section>
+
+    <section id="gifts" aria-labelledby="gifts-heading" class="category-section" data-reveal>
+      <h2 id="gifts-heading" class="section-heading">Gifts</h2>
+      <p class="section-copy empty-state">Recommendations coming soon — handpicked with care.</p>
+    </section>
+
+    <section id="shops" aria-labelledby="shops-heading" class="category-section" data-reveal>
+      <h2 id="shops-heading" class="section-heading">Independent Shops</h2>
+      <p class="section-copy empty-state">Recommendations coming soon — handpicked with care.</p>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding: var(--space-12) 0 var(--space-8);
+    max-width: 64ch;
+  }
+
+  .kicker {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent-teal);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  h1 {
+    margin: var(--space-2) 0 var(--space-4);
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--color-text-strong);
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--color-text-muted);
+    max-width: 56ch;
+  }
+
+  .category-nav {
+    margin: var(--space-6) 0 var(--space-10);
+  }
+
+  .category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .category-chip {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+  }
+
+  .category-chip:hover {
+    background: var(--color-surface-strong);
+    border-color: var(--color-accent-soft);
+    color: var(--color-text-strong);
+  }
+
+  .category-section {
+    padding: var(--space-8) 0;
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .category-section .section-heading {
+    margin-bottom: var(--space-4);
+  }
+
+  .empty-state {
+    font-style: italic;
+    opacity: 0.7;
+  }
+</style>

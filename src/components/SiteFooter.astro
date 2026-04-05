@@ -1,10 +1,81 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faBluesky, faInstagram, faFacebook } from '@fortawesome/free-brands-svg-icons';
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/recommendations', label: 'Recommendations' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+] as const;
+
+const mkViewBox = (def: IconDefinition) => `0 0 ${def.icon[0]} ${def.icon[1]}`;
+const mkPath = (def: IconDefinition): string => {
+  const d = def.icon[4];
+  return Array.isArray(d) ? d.join(' ') : d;
+};
+---
+
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <p>© {new Date().getFullYear()} Siren Song. Curated with care, built for community.</p>
-    <nav aria-label="Footer navigation">
-      <a href="/">Home</a>
-      <a href="/guides">Gift Guides</a>
+  <div class="container footer-body">
+    <!-- Brand column -->
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">Siren Song Shop</a>
+      <p class="footer-tagline">
+        Curated with care.<br />Built for community.
+      </p>
+      <ThemeToggle />
+    </div>
+
+    <!-- Navigation column -->
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <p class="footer-col-heading">Explore</p>
+      <ul>
+        {navLinks.map(({ href, label }) => (
+          <li><a href={href}>{label}</a></li>
+        ))}
+      </ul>
     </nav>
+
+    <!-- Social column -->
+    <div class="footer-social">
+      <p class="footer-col-heading">Follow</p>
+      <ul class="social-list">
+        <li>
+          <a href="https://bsky.app" class="social-link" aria-label="Bluesky" rel="noopener noreferrer" target="_blank">
+            <svg width="20" height="20" viewBox={mkViewBox(faBluesky)} fill="currentColor" aria-hidden="true" focusable="false">
+              <path d={mkPath(faBluesky)} />
+            </svg>
+            <span>Bluesky</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://instagram.com" class="social-link" aria-label="Instagram" rel="noopener noreferrer" target="_blank">
+            <svg width="20" height="20" viewBox={mkViewBox(faInstagram)} fill="currentColor" aria-hidden="true" focusable="false">
+              <path d={mkPath(faInstagram)} />
+            </svg>
+            <span>Instagram</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://facebook.com" class="social-link" aria-label="Facebook" rel="noopener noreferrer" target="_blank">
+            <svg width="20" height="20" viewBox={mkViewBox(faFacebook)} fill="currentColor" aria-hidden="true" focusable="false">
+              <path d={mkPath(faFacebook)} />
+            </svg>
+            <span>Facebook</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© {new Date().getFullYear()} Siren Song Shop. All recommendations are personally vetted.</p>
+      <span class="built-by">built by <a href="https://www.prettyprettyprettygood.org/" rel="noopener noreferrer" target="_blank">prettyprettyprettygood</a></span>
+    </div>
   </div>
 </footer>
 
@@ -12,41 +83,140 @@
   .site-footer {
     border-top: 1px solid var(--color-border-soft);
     margin-top: var(--space-12);
-    padding: var(--space-8) 0;
+    background: var(--color-surface);
   }
 
-  .footer-grid {
+  .footer-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    padding: var(--space-12) 0 var(--space-10);
+  }
+
+  @media (min-width: 48rem) {
+    .footer-body {
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: var(--space-8);
+    }
+  }
+
+  /* Brand */
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .footer-logo {
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--color-text-strong);
+  }
+
+  .footer-logo:hover {
+    color: var(--color-accent);
+  }
+
+  .footer-tagline {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* Column headings */
+  .footer-col-heading {
+    margin: 0 0 var(--space-4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+  }
+
+  /* Nav column */
+  .footer-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
   }
 
-  nav {
-    display: flex;
-    gap: var(--space-4);
-    flex-wrap: wrap;
-  }
-
-  p {
-    margin: 0;
-    color: var(--color-text-muted);
-  }
-
-  nav a {
+  .footer-nav a {
     text-decoration: none;
     color: var(--color-text-muted);
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 180ms ease;
   }
 
-  nav a:hover {
+  .footer-nav a:hover {
     color: var(--color-text-strong);
   }
 
-  @media (min-width: 48rem) {
-    .footer-grid {
-      align-items: center;
-      flex-direction: row;
-      justify-content: space-between;
-    }
+  /* Social column */
+  .social-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 200ms ease;
+  }
+
+  .social-link:hover {
+    color: var(--color-accent-teal);
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    border-top: 1px solid var(--color-border-soft);
+    padding: var(--space-5) 0;
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .footer-bottom p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+  }
+
+  .built-by {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .built-by a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .built-by a:hover {
+    color: var(--color-text-strong);
   }
 </style>

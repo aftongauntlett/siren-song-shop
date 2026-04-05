@@ -16,6 +16,8 @@
     "@astrojs/node": "^9.4.2",
     "@astrojs/react": "^5.0.2",
     "@astrojs/sitemap": "^3.2.1",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-brands-svg-icons": "^7.2.0",
     "@keystatic/astro": "^5.0.5",
     "@keystatic/core": "^0.5.39",
     "astro": "^5.7.0",

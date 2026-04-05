@@ -6,6 +6,7 @@ interface Props {
 
 const { title, description = "A curated recommendation platform for genuinely loved finds." } = Astro.props;
 import '../styles/theme.css';
+import WaterCanvas from '../components/WaterCanvas.tsx';
 ---
 
 <!doctype html>
@@ -31,8 +32,11 @@ import '../styles/theme.css';
     </script>
   </head>
   <body>
+    <WaterCanvas client:load />
     <a class="skip-link" href="#main-content">Skip to main content</a>
-    <slot />
+    <div class="layout">
+      <slot />
+    </div>
     <script is:inline>
       (() => {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -52,3 +56,10 @@ import '../styles/theme.css';
     </script>
   </body>
 </html>
+
+<style>
+  .layout {
+    position: relative;
+    z-index: 1;
+  }
+</style>

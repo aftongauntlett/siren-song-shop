@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<BaseLayout title="About | Siren Song Shop" description="The story behind Siren Song Shop — a trust-first recommendation platform for things genuinely worth sharing.">
+  <SiteNav />
+  <main id="main-content" class="container">
+    <section class="page-hero" aria-labelledby="about-heading">
+      <p class="kicker">Our Story</p>
+      <h1 id="about-heading">A recommendation platform built on trust.</h1>
+      <p class="intro">
+        Siren Song is a curated space for artists, makers, independent shops, tea, books, spirits,
+        and gifting resources — every pick personally vetted and editorially accountable.
+      </p>
+    </section>
+
+    <section aria-labelledby="mission-heading" class="content-section">
+      <h2 id="mission-heading" class="section-heading" data-reveal>What we believe</h2>
+      <p class="section-copy" data-reveal data-reveal-delay="1">
+        Great recommendations have a human voice behind them. We don't publish anything we
+        wouldn't confidently give to a close friend. No affiliate pressure, no sponsored
+        placements, no algorithmic ranking — just honest taste and genuine care.
+      </p>
+    </section>
+
+    <section aria-labelledby="process-heading" class="content-section">
+      <h2 id="process-heading" class="section-heading" data-reveal>How picks make the list</h2>
+      <p class="section-copy" data-reveal data-reveal-delay="1">
+        We look for things with a real story behind them — independent makers, considered craft,
+        and products that hold up over time. Every recommendation includes the rationale so you
+        can decide if it fits your world, not just ours.
+      </p>
+    </section>
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<style>
+  .page-hero {
+    padding: var(--space-12) 0 var(--space-8);
+    max-width: 64ch;
+  }
+
+  .kicker {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent-teal);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  h1 {
+    margin: var(--space-2) 0 var(--space-4);
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--color-text-strong);
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--color-text-muted);
+    max-width: 56ch;
+  }
+
+  .content-section {
+    padding: var(--space-8) 0;
+    border-top: 1px solid var(--color-border-soft);
+    max-width: 64ch;
+  }
+
+  .content-section .section-heading {
+    margin-bottom: var(--space-4);
+  }
+</style>

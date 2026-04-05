@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
 const guides = (await getCollection('guides')).sort(
@@ -9,6 +10,7 @@ const guides = (await getCollection('guides')).sort(
 ---
 
 <BaseLayout title="Siren Song | Gift Guides">
+  <SiteNav />
   <main id="main-content" class="container">
     <section aria-labelledby="guides-heading">
       <h1 id="guides-heading">Gift Guides</h1>

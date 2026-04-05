@@ -1,12 +1,10 @@
 ---
 import ButtonLink from './ButtonLink.astro';
-import WaterCanvas from './WaterCanvas.tsx';
 ---
 
 <header class="site-header">
-  <WaterCanvas client:load />
   <div class="container inner">
-    <p class="kicker">Siren Song</p>
+    <p class="kicker">Siren Song Shop</p>
     <h1>A calm, trust-first space for things worth sharing.</h1>
     <p class="intro">
       Handpicked artists, makers, books, tea, and gift ideas — shaped with genuine care and an editorial voice you can trust.
@@ -21,9 +19,7 @@ import WaterCanvas from './WaterCanvas.tsx';
 <style>
   .site-header {
     position: relative;
-    overflow: hidden;
     padding: var(--space-16) 0 var(--space-10);
-    border-bottom: 1px solid var(--color-border-soft);
   }
 
   .inner {
