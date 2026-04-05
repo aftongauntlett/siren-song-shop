@@ -15,6 +15,7 @@ import WaterCanvas from '../components/WaterCanvas.tsx';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <!-- Fonts: Fraunces (display, optical-size) + Nunito (body) — TODO: self-host per project guidelines -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,6 +31,14 @@ import WaterCanvas from '../components/WaterCanvas.tsx';
         document.documentElement.dataset.theme = saved === 'dark' || saved === 'light' ? saved : system;
       })();
     </script>
+    <script is:inline>
+      (() => {
+        const saved = localStorage.getItem('siren-song-motion');
+        const systemReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isReduced = saved !== null ? saved === 'reduce' : systemReduced;
+        if (isReduced) document.documentElement.dataset.reducedMotion = 'true';
+      })();
+    </script>
   </head>
   <body>
     <WaterCanvas client:load />
@@ -39,7 +48,7 @@ import WaterCanvas from '../components/WaterCanvas.tsx';
     </div>
     <script is:inline>
       (() => {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.reducedMotion === 'true') return;
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {

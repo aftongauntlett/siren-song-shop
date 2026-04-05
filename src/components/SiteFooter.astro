@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import MotionToggle from './MotionToggle.astro';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faBluesky, faInstagram, faFacebook } from '@fortawesome/free-brands-svg-icons';
 
@@ -23,9 +24,12 @@ const mkPath = (def: IconDefinition): string => {
     <div class="footer-brand">
       <a href="/" class="footer-logo">Siren Song Shop</a>
       <p class="footer-tagline">
-        Curated with care.<br />Built for community.
+        Curated with care. Built for community.
       </p>
-      <ThemeToggle />
+      <div class="footer-toggles">
+        <ThemeToggle />
+        <MotionToggle />
+      </div>
     </div>
 
     <!-- Navigation column -->
@@ -83,20 +87,26 @@ const mkPath = (def: IconDefinition): string => {
   .site-footer {
     border-top: 1px solid var(--color-border-soft);
     margin-top: var(--space-12);
-    background: var(--color-surface);
+  }
+
+  :root:not([data-theme="dark"]) .site-footer {
+    background: transparent;
+    border-top-color: color-mix(in oklab, var(--color-accent-strong) 24%, var(--color-border-soft) 76%);
   }
 
   .footer-body {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-10);
-    padding: var(--space-12) 0 var(--space-10);
+    gap: var(--space-4);
+    padding: var(--space-8) 0 var(--space-6);
   }
 
   @media (min-width: 48rem) {
     .footer-body {
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: var(--space-8);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+      justify-items: center;
+      align-items: start;
     }
   }
 
@@ -104,8 +114,15 @@ const mkPath = (def: IconDefinition): string => {
   .footer-brand {
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-3);
     align-items: flex-start;
+  }
+
+  .footer-toggles {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-3);
   }
 
   .footer-logo {
@@ -115,6 +132,10 @@ const mkPath = (def: IconDefinition): string => {
     font-weight: 700;
     font-size: 0.875rem;
     color: var(--color-text-strong);
+  }
+
+  :root[data-theme="dark"] .footer-logo {
+    color: color-mix(in oklab, white 94%, var(--color-accent-soft));
   }
 
   .footer-logo:hover {
@@ -130,12 +151,24 @@ const mkPath = (def: IconDefinition): string => {
 
   /* Column headings */
   .footer-col-heading {
-    margin: 0 0 var(--space-4);
+    margin: 0;
+    padding-bottom: var(--space-2);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--color-text-muted);
+    font-weight: 800;
+    color: color-mix(in oklab, var(--color-accent-teal) 58%, var(--color-text-strong) 42%);
+    flex-shrink: 0;
+  }
+
+  :root[data-theme="dark"] .footer-col-heading {
+    color: color-mix(in oklab, white 94%, var(--color-accent-soft));
+  }
+
+  .footer-nav,
+  .footer-social {
+    display: block;
+    text-align: center;
   }
 
   /* Nav column */
@@ -145,7 +178,8 @@ const mkPath = (def: IconDefinition): string => {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    align-items: center;
+    gap: var(--space-2);
   }
 
   .footer-nav a {
@@ -157,7 +191,7 @@ const mkPath = (def: IconDefinition): string => {
   }
 
   .footer-nav a:hover {
-    color: var(--color-text-strong);
+    color: var(--color-accent-teal);
   }
 
   /* Social column */
@@ -167,7 +201,20 @@ const mkPath = (def: IconDefinition): string => {
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 48rem) {
+    .footer-brand {
+      align-items: center;
+      text-align: center;
+      max-width: 24rem;
+    }
+
+    .footer-toggles {
+      justify-content: center;
+    }
   }
 
   .social-link {
@@ -187,15 +234,43 @@ const mkPath = (def: IconDefinition): string => {
 
   /* Bottom bar */
   .footer-bottom {
+    padding: 0 0 var(--space-4);
+  }
+
+  .footer-bottom::before {
+    content: '';
+    display: block;
+    width: min(100% - 2rem, var(--container-max));
+    margin: 0 auto var(--space-4);
     border-top: 1px solid var(--color-border-soft);
-    padding: var(--space-5) 0;
+  }
+
+  :root:not([data-theme="dark"]) .footer-bottom {
+    background: transparent;
+  }
+
+  :root:not([data-theme="dark"]) .site-footer .footer-nav a:hover {
+    color: color-mix(in oklab, var(--color-accent-teal) 62%, var(--color-text-strong) 38%);
+  }
+
+  :root:not([data-theme="dark"]) .site-footer .social-link:hover {
+    color: color-mix(in oklab, var(--color-accent-teal) 62%, var(--color-text-strong) 38%);
+  }
+
+  :root:not([data-theme="dark"]) .site-footer .footer-bottom {
+    border-top: none;
+  }
+
+  :root:not([data-theme="dark"]) .site-footer .footer-bottom::before {
+    border-top-color: color-mix(in oklab, var(--color-accent-strong) 24%, var(--color-border-soft) 76%);
   }
 
   .footer-bottom-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-4);
+    gap: var(--space-3);
+    flex-wrap: wrap;
   }
 
   .footer-bottom p {

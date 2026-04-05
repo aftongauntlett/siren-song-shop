@@ -3,28 +3,30 @@ import ButtonLink from './ButtonLink.astro';
 ---
 
 <header class="site-header">
-  <div class="container inner">
-    <p class="kicker">Siren Song Shop</p>
+  <div class="container hero-content">
+    <p class="kicker">Curated with care</p>
     <h1>A calm, trust-first space for things worth sharing.</h1>
     <p class="intro">
       Handpicked artists, makers, books, tea, and gift ideas — shaped with genuine care and an editorial voice you can trust.
     </p>
     <div class="hero-actions">
-      <ButtonLink href="/guides">Explore Early Guides</ButtonLink>
-      <ButtonLink href="/guides" variant="ghost">See the Mood</ButtonLink>
+      <ButtonLink href="/recommendations">Browse Recommendations</ButtonLink>
+      <ButtonLink href="/guides" variant="ghost">Read the Guides</ButtonLink>
     </div>
   </div>
 </header>
 
 <style>
   .site-header {
-    position: relative;
-    padding: var(--space-16) 0 var(--space-10);
+    padding: var(--space-20) 0;
   }
 
-  .inner {
-    position: relative;
-    z-index: 1;
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
   }
 
   .kicker {
@@ -37,27 +39,30 @@ import ButtonLink from './ButtonLink.astro';
   }
 
   h1 {
-    margin: var(--space-2) 0 var(--space-4);
+    margin: 0;
     font-family: var(--font-display);
     font-weight: 400;
     line-height: 1.15;
     color: var(--color-text-strong);
-    max-width: 18ch;
-    font-size: clamp(2rem, 5.5vw, 3.8rem);
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    max-width: 22ch;
   }
 
   .intro {
-    max-width: 56ch;
     margin: 0;
     color: var(--color-text-muted);
     font-weight: 400;
+    max-width: 52ch;
+    font-size: 1.05rem;
+    line-height: 1.7;
   }
 
   .hero-actions {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-3);
-    margin-top: var(--space-6);
+    margin-top: var(--space-2);
   }
 </style>

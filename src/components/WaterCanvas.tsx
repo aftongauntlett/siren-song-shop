@@ -18,12 +18,12 @@ export default function WaterCanvas() {
   const animFrameRef = useRef<number>(0);
   const mouseRef = useRef({ x: -9999, y: -9999, active: false });
   const ambientTimerRef = useRef(0);
+  const pausedRef = useRef(false);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReducedMotion) return;
+    pausedRef.current =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      document.documentElement.dataset.reducedMotion === "true";
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -63,6 +63,12 @@ export default function WaterCanvas() {
     }
 
     function tick() {
+      if (pausedRef.current) {
+        ctx.clearRect(0, 0, canvas!.offsetWidth, canvas!.offsetHeight);
+        particlesRef.current = [];
+        animFrameRef.current = requestAnimationFrame(tick);
+        return;
+      }
       const w = (canvas as HTMLCanvasElement).offsetWidth;
       const h = (canvas as HTMLCanvasElement).offsetHeight;
       (ctx as CanvasRenderingContext2D).clearRect(0, 0, w, h);
@@ -160,14 +166,22 @@ export default function WaterCanvas() {
       }, 120);
     };
 
+    const handleMotionChange = (e: Event) => {
+      pausedRef.current = (
+        e as CustomEvent<{ reduced: boolean }>
+      ).detail.reduced;
+    };
+
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("siren-motion-change", handleMotionChange);
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
       ro.disconnect();
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("siren-motion-change", handleMotionChange);
     };
   }, []);
 

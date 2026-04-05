@@ -5,29 +5,30 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import FeatureCard from '../components/FeatureCard.astro';
 import AccordionItem from '../components/AccordionItem.astro';
-import { Palette, Users, Layers } from 'lucide-astro';
+import { Sparkles, Users, Monitor } from 'lucide-astro';
 
 const previewCards = [
   {
-    eyebrow: 'Artists',
-    title: 'Handmade, Story-Rich Picks',
-    description: 'A growing set of recommendations rooted in craft, provenance, and genuine relationships.',
-    href: '/guides',
-    cta: 'Preview the tone'
+    eyebrow: 'Curation',
+    title: 'Personally Vouched, Every Time',
+    description: 'No affiliate pressure, no sponsored slots. Every recommendation here is something the curator genuinely uses, loves, or would give to a close friend.',
+    href: '/recommendations',
+    cta: 'See our Picks'
   },
   {
-    eyebrow: 'Community',
-    title: 'People Doing Good Work',
-    description: 'Highlighting independent shops and values-led communities with an editorial voice you can trust.',
-    href: '/guides',
-    cta: 'See examples'
+    eyebrow: 'Makers',
+    title: 'Independent Shops & Craft',
+    description: 'We spotlight small producers and values-led makers who bring real craft and story to what they make — not scale for its own sake.',
+    href: '/recommendations',
+    cta: 'Meet the Makers'
   },
   {
-    eyebrow: 'Design System',
-    title: 'Reusable UI, Ready to Grow',
-    description: 'Components are token-based so visual updates flow instantly from a single theme file.',
-    href: '/guides',
-    cta: 'See tokens in action'
+    eyebrow: 'Website?',
+    title: 'Want a Site Like This?',
+    description: 'Are you a shop or maker who deserves a site this thoughtful? We build sites that feel like you — head over to Pretty Pretty Pretty Good to find out more.',
+    href: 'https://prettyprettyprettygood.org',
+    cta: 'Visit PPPG',
+    external: true as const
   }
 ] as const;
 
@@ -43,6 +44,10 @@ const accordionItems = [
   {
     title: 'How often is new content added?',
     body: 'Slowly and intentionally. We\'d rather have a shorter list of things we truly believe in than a long one padded with noise. New guides and picks are added when they\'ve earned their place.'
+  },
+  {
+    title: 'Are your recommendations vegan-friendly?',
+    body: 'Yes — and it matters. We do not recommend products that use animal-derived materials or are tested on animals. Every pick here reflects a commitment to cruelty-free, plant-based, and ethically sourced goods.'
   }
 ] as const;
 ---
@@ -52,22 +57,22 @@ const accordionItems = [
   <SiteHeader />
   <main id="main-content" class="container">
     <section aria-labelledby="component-preview-heading" class="component-preview">
-      <h2 id="component-preview-heading" class="section-heading" data-reveal>Component Preview</h2>
-      <p class="section-copy" data-reveal data-reveal-delay="1">A quick system check for cards, buttons, spacing, and color behavior across themes.</p>
+      <h2 id="component-preview-heading" class="section-heading" data-reveal>What We Believe In</h2>
+      <p class="section-copy" data-reveal data-reveal-delay="1">Everything here is something we'd say yes to in person. No algorithms, no sponsorships — just taste.</p>
       <div class="grid">
         <div data-reveal data-reveal-delay="1" class="card-cell">
           <FeatureCard {...previewCards[0]}>
-            <Palette slot="icon" size={20} />
+            <Sparkles slot="icon" size={28} />
           </FeatureCard>
         </div>
         <div data-reveal data-reveal-delay="2" class="card-cell">
           <FeatureCard {...previewCards[1]}>
-            <Users slot="icon" size={20} />
+            <Users slot="icon" size={28} />
           </FeatureCard>
         </div>
         <div data-reveal data-reveal-delay="3" class="card-cell">
           <FeatureCard {...previewCards[2]}>
-            <Layers slot="icon" size={20} />
+            <Monitor slot="icon" size={28} />
           </FeatureCard>
         </div>
       </div>

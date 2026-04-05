@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="g" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#825ac2"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Scallop shell body -->
+  <path fill="url(#g)"
+    d="M 16 29
+       L 4 22
+       Q 2 14 6 8
+       Q 10 3 16 2
+       Q 22 3 26 8
+       Q 30 14 28 22
+       Z"/>
+
+  <!-- Radiating ribs from hinge tip to rim -->
+  <g stroke="rgba(255,255,255,0.28)" stroke-width="1" fill="none" stroke-linecap="round">
+    <line x1="16" y1="29" x2="4"  y2="22"/>
+    <line x1="16" y1="29" x2="6"  y2="8"/>
+    <line x1="16" y1="29" x2="10" y2="3"/>
+    <line x1="16" y1="29" x2="16" y2="2"/>
+    <line x1="16" y1="29" x2="22" y2="3"/>
+    <line x1="16" y1="29" x2="26" y2="8"/>
+    <line x1="16" y1="29" x2="28" y2="22"/>
+  </g>
+</svg>

@@ -1,6 +1,7 @@
 ---
 const navLinks = [
   { href: '/recommendations', label: 'Recommendations' },
+  { href: '/resources', label: 'Resources' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ] as const;
@@ -27,14 +28,42 @@ const currentPath = Astro.url.pathname;
   </div>
 </nav>
 
+<script>
+  const nav = document.querySelector<HTMLElement>('.site-nav');
+  const updateNavScrolledState = () => {
+    nav?.classList.toggle('site-nav--scrolled', window.scrollY > 8);
+  };
+
+  updateNavScrolledState();
+  window.addEventListener('scroll', updateNavScrolledState, { passive: true });
+</script>
+
 <style>
   .site-nav {
     position: sticky;
     top: 0;
     z-index: 20;
-    backdrop-filter: blur(8px);
-    background: color-mix(in oklab, var(--color-bg) 85%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--color-bg) 75%, transparent);
     border-bottom: 1px solid var(--color-border-soft);
+    transition: background-color 200ms ease, backdrop-filter 200ms ease, box-shadow 200ms ease;
+  }
+
+  .site-nav.site-nav--scrolled {
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 6px 24px -20px rgba(0, 0, 0, 0.35);
+  }
+
+  :root:not([data-theme="dark"]) .site-nav {
+    background: color-mix(in oklab, var(--color-bg) 88%, var(--color-accent-soft) 12%);
+    border-bottom-color: color-mix(in oklab, var(--color-accent-soft) 38%, white 62%);
+  }
+
+  :root:not([data-theme="dark"]) .site-nav.site-nav--scrolled {
+    background: color-mix(in oklab, var(--color-bg) 82%, var(--color-accent-soft) 18%);
+    box-shadow: 0 8px 24px -20px rgba(56, 30, 97, 0.28);
   }
 
   .nav-inner {

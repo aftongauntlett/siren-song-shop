@@ -4,16 +4,21 @@
   --color-bg-muted: #ede9fe;
   --color-surface: #fdfcff;
   --color-surface-strong: #f0ecff;
+  --color-surface-card: color-mix(
+    in oklab,
+    var(--color-surface) 88%,
+    transparent
+  );
   --color-text: #1e1b2e;
   --color-text-strong: #0f0c1a;
   --color-text-muted: #6b5f8a;
-  --color-accent: #6d28d9;
+  --color-accent: #825ac2;
   --color-accent-soft: #ddd6fe;
-  --color-accent-strong: #4c1d95;
-  --color-accent-teal: #0d9488;
-  --color-accent-teal-soft: #99f6e4;
+  --color-accent-strong: #381e61;
+  --color-accent-teal: #3a9990;
+  --color-accent-teal-soft: #a0c4c0;
   --color-on-accent: #ffffff;
-  --color-border: #c4b5fd;
+  --color-border: #d0c8fd;
   --color-border-soft: #ede9fe;
   --focus-ring: 0 0 0 3px rgba(109, 40, 217, 0.3);
 
@@ -30,6 +35,7 @@
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  --space-20: 5rem;
 
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
@@ -38,8 +44,8 @@
 
   --shadow-soft: 0 12px 30px -20px rgba(109, 40, 217, 0.2);
   --shadow-glow:
-    0 0 0 1px var(--color-border-soft), 0 8px 32px rgba(109, 40, 217, 0.18),
-    0 0 60px rgba(13, 148, 136, 0.08);
+    0 0 0 1px var(--color-border-soft), 0 8px 32px rgba(109, 40, 217, 0.1),
+    0 0 60px rgba(58, 153, 144, 0.05);
   --container-max: 72rem;
 }
 
@@ -48,10 +54,15 @@
   --color-bg-muted: #1a1530;
   --color-surface: #16122a;
   --color-surface-strong: #221c3f;
+  --color-surface-card: color-mix(
+    in oklab,
+    var(--color-surface) 92%,
+    transparent
+  );
   --color-text: #e2deff;
   --color-text-strong: #f0ecff;
   --color-text-muted: #a89fd0;
-  --color-accent: #a78bfa;
+  --color-accent: #9884d7;
   --color-accent-soft: #3b2a6e;
   --color-accent-strong: #c4b5fd;
   --color-accent-teal: #2dd4bf;
@@ -76,7 +87,7 @@ body {
   padding: 0;
   background:
     radial-gradient(
-      ellipse at 25% 0%,
+      ellipse at 25% 100%,
       color-mix(in oklab, var(--color-accent-teal-soft) 35%, transparent),
       transparent 55%
     ),
@@ -230,4 +241,20 @@ textarea:focus-visible {
     transform: none;
     transition: none;
   }
+}
+
+/* User-toggled reduced motion (mirrors @media prefers-reduced-motion: reduce) */
+[data-reduced-motion="true"] *,
+[data-reduced-motion="true"] *::before,
+[data-reduced-motion="true"] *::after {
+  animation-duration: 0.01ms;
+  animation-iteration-count: 1;
+  transition-duration: 0.01ms;
+  scroll-behavior: auto;
+}
+
+[data-reduced-motion="true"] [data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }

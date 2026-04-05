@@ -23,7 +23,7 @@ const { title, body } = Astro.props;
   .accordion-item {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    background: var(--color-surface);
+    background: var(--color-surface-card);
     padding: 0;
     overflow: hidden;
   }
@@ -50,9 +50,21 @@ const { title, body } = Astro.props;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .chevron {
-      transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+    .accordion-item {
+      transition: box-shadow 320ms ease;
     }
+
+    .chevron {
+      transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), color 320ms ease;
+    }
+  }
+
+  .accordion-item:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  summary:hover .chevron {
+    color: var(--color-accent-teal);
   }
 
   details.is-open .chevron {

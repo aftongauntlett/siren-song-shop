@@ -1,0 +1,45 @@
+{
+  "$ref": "#/definitions/resources",
+  "definitions": {
+    "resources": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "orgs",
+            "hiring",
+            "charities"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "featured": {
+          "type": "boolean",
+          "default": false
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "url",
+        "category",
+        "description"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

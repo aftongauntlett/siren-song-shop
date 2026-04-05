@@ -1,5 +1,6 @@
 ---
 import ButtonLink from './ButtonLink.astro';
+import { ExternalLink } from 'lucide-astro';
 
 interface Props {
   eyebrow: string;
@@ -7,9 +8,10 @@ interface Props {
   description: string;
   href: string;
   cta: string;
+  external?: boolean;
 }
 
-const { eyebrow, title, description, href, cta } = Astro.props;
+const { eyebrow, title, description, href, cta, external = false } = Astro.props;
 ---
 
 <article class="feature-card">
@@ -19,18 +21,23 @@ const { eyebrow, title, description, href, cta } = Astro.props;
   <p class="eyebrow">{eyebrow}</p>
   <h3>{title}</h3>
   <p>{description}</p>
-  <ButtonLink href={href} variant="ghost">{cta}</ButtonLink>
+  <ButtonLink href={href} variant="ghost" target={external ? '_blank' : '_self'} {...(external ? { rel: 'noopener noreferrer' } : {})}>
+    {cta}
+    {external && <ExternalLink size={14} aria-hidden="true" class="ext-icon" />}
+  </ButtonLink>
 </article>
 
 <style>
   .feature-card {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: var(--space-3);
     height: 100%;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border-soft);
-    background: var(--color-surface);
+    background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
     padding: var(--space-6) var(--space-5);
     transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease;
@@ -44,8 +51,8 @@ const { eyebrow, title, description, href, cta } = Astro.props;
 
   .card-icon-wrap {
     display: flex;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3.25rem;
+    height: 3.25rem;
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-md);
@@ -88,5 +95,29 @@ const { eyebrow, title, description, href, cta } = Astro.props;
   p:not(.eyebrow) {
     color: var(--color-text-muted);
     flex: 1;
+  }
+
+  :global(.button) svg {
+    margin-inline-start: var(--space-1);
+  }
+
+  :global(.button .ext-icon) {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-inline-start: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.button .ext-icon) {
+      transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
+    }
+  }
+
+  .feature-card:hover :global(.button .ext-icon) {
+    width: 14px;
+    opacity: 1;
+    margin-inline-start: var(--space-1);
   }
 </style>
