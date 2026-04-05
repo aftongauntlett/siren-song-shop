@@ -26,7 +26,7 @@ const mkPath = (def: IconDefinition): string => {
       <p class="footer-tagline">
         Curated with care. Built for community.
       </p>
-      <div class="footer-toggles">
+      <div class="footer-toggles footer-toggles-desktop" aria-label="Footer controls">
         <ThemeToggle />
         <MotionToggle />
       </div>
@@ -72,12 +72,17 @@ const mkPath = (def: IconDefinition): string => {
         </li>
       </ul>
     </div>
+
+    <div class="footer-toggles footer-toggles-mobile" aria-label="Footer controls">
+      <ThemeToggle />
+      <MotionToggle />
+    </div>
   </div>
 
   <!-- Bottom bar -->
   <div class="footer-bottom">
     <div class="container footer-bottom-inner">
-      <p>© {new Date().getFullYear()} Siren Song Shop. All recommendations are personally vetted.</p>
+      <p>© {new Date().getFullYear()} Siren Song Shop</p>
       <span class="built-by">built by <a href="https://www.prettyprettyprettygood.org/" rel="noopener noreferrer" target="_blank">prettyprettyprettygood</a></span>
     </div>
   </div>
@@ -96,9 +101,10 @@ const mkPath = (def: IconDefinition): string => {
 
   .footer-body {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-6);
     padding: var(--space-8) 0 var(--space-6);
+    align-items: start;
   }
 
   @media (min-width: 48rem) {
@@ -115,7 +121,9 @@ const mkPath = (def: IconDefinition): string => {
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
+    grid-column: 1 / -1;
   }
 
   .footer-toggles {
@@ -123,6 +131,17 @@ const mkPath = (def: IconDefinition): string => {
     flex-direction: row;
     flex-wrap: wrap;
     gap: var(--space-3);
+  }
+
+  .footer-toggles-desktop {
+    display: none;
+  }
+
+  .footer-toggles-mobile {
+    justify-content: center;
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--color-border-soft);
+    padding-top: var(--space-4);
   }
 
   .footer-logo {
@@ -169,6 +188,7 @@ const mkPath = (def: IconDefinition): string => {
   .footer-social {
     display: block;
     text-align: center;
+    min-width: 0;
   }
 
   /* Nav column */
@@ -205,15 +225,47 @@ const mkPath = (def: IconDefinition): string => {
     gap: var(--space-2);
   }
 
+  .footer-nav,
+  .footer-social {
+    border-top: 1px solid var(--color-border-soft);
+    padding-top: var(--space-4);
+  }
+
   @media (min-width: 48rem) {
     .footer-brand {
+      grid-column: auto;
+      gap: var(--space-2);
       align-items: center;
       text-align: center;
       max-width: 24rem;
     }
 
-    .footer-toggles {
+    .footer-toggles-desktop {
+      display: flex;
       justify-content: center;
+      border-top: 0;
+      padding-top: 0;
+      grid-column: auto;
+    }
+
+    .footer-toggles-mobile {
+      display: none;
+      justify-content: center;
+      grid-column: 1 / 2;
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .footer-nav,
+    .footer-social {
+      text-align: center;
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .footer-nav ul,
+    .social-list {
+      align-items: center;
     }
   }
 
@@ -266,11 +318,10 @@ const mkPath = (def: IconDefinition): string => {
   }
 
   .footer-bottom-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
     gap: var(--space-3);
-    flex-wrap: wrap;
   }
 
   .footer-bottom p {
@@ -282,7 +333,8 @@ const mkPath = (def: IconDefinition): string => {
   .built-by {
     color: var(--color-text-muted);
     font-size: 0.8rem;
-    white-space: nowrap;
+    text-align: right;
+    justify-self: end;
   }
 
   .built-by a {
