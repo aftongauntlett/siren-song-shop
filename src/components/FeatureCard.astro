@@ -1,6 +1,5 @@
 ---
 import ButtonLink from './ButtonLink.astro';
-import { ExternalLink } from 'lucide-astro';
 
 interface Props {
   eyebrow: string;
@@ -23,7 +22,12 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
   <p>{description}</p>
   <ButtonLink href={href} variant="ghost" target={external ? '_blank' : '_self'} {...(external ? { rel: 'noopener noreferrer' } : {})}>
     {cta}
-    {external && <ExternalLink size={14} aria-hidden="true" class="ext-icon" />}
+    {external && (
+      <svg class="ext-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    )}
   </ButtonLink>
 </article>
 

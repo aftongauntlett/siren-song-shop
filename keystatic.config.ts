@@ -18,15 +18,13 @@ export default config({
         category: fields.select({
           label: "Category",
           options: [
-            { label: "Artists", value: "artists" },
-            { label: "Makers", value: "makers" },
-            { label: "Small Shops", value: "small-shops" },
-            { label: "Tea", value: "tea" },
-            { label: "Books", value: "books" },
-            { label: "Spirits", value: "spirits" },
-            { label: "Gift Resources", value: "gift-resources" },
+            { label: "Arts & Crafts", value: "arts-crafts" },
+            { label: "Food & Drinks", value: "food-drinks" },
+            { label: "Bath & Body", value: "bath-body" },
+            { label: "Media", value: "media" },
+            { label: "Clothing", value: "clothing" },
           ],
-          defaultValue: "artists",
+          defaultValue: "arts-crafts",
         }),
         url: fields.url({
           label: "External URL",
@@ -57,9 +55,10 @@ export default config({
         category: fields.select({
           label: "Category",
           options: [
-            { label: "Organizations Doing Good", value: "orgs" },
-            { label: "Places Hiring", value: "hiring" },
-            { label: "Charities", value: "charities" },
+            { label: "Good Neighbor Orgs", value: "orgs" },
+            { label: "Work Worth Doing", value: "hiring" },
+            { label: "Giveback Picks", value: "charities" },
+            { label: "Homes & Habitats", value: "communities" },
           ],
           defaultValue: "orgs",
         }),

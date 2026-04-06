@@ -1,0 +1,438 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+
+const allResources = await getCollection('resources');
+
+type ResourceTabId = 'work-good' | 'community-living' | 'volunteer-donate';
+
+const categories: { id: ResourceTabId; label: string; description: string }[] = [
+  {
+    id: 'work-good',
+    label: 'Find Good Work',
+    description: 'Mission-aligned places hiring for work that feels useful and values-led.'
+  },
+  {
+    id: 'community-living',
+    label: 'Find A Community',
+    description: 'Cohousing and intentional-community pathways for shared life and practical mutual support.'
+  },
+  {
+    id: 'volunteer-donate',
+    label: 'Volunteer Or Donate',
+    description: 'Organizations and causes where your time or money can do direct, practical good.'
+  }
+];
+
+const sortFeatured = <T extends { data: { featured: boolean } }>(items: T[]) =>
+  items.sort((a, b) => Number(b.data.featured) - Number(a.data.featured));
+
+const byCategory = (id: ResourceTabId) => {
+  if (id === 'work-good') {
+    return sortFeatured(allResources.filter((r) => r.data.category === 'hiring'));
+  }
+
+  if (id === 'community-living') {
+    return sortFeatured(allResources.filter((r) => r.data.category === 'communities'));
+  }
+
+  return sortFeatured(
+    allResources.filter((r) => r.data.category === 'orgs' || r.data.category === 'charities')
+  );
+};
+---
+
+<BaseLayout
+  title="Get Involved | Siren Song"
+  description="Find work worth doing, community living options, and practical ways to volunteer or donate."
+>
+  <SiteNav />
+  <main id="main-content" class="container">
+    <section class="page-hero" aria-labelledby="resources-heading">
+      <p class="kicker">Get Involved</p>
+      <h1 id="resources-heading">Places Worth Your Attention</h1>
+      <p class="intro">
+        Not just places to browse, but places to participate. Use these tabs to find work, homes,
+        and causes that align with mutual-care values.
+      </p>
+    </section>
+
+    <nav class="category-nav" aria-label="Browse involvement categories">
+      <div class="category-select-wrap">
+        <select
+          id="resources-category-select"
+          class="category-select"
+          data-category-select
+          aria-label="Get involved category"
+        >
+          {categories.map((category) => (
+            <option value={category.id}>{category.label}</option>
+          ))}
+        </select>
+      </div>
+      <div class="category-list" role="tablist" aria-label="Get involved categories">
+        {categories.map(({ id, label }, index) => (
+          <div class="category-item">
+            <button
+              type="button"
+              class:list={['category-tab', { 'category-tab--active': index === 0 }]}
+              role="tab"
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? '0' : '-1'}
+              aria-controls={`${id}-panel`}
+              id={`${id}-tab`}
+              data-category-tab
+              data-category={id}
+            >
+              {label}
+            </button>
+          </div>
+        ))}
+      </div>
+    </nav>
+
+    {categories.map(({ id, label, description }, index) => {
+      const entries = byCategory(id);
+      return (
+        <section
+          id={`${id}-panel`}
+          aria-labelledby={`${id}-tab`}
+          role="tabpanel"
+          class="category-section"
+          data-reveal
+          data-category-panel
+          data-category={id}
+          hidden={index !== 0}
+        >
+          <header class="category-header">
+            <h2 class="section-heading">{label}</h2>
+            <p class="category-description">{description}</p>
+          </header>
+          {entries.length > 0 ? (
+            <ul class="resource-grid">
+              {entries.map((resource) => (
+                <li>
+                  <ResourceCard
+                    name={resource.data.name}
+                    url={resource.data.url}
+                    description={resource.data.description}
+                    featured={resource.data.featured}
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="empty-state">More coming soon — added with intention.</p>
+          )}
+        </section>
+      );
+    })}
+  </main>
+  <SiteFooter />
+</BaseLayout>
+
+<script>
+  const w = window as Window & { __sirenResourcesTabsHookBound?: boolean };
+
+  const initializeResourceTabs = () => {
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category-tab]'));
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-category-panel]'));
+    const categorySelect = document.querySelector<HTMLSelectElement>('[data-category-select]');
+    if (tabs.length === 0 || panels.length === 0) return;
+
+    const getTabCategory = (tab: HTMLButtonElement) => tab.dataset.category;
+
+    const setActiveCategory = (category: string) => {
+      tabs.forEach((tab) => {
+        const isActive = tab.dataset.category === category;
+        tab.setAttribute('aria-selected', String(isActive));
+        tab.classList.toggle('category-tab--active', isActive);
+        tab.tabIndex = isActive ? 0 : -1;
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.category !== category;
+      });
+
+      if (categorySelect && categorySelect.value !== category) {
+        categorySelect.value = category;
+      }
+    };
+
+    const setActiveByIndex = (index: number) => {
+      const safeIndex = (index + tabs.length) % tabs.length;
+      const nextTab = tabs[safeIndex];
+      if (!nextTab) return;
+      const category = getTabCategory(nextTab);
+      if (!category) return;
+      setActiveCategory(category);
+      nextTab.focus();
+    };
+
+    tabs.forEach((tab) => {
+      if (tab.dataset.categoryBound === 'true') return;
+
+      tab.addEventListener('click', () => {
+        const category = getTabCategory(tab);
+        if (!category) return;
+        setActiveCategory(category);
+      });
+
+      tab.addEventListener('keydown', (event) => {
+        const currentIndex = tabs.indexOf(tab);
+        if (currentIndex < 0) return;
+
+        if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          setActiveByIndex(currentIndex + 1);
+        }
+
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          setActiveByIndex(currentIndex - 1);
+        }
+
+        if (event.key === 'Home') {
+          event.preventDefault();
+          setActiveByIndex(0);
+        }
+
+        if (event.key === 'End') {
+          event.preventDefault();
+          setActiveByIndex(tabs.length - 1);
+        }
+
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          const category = getTabCategory(tab);
+          if (!category) return;
+          setActiveCategory(category);
+        }
+      });
+
+      tab.dataset.categoryBound = 'true';
+    });
+
+    if (categorySelect && categorySelect.dataset.categorySelectBound !== 'true') {
+      categorySelect.addEventListener('change', () => {
+        setActiveCategory(categorySelect.value);
+      });
+      categorySelect.dataset.categorySelectBound = 'true';
+    }
+
+    const firstTab = tabs.at(0);
+    if (firstTab?.dataset.category) {
+      setActiveCategory(firstTab.dataset.category);
+    }
+  };
+
+  initializeResourceTabs();
+
+  if (!w.__sirenResourcesTabsHookBound) {
+    document.addEventListener('astro:page-load', initializeResourceTabs);
+    w.__sirenResourcesTabsHookBound = true;
+  }
+</script>
+
+<style>
+  .page-hero {
+    padding: var(--space-12) 0 var(--space-8);
+  }
+
+  .kicker {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent-teal);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  h1 {
+    margin: var(--space-2) 0 var(--space-4);
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--color-text-strong);
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--color-text-muted);
+    max-width: 56ch;
+  }
+
+  .category-nav {
+    margin: var(--space-8) 0 var(--space-4);
+  }
+
+  .category-select-wrap {
+    margin-bottom: var(--space-3);
+  }
+
+  .category-select {
+    width: 100%;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-card);
+    color: var(--color-text-strong);
+    padding: 0.55rem 0.75rem;
+    font: inherit;
+  }
+
+  .category-select:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  :root:not([data-theme='dark']) .category-list {
+    border-bottom-color: color-mix(in oklab, var(--color-accent-strong) 28%, var(--color-border-soft) 72%);
+  }
+
+  .category-item {
+    flex: 0 0 auto;
+  }
+
+  .category-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-4);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  }
+
+  .category-tab:hover {
+    background: var(--color-surface-strong);
+    color: var(--color-text-strong);
+  }
+
+  :root:not([data-theme='dark']) .category-tab:hover {
+    background: color-mix(in oklab, var(--color-surface) 66%, var(--color-bg) 34%);
+  }
+
+  .category-tab--active,
+  .category-tab[aria-selected='true'] {
+    background: color-mix(in oklab, var(--color-surface-strong) 86%, transparent);
+    border-bottom-color: var(--color-accent-teal);
+    color: var(--color-text-strong);
+  }
+
+  :root:not([data-theme='dark']) .category-tab--active,
+  :root:not([data-theme='dark']) .category-tab[aria-selected='true'] {
+    background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg) 30%);
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent-soft) 58%, var(--color-border-soft));
+  }
+
+  .category-tab:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-sm);
+  }
+
+  .category-section {
+    padding: var(--space-6) 0;
+  }
+
+  .category-header {
+    margin-bottom: var(--space-6);
+  }
+
+  .category-header .section-heading {
+    margin-bottom: var(--space-2);
+  }
+
+  .category-description {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    max-width: none;
+  }
+
+  .resource-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .resource-grid > li {
+    display: flex;
+  }
+
+  .empty-state {
+    font-style: italic;
+    opacity: 0.7;
+    margin: 0;
+  }
+
+  @media (min-width: 48rem) {
+    .category-select-wrap {
+      display: none;
+    }
+
+    .category-list {
+      overflow-x: visible;
+    }
+
+    .category-item {
+      flex: 1 1 auto;
+    }
+
+    .category-tab {
+      width: 100%;
+    }
+
+    .resource-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .category-list {
+      display: none;
+    }
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .resource-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

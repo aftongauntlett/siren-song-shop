@@ -4,12 +4,20 @@ interface Props {
   variant?: 'primary' | 'ghost';
   target?: '_self' | '_blank';
   rel?: string;
+  class?: string;
 }
 
-const { href, variant = 'primary', target = '_self', rel } = Astro.props;
+const { href, variant = 'primary', target = '_self', rel, class: className = '' } = Astro.props;
+const isInternal = href.startsWith('/') && target === '_self';
 ---
 
-<a class={`button button-${variant}`} href={href} target={target} rel={rel}>
+<a
+  class={`button button-${variant} ${className}`}
+  href={href}
+  target={target}
+  rel={rel}
+  data-astro-prefetch={isInternal ? true : undefined}
+>
   <slot />
 </a>
 

@@ -17,7 +17,8 @@
           "enum": [
             "orgs",
             "hiring",
-            "charities"
+            "charities",
+            "communities"
           ]
         },
         "description": {

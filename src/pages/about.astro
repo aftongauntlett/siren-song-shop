@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ButtonLink from '../components/ButtonLink.astro';
 ---
 
 <BaseLayout title="About | Siren Song Shop" description="The story behind Siren Song Shop — a trust-first recommendation platform for things genuinely worth sharing.">
@@ -32,6 +33,18 @@ import SiteFooter from '../components/SiteFooter.astro';
         and products that hold up over time. Every recommendation includes the rationale so you
         can decide if it fits your world, not just ours.
       </p>
+    </section>
+
+    <section aria-labelledby="support-heading" class="content-section support-section" data-reveal>
+      <h2 id="support-heading" class="section-heading">Keep the lights on</h2>
+      <p class="section-copy">
+        Siren Song is free to use and ad-free. If it's been useful to you, a small contribution
+        goes a long way!
+      </p>
+      <div class="support-links">
+        <ButtonLink href="https://ko-fi.com/prettyprettyprettygood" target="_blank" rel="noopener noreferrer">Ko-fi</ButtonLink>
+        <ButtonLink href="https://paypal.me/aftons" target="_blank" rel="noopener noreferrer" variant="ghost">PayPal</ButtonLink>
+      </div>
     </section>
   </main>
   <SiteFooter />
@@ -68,10 +81,24 @@ import SiteFooter from '../components/SiteFooter.astro';
 
   .content-section {
     padding: var(--space-8) 0;
-    border-top: 1px solid var(--color-border-soft);
+    border-top: 1px solid var(--color-border);
   }
 
   .content-section .section-heading {
     margin-bottom: var(--space-4);
+    transition: color 220ms ease;
+  }
+
+  .content-section:hover .section-heading {
+    color: var(--color-accent-teal);
+  }
+
+  .support-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    margin-bottom: calc(-1 * var(--space-2));
   }
 </style>

@@ -157,7 +157,7 @@ textarea:focus-visible {
 .section-copy {
   margin: 0;
   color: var(--color-text-muted);
-  max-width: 62ch;
+  max-width: none;
 }
 
 .stagger-in {

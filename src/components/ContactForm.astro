@@ -126,6 +126,7 @@ const contactStatus = Astro.url.searchParams.get('contact');
           <div class="url-row">
             <label for="url-0" class="sr-only">URL 1</label>
             <input
+              class="url-input"
               id="url-0"
               name="urls[]"
               type="url"
@@ -198,6 +199,7 @@ const contactStatus = Astro.url.searchParams.get('contact');
 
     const input = document.createElement('input');
     input.id = `url-${index}`;
+    input.className = 'url-input';
     input.name = 'urls[]';
     input.type = 'url';
     input.setAttribute('autocomplete', 'url');
@@ -313,18 +315,36 @@ const contactStatus = Astro.url.searchParams.get('contact');
     gap: var(--space-2);
   }
 
-  .url-row {
+  :global(.url-row) {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
     gap: var(--space-2);
   }
 
-  .url-row input {
+  :global(.url-input) {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text);
+    padding: var(--space-3);
+    font: inherit;
+    font-size: 1rem;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+
+  :global(.url-input:focus-visible) {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: var(--focus-ring);
+  }
+
+  :global(.url-row .url-input) {
     grid-column: 1;
   }
 
-  .url-remove-btn {
+  :global(.url-remove-btn) {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     background: transparent;
@@ -338,13 +358,13 @@ const contactStatus = Astro.url.searchParams.get('contact');
     flex-shrink: 0;
   }
 
-  .url-remove-btn:hover {
+  :global(.url-remove-btn:hover) {
     color: #e11d48;
     border-color: #e11d48;
     background: color-mix(in oklab, #e11d48 8%, transparent);
   }
 
-  .url-remove-btn:focus-visible {
+  :global(.url-remove-btn:focus-visible) {
     outline: none;
     box-shadow: var(--focus-ring);
   }

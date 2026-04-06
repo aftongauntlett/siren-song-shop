@@ -4,9 +4,10 @@ interface Props {
   url: string;
   description: string;
   featured?: boolean;
+  location?: string;
 }
 
-const { name, url, description, featured = false } = Astro.props;
+const { name, url, description, featured = false, location } = Astro.props;
 
 const displayUrl = new URL(url).hostname.replace(/^www\./, '');
 ---
@@ -14,6 +15,9 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
 <article class:list={['resource-card', { 'resource-card--featured': featured }]}>
   <div class="resource-card-body">
     <h3 class="resource-name">{name}</h3>
+    {location && (
+      <span class="resource-location" aria-label={`Location: ${location}`}>{location}</span>
+    )}
     <p class="resource-description">{description}</p>
   </div>
   <a
@@ -24,7 +28,10 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     aria-label={`Visit ${name} (opens in new tab)`}
   >
     {displayUrl}
-    <span class="resource-link-arrow" aria-hidden="true">↗</span>
+    <svg class="resource-link-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
   </a>
 </article>
 
@@ -34,6 +41,7 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     flex-direction: column;
     justify-content: space-between;
     gap: var(--space-4);
+    height: 100%;
     padding: var(--space-5) var(--space-6);
     border: 1px solid var(--color-border-soft);
     border-radius: var(--radius-lg);
@@ -66,6 +74,21 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     color: var(--color-text-strong);
   }
 
+  .resource-location {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 0.15rem 0.55rem;
+    border: 1px solid color-mix(in oklab, var(--color-accent-teal) 35%, var(--color-border-soft));
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--color-accent-teal) 10%, transparent);
+    color: var(--color-accent-teal);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+
   .resource-description {
     margin: 0;
     font-size: 0.925rem;
@@ -81,13 +104,13 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     font-weight: 500;
     color: var(--color-accent-teal);
     text-decoration: none;
-    align-self: flex-start;
-    transition: color 200ms ease, gap 200ms ease;
+    align-self: flex-end;
+    justify-content: flex-end;
+    transition: color 200ms ease;
   }
 
   .resource-link:hover {
     color: var(--color-accent);
-    gap: var(--space-2);
   }
 
   .resource-link:focus-visible {
@@ -96,7 +119,24 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     border-radius: var(--radius-sm, 2px);
   }
 
-  .resource-link-arrow {
-    font-style: normal;
+  .resource-link-icon {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-inline-start: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .resource-link-icon {
+      transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
+    }
+  }
+
+  .resource-card:hover .resource-link-icon,
+  .resource-link:focus-visible .resource-link-icon {
+    width: 14px;
+    opacity: 1;
+    margin-inline-start: var(--space-1);
   }
 </style>

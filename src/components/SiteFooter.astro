@@ -6,7 +6,9 @@ import { faBluesky, faInstagram, faFacebook } from '@fortawesome/free-brands-svg
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/recommendations', label: 'Recommendations' },
+  { href: '/shop', label: 'Browse Shops' },
+  { href: '/get-involved', label: 'Get Involved' },
+  { href: '/local', label: 'Local Gems' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ] as const;
@@ -22,36 +24,16 @@ const mkPath = (def: IconDefinition): string => {
   <div class="container footer-body">
     <!-- Brand column -->
     <div class="footer-brand">
-      <a href="/" class="footer-logo">Siren Song Shop</a>
+      <a href="/" class="footer-logo" data-astro-prefetch>Siren Song Shop</a>
       <p class="footer-tagline">
         Curated with care. Built for community.
       </p>
-      <div class="footer-toggles footer-toggles-desktop" aria-label="Footer controls">
-        <ThemeToggle />
-        <MotionToggle />
-      </div>
-    </div>
-
-    <!-- Navigation column -->
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <p class="footer-col-heading">Explore</p>
-      <ul>
-        {navLinks.map(({ href, label }) => (
-          <li><a href={href}>{label}</a></li>
-        ))}
-      </ul>
-    </nav>
-
-    <!-- Social column -->
-    <div class="footer-social">
-      <p class="footer-col-heading">Follow</p>
-      <ul class="social-list">
+      <ul class="social-list" aria-label="Follow us">
         <li>
           <a href="https://bsky.app" class="social-link" aria-label="Bluesky" rel="noopener noreferrer" target="_blank">
             <svg width="20" height="20" viewBox={mkViewBox(faBluesky)} fill="currentColor" aria-hidden="true" focusable="false">
               <path d={mkPath(faBluesky)} />
             </svg>
-            <span>Bluesky</span>
           </a>
         </li>
         <li>
@@ -59,7 +41,6 @@ const mkPath = (def: IconDefinition): string => {
             <svg width="20" height="20" viewBox={mkViewBox(faInstagram)} fill="currentColor" aria-hidden="true" focusable="false">
               <path d={mkPath(faInstagram)} />
             </svg>
-            <span>Instagram</span>
           </a>
         </li>
         <li>
@@ -67,13 +48,22 @@ const mkPath = (def: IconDefinition): string => {
             <svg width="20" height="20" viewBox={mkViewBox(faFacebook)} fill="currentColor" aria-hidden="true" focusable="false">
               <path d={mkPath(faFacebook)} />
             </svg>
-            <span>Facebook</span>
           </a>
         </li>
       </ul>
     </div>
 
-    <div class="footer-toggles footer-toggles-mobile" aria-label="Footer controls">
+    <!-- Navigation row -->
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <ul>
+        {navLinks.map(({ href, label }) => (
+          <li><a href={href} data-astro-prefetch>{label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Toggles row -->
+    <div class="footer-toggles" aria-label="Footer controls">
       <ThemeToggle />
       <MotionToggle />
     </div>
@@ -90,30 +80,30 @@ const mkPath = (def: IconDefinition): string => {
 
 <style>
   .site-footer {
-    border-top: 1px solid var(--color-border-soft);
     margin-top: var(--space-12);
+    position: relative;
+    z-index: 1;
+    background: transparent;
   }
 
-  :root:not([data-theme="dark"]) .site-footer {
-    background: transparent;
-    border-top-color: color-mix(in oklab, var(--color-accent-strong) 24%, var(--color-border-soft) 76%);
+  .site-footer::before {
+    content: '';
+    display: block;
+    width: min(100% - 2rem, var(--container-max));
+    margin: 0 auto;
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  :root:not([data-theme="dark"]) .site-footer::before {
+    border-top-color: color-mix(in oklab, var(--color-accent-strong) 18%, var(--color-border-soft) 82%);
   }
 
   .footer-body {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
     padding: var(--space-8) 0 var(--space-6);
-    align-items: start;
-  }
-
-  @media (min-width: 48rem) {
-    .footer-body {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: var(--space-6);
-      justify-items: center;
-      align-items: start;
-    }
   }
 
   /* Brand */
@@ -123,25 +113,17 @@ const mkPath = (def: IconDefinition): string => {
     gap: var(--space-3);
     align-items: center;
     text-align: center;
-    grid-column: 1 / -1;
   }
 
   .footer-toggles {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
-  .footer-toggles-desktop {
-    display: none;
-  }
-
-  .footer-toggles-mobile {
+    gap: var(--space-4);
     justify-content: center;
-    grid-column: 1 / -1;
     border-top: 1px solid var(--color-border-soft);
     padding-top: var(--space-4);
+    width: 100%;
   }
 
   .footer-logo {
@@ -168,44 +150,27 @@ const mkPath = (def: IconDefinition): string => {
     line-height: 1.6;
   }
 
-  /* Column headings */
-  .footer-col-heading {
-    margin: 0;
-    padding-bottom: var(--space-2);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: color-mix(in oklab, var(--color-accent-teal) 58%, var(--color-text-strong) 42%);
-    flex-shrink: 0;
+  /* Nav row */
+  .footer-nav {
+    width: 100%;
+    border-top: 1px solid var(--color-border-soft);
+    padding-top: var(--space-5);
   }
 
-  :root[data-theme="dark"] .footer-col-heading {
-    color: color-mix(in oklab, white 94%, var(--color-accent-soft));
-  }
-
-  .footer-nav,
-  .footer-social {
-    display: block;
-    text-align: center;
-    min-width: 0;
-  }
-
-  /* Nav column */
   .footer-nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-2);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-6);
   }
 
   .footer-nav a {
     text-decoration: none;
     color: var(--color-text-muted);
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     font-weight: 500;
     transition: color 180ms ease;
   }
@@ -214,69 +179,25 @@ const mkPath = (def: IconDefinition): string => {
     color: var(--color-accent-teal);
   }
 
-  /* Social column */
+  /* Social icon row */
   .social-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: var(--space-2);
-  }
-
-  .footer-nav,
-  .footer-social {
-    border-top: 1px solid var(--color-border-soft);
-    padding-top: var(--space-4);
-  }
-
-  @media (min-width: 48rem) {
-    .footer-brand {
-      grid-column: auto;
-      gap: var(--space-2);
-      align-items: center;
-      text-align: center;
-      max-width: 24rem;
-    }
-
-    .footer-toggles-desktop {
-      display: flex;
-      justify-content: center;
-      border-top: 0;
-      padding-top: 0;
-      grid-column: auto;
-    }
-
-    .footer-toggles-mobile {
-      display: none;
-      justify-content: center;
-      grid-column: 1 / 2;
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .footer-nav,
-    .footer-social {
-      text-align: center;
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .footer-nav ul,
-    .social-list {
-      align-items: center;
-    }
+    gap: var(--space-4);
   }
 
   .social-link {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-2);
+    justify-content: center;
     text-decoration: none;
     color: var(--color-text-muted);
-    font-size: 0.9rem;
-    font-weight: 500;
+    width: 2rem;
+    height: 2rem;
     transition: color 200ms ease;
   }
 
@@ -286,15 +207,7 @@ const mkPath = (def: IconDefinition): string => {
 
   /* Bottom bar */
   .footer-bottom {
-    padding: 0 0 var(--space-4);
-  }
-
-  .footer-bottom::before {
-    content: '';
-    display: block;
-    width: min(100% - 2rem, var(--container-max));
-    margin: 0 auto var(--space-4);
-    border-top: 1px solid var(--color-border-soft);
+    padding: 0 0 var(--space-2);
   }
 
   :root:not([data-theme="dark"]) .footer-bottom {
@@ -308,13 +221,8 @@ const mkPath = (def: IconDefinition): string => {
   :root:not([data-theme="dark"]) .site-footer .social-link:hover {
     color: color-mix(in oklab, var(--color-accent-teal) 62%, var(--color-text-strong) 38%);
   }
-
   :root:not([data-theme="dark"]) .site-footer .footer-bottom {
     border-top: none;
-  }
-
-  :root:not([data-theme="dark"]) .site-footer .footer-bottom::before {
-    border-top-color: color-mix(in oklab, var(--color-accent-strong) 24%, var(--color-border-soft) 76%);
   }
 
   .footer-bottom-inner {

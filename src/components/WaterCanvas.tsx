@@ -19,6 +19,7 @@ export default function WaterCanvas() {
   const mouseRef = useRef({ x: -9999, y: -9999, active: false });
   const ambientTimerRef = useRef(0);
   const pausedRef = useRef(false);
+  const hiddenRef = useRef(false);
 
   useEffect(() => {
     pausedRef.current =
@@ -27,23 +28,37 @@ export default function WaterCanvas() {
 
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const canvasEl = canvas;
+
     // Cast after null-check so TypeScript tracks non-null through closures
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    const ctx = canvasEl.getContext("2d") as CanvasRenderingContext2D;
     if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio, 2);
+    const navigatorWithMemory = navigator as Navigator & {
+      deviceMemory?: number;
+    };
+    const lowPowerDevice =
+      navigator.hardwareConcurrency <= 4 ||
+      (typeof navigatorWithMemory.deviceMemory === "number" &&
+        navigatorWithMemory.deviceMemory <= 4);
+    const ambientCadence = lowPowerDevice ? 10 : 7;
+    const interactiveBurst = lowPowerDevice ? 2 : 4;
+    const maxParticles = lowPowerDevice ? 64 : 96;
+    const frameIntervalMs = lowPowerDevice ? 1000 / 36 : 1000 / 48;
+    let lastPaint = 0;
 
     const resize = () => {
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      const w = canvasEl.offsetWidth;
+      const h = canvasEl.offsetHeight;
+      canvasEl.width = w * dpr;
+      canvasEl.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
 
     const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
+    ro.observe(canvasEl);
 
     function spawnParticle(x: number, y: number, ambient = false) {
       const hue = ambient
@@ -62,21 +77,30 @@ export default function WaterCanvas() {
       });
     }
 
-    function tick() {
-      if (pausedRef.current) {
-        ctx.clearRect(0, 0, canvas!.offsetWidth, canvas!.offsetHeight);
-        particlesRef.current = [];
-        animFrameRef.current = requestAnimationFrame(tick);
+    function tick(now: number) {
+      animFrameRef.current = requestAnimationFrame(tick);
+
+      if (pausedRef.current || hiddenRef.current) {
+        if (particlesRef.current.length > 0) {
+          ctx.clearRect(0, 0, canvasEl.offsetWidth, canvasEl.offsetHeight);
+          particlesRef.current = [];
+        }
         return;
       }
-      const w = (canvas as HTMLCanvasElement).offsetWidth;
-      const h = (canvas as HTMLCanvasElement).offsetHeight;
-      (ctx as CanvasRenderingContext2D).clearRect(0, 0, w, h);
+
+      if (now - lastPaint < frameIntervalMs) {
+        return;
+      }
+      lastPaint = now;
+
+      const w = canvasEl.offsetWidth;
+      const h = canvasEl.offsetHeight;
+      ctx.clearRect(0, 0, w, h);
 
       ambientTimerRef.current++;
       if (
-        ambientTimerRef.current % 7 === 0 &&
-        particlesRef.current.length < 90
+        ambientTimerRef.current % ambientCadence === 0 &&
+        particlesRef.current.length < maxParticles
       ) {
         const x = Math.random() * w;
         const y = h * 0.4 + Math.random() * h * 0.6;
@@ -85,7 +109,7 @@ export default function WaterCanvas() {
 
       // Spawn particles while mouse is active (pointer held or fresh move)
       if (mouseRef.current.active) {
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < interactiveBurst; i++) {
           spawnParticle(mouseRef.current.x, mouseRef.current.y, false);
         }
       }
@@ -121,11 +145,9 @@ export default function WaterCanvas() {
         ctx.fillStyle = grad;
         ctx.fill();
       }
-
-      animFrameRef.current = requestAnimationFrame(tick);
     }
 
-    tick();
+    animFrameRef.current = requestAnimationFrame(tick);
 
     const isOverChrome = (e: MouseEvent) =>
       !!(
@@ -172,9 +194,15 @@ export default function WaterCanvas() {
       ).detail.reduced;
     };
 
+    const handleVisibility = () => {
+      hiddenRef.current = document.visibilityState !== "visible";
+    };
+    handleVisibility();
+
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("siren-motion-change", handleMotionChange);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
@@ -182,6 +210,7 @@ export default function WaterCanvas() {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("siren-motion-change", handleMotionChange);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 

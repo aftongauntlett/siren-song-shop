@@ -36,12 +36,12 @@ import WaterCanvas from '../components/WaterCanvas.tsx';
         const saved = localStorage.getItem('siren-song-motion');
         const systemReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isReduced = saved !== null ? saved === 'reduce' : systemReduced;
-        if (isReduced) document.documentElement.dataset.reducedMotion = 'true';
+        document.documentElement.dataset.reducedMotion = isReduced ? 'true' : 'false';
       })();
     </script>
   </head>
   <body>
-    <WaterCanvas client:load />
+    <WaterCanvas client:idle />
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <div class="layout">
       <slot />
@@ -67,8 +67,22 @@ import WaterCanvas from '../components/WaterCanvas.tsx';
 </html>
 
 <style>
+  :global(body) {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
   .layout {
     position: relative;
     z-index: 1;
+    flex: 1;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .layout > :global(main) {
+    flex: 1 0 auto;
   }
 </style>

@@ -1,21 +1,21 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const recommendationCategorySchema = z.enum([
-  'artists',
-  'makers',
-  'small-shops',
-  'tea',
-  'books',
-  'spirits',
-  'gift-resources'
+  "arts-crafts",
+  "food-drinks",
+  "bath-body",
+  "media",
+  "clothing",
 ]);
 
 export const recommendationSchema = z.object({
   title: z.string().min(1),
   category: recommendationCategorySchema,
   url: z.string().url(),
-  excerpt: z.string().min(12)
+  excerpt: z.string().min(12),
 });
 
-export type RecommendationCategory = z.infer<typeof recommendationCategorySchema>;
+export type RecommendationCategory = z.infer<
+  typeof recommendationCategorySchema
+>;
 export type Recommendation = z.infer<typeof recommendationSchema>;

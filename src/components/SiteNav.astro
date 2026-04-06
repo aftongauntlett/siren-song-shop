@@ -1,9 +1,8 @@
 ---
 const navLinks = [
-  { href: '/recommendations', label: 'Recommendations' },
-  { href: '/resources', label: 'Resources' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/shop', label: 'Browse Shops' },
+  { href: '/get-involved', label: 'Get Involved' },
+  { href: '/local', label: 'Local Gems' },
 ] as const;
 
 const currentPath = Astro.url.pathname;
@@ -11,7 +10,7 @@ const currentPath = Astro.url.pathname;
 
 <nav class="site-nav" aria-label="Primary navigation">
   <div class="container nav-inner">
-    <a href="/" class="brand">Siren Song Shop</a>
+    <a href="/" class="brand" data-astro-prefetch>Siren Song Shop</a>
     <button
       class="nav-toggle"
       type="button"
@@ -31,6 +30,7 @@ const currentPath = Astro.url.pathname;
         <li>
           <a
             href={href}
+            data-astro-prefetch
             class:list={['nav-link', { 'nav-link--active': currentPath.startsWith(href) }]}
             aria-current={currentPath.startsWith(href) ? 'page' : undefined}
           >
@@ -43,47 +43,70 @@ const currentPath = Astro.url.pathname;
 </nav>
 
 <script>
-  const nav = document.querySelector<HTMLElement>('.site-nav');
-  const navToggle = nav?.querySelector<HTMLButtonElement>('.nav-toggle');
-  const navLinkItems = nav?.querySelectorAll<HTMLAnchorElement>('.nav-link') ?? [];
-
-  const setMenuOpenState = (isOpen: boolean) => {
-    if (!nav || !navToggle) return;
-    nav.dataset.menuOpen = isOpen ? 'true' : 'false';
-    navToggle.setAttribute('aria-expanded', String(isOpen));
-    navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+  const w = window as Window & {
+    __sirenNavHooksBound?: boolean;
+    __sirenNavScrollHandler?: () => void;
+    __sirenNavResizeHandler?: () => void;
   };
 
-  setMenuOpenState(false);
+  const initializeSiteNav = () => {
+    const nav = document.querySelector<HTMLElement>('.site-nav');
+    if (!nav) return;
 
-  const updateNavScrolledState = () => {
-    nav?.classList.toggle('site-nav--scrolled', window.scrollY > 8);
-  };
+    const navToggle = nav.querySelector<HTMLButtonElement>('.nav-toggle');
+    const navLinkItems = nav.querySelectorAll<HTMLAnchorElement>('.nav-link');
 
-  navToggle?.addEventListener('click', () => {
-    setMenuOpenState(nav?.dataset.menuOpen !== 'true');
-  });
+    const setMenuOpenState = (isOpen: boolean) => {
+      if (!navToggle) return;
+      nav.dataset.menuOpen = isOpen ? 'true' : 'false';
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+      navToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    };
 
-  navLinkItems.forEach((link) => {
-    link.addEventListener('click', () => {
-      if (window.matchMedia('(max-width: 47.99rem)').matches) {
-        setMenuOpenState(false);
-      }
+    setMenuOpenState(false);
+
+    if (navToggle && navToggle.dataset.navToggleBound !== 'true') {
+      navToggle.addEventListener('click', () => {
+        setMenuOpenState(nav.dataset.menuOpen !== 'true');
+      });
+      navToggle.dataset.navToggleBound = 'true';
+    }
+
+    navLinkItems.forEach((link) => {
+      if (link.dataset.navLinkBound === 'true') return;
+      link.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 47.99rem)').matches) {
+          setMenuOpenState(false);
+        }
+      });
+      link.dataset.navLinkBound = 'true';
     });
-  });
 
-  window.addEventListener(
-    'resize',
-    () => {
-      if (window.matchMedia('(min-width: 48rem)').matches) {
-        setMenuOpenState(false);
-      }
-    },
-    { passive: true },
-  );
+    nav.classList.toggle('site-nav--scrolled', window.scrollY > 8);
+  };
 
-  updateNavScrolledState();
-  window.addEventListener('scroll', updateNavScrolledState, { passive: true });
+  if (!w.__sirenNavHooksBound) {
+    w.__sirenNavScrollHandler = () => {
+      document.querySelector<HTMLElement>('.site-nav')?.classList.toggle('site-nav--scrolled', window.scrollY > 8);
+    };
+
+    w.__sirenNavResizeHandler = () => {
+      if (!window.matchMedia('(min-width: 48rem)').matches) return;
+      const nav = document.querySelector<HTMLElement>('.site-nav');
+      const navToggle = nav?.querySelector<HTMLButtonElement>('.nav-toggle');
+      if (!nav || !navToggle) return;
+      nav.dataset.menuOpen = 'false';
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Open menu');
+    };
+
+    window.addEventListener('scroll', w.__sirenNavScrollHandler, { passive: true });
+    window.addEventListener('resize', w.__sirenNavResizeHandler, { passive: true });
+    document.addEventListener('astro:page-load', initializeSiteNav);
+    w.__sirenNavHooksBound = true;
+  }
+
+  initializeSiteNav();
 </script>
 
 <style>
@@ -144,7 +167,7 @@ const currentPath = Astro.url.pathname;
     border: 1px solid var(--color-border-soft);
     background: color-mix(in oklab, var(--color-surface) 86%, transparent);
     color: var(--color-text-strong);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-md);
     padding: 0.45rem 0.75rem;
     font: inherit;
     font-size: 0.8rem;
@@ -200,9 +223,10 @@ const currentPath = Astro.url.pathname;
     font-weight: 500;
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-sm);
+    border: 1px solid transparent;
     display: block;
     text-align: center;
-    transition: color 180ms ease, background-color 180ms ease;
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
   }
 
   .nav-link:hover {
@@ -211,12 +235,16 @@ const currentPath = Astro.url.pathname;
   }
 
   .nav-link--active {
-    color: var(--color-accent);
+    color: var(--color-text-strong);
     font-weight: 600;
+    background: var(--color-surface-strong);
+    border-color: color-mix(in oklab, var(--color-accent-soft) 70%, var(--color-border-soft));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent) 25%, transparent);
   }
 
   .nav-link--active:hover {
-    color: var(--color-accent-strong);
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
   }
 
   @media (min-width: 48rem) {
