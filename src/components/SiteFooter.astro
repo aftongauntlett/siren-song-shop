@@ -25,9 +25,13 @@ const mkPath = (def: IconDefinition): string => {
     <!-- Brand column -->
     <div class="footer-brand">
       <a href="/" class="footer-logo" data-astro-prefetch>Siren Song Shop</a>
-      <p class="footer-tagline">
-        Curated with care. Built for community.
-      </p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <ul>
+          {navLinks.map(({ href, label }) => (
+            <li><a href={href} data-astro-prefetch>{label}</a></li>
+          ))}
+        </ul>
+      </nav>
       <ul class="social-list" aria-label="Follow us">
         <li>
           <a href="https://bsky.app" class="social-link" aria-label="Bluesky" rel="noopener noreferrer" target="_blank">
@@ -52,15 +56,6 @@ const mkPath = (def: IconDefinition): string => {
         </li>
       </ul>
     </div>
-
-    <!-- Navigation row -->
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <ul>
-        {navLinks.map(({ href, label }) => (
-          <li><a href={href} data-astro-prefetch>{label}</a></li>
-        ))}
-      </ul>
-    </nav>
 
     <!-- Toggles row -->
     <div class="footer-toggles" aria-label="Footer controls">
@@ -139,8 +134,9 @@ const mkPath = (def: IconDefinition): string => {
     color: color-mix(in oklab, white 94%, var(--color-accent-soft));
   }
 
-  .footer-logo:hover {
-    color: var(--color-accent);
+  .footer-logo:hover,
+  :root[data-theme="dark"] .footer-logo:hover {
+    color: var(--color-accent-teal);
   }
 
   .footer-tagline {
@@ -153,8 +149,6 @@ const mkPath = (def: IconDefinition): string => {
   /* Nav row */
   .footer-nav {
     width: 100%;
-    border-top: 1px solid var(--color-border-soft);
-    padding-top: var(--space-5);
   }
 
   .footer-nav ul {
