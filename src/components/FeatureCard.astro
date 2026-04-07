@@ -1,6 +1,4 @@
 ---
-import ButtonLink from './ButtonLink.astro';
-
 interface Props {
   eyebrow: string;
   title: string;
@@ -13,14 +11,20 @@ interface Props {
 const { eyebrow, title, description, href, cta, external = false } = Astro.props;
 ---
 
-<article class="feature-card">
+<a
+  class="feature-card"
+  href={href}
+  target={external ? '_blank' : '_self'}
+  {...(external ? { rel: 'noopener noreferrer' } : {})}
+  aria-label={`${title}: ${cta}${external ? ' (opens in new tab)' : ''}`}
+>
   <div class="card-icon-wrap" aria-hidden="true">
     <slot name="icon" />
   </div>
   <p class="eyebrow">{eyebrow}</p>
   <h3>{title}</h3>
   <p>{description}</p>
-  <ButtonLink href={href} variant="ghost" target={external ? '_blank' : '_self'} {...(external ? { rel: 'noopener noreferrer' } : {})}>
+  <span class="feature-cta" aria-hidden="true">
     {cta}
     {external && (
       <svg class="ext-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -28,8 +32,8 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
         <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       </svg>
     )}
-  </ButtonLink>
-</article>
+  </span>
+</a>
 
 <style>
   .feature-card {
@@ -37,20 +41,76 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     flex-direction: column;
     align-items: center;
     text-align: center;
+    text-decoration: none;
     gap: var(--space-3);
     height: 100%;
     border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border-soft);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
     padding: var(--space-6) var(--space-5);
-    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease;
+    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease, background-color 320ms ease;
+    color: var(--color-on-accent);
+  }
+
+  .feature-card:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring), var(--shadow-glow);
+  }
+
+  :root[data-theme='dark'] .feature-card {
+    border-color: var(--color-border-soft);
   }
 
   .feature-card:hover {
     box-shadow: var(--shadow-glow);
-    border-color: var(--color-border);
+    border-color: rgba(255, 255, 255, 0.28);
     transform: translateY(-2px);
+  }
+
+  :root:not([data-theme='dark']) .feature-card:hover {
+    background: color-mix(in oklab, var(--color-surface-card) 86%, black 14%);
+  }
+
+  :root[data-theme='dark'] .feature-card:hover {
+    border-color: var(--color-border);
+  }
+
+  .feature-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-on-accent);
+  }
+
+  :root:not([data-theme='dark']) .feature-cta {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.45);
+    color: var(--color-on-accent);
+  }
+
+  :root:not([data-theme='dark']) .feature-card:hover .feature-cta {
+    background: rgba(255, 255, 255, 0.24);
+    border-color: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  :root[data-theme='dark'] .feature-cta {
+    color: var(--color-accent);
+    background: color-mix(in oklab, var(--color-accent-soft) 38%, transparent);
+    border-color: var(--color-border);
+  }
+
+  :root[data-theme='dark'] .feature-card:hover .feature-cta {
+    color: var(--color-accent-pop);
+    border-color: var(--color-border);
+    background: color-mix(in oklab, var(--color-accent-soft) 52%, transparent);
   }
 
   .card-icon-wrap {
@@ -59,14 +119,23 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     height: 3.25rem;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-md);
-    background: color-mix(in oklab, var(--color-accent-soft) 60%, transparent);
-    color: var(--color-accent);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--color-on-accent);
     transition: color 200ms ease;
   }
 
+  :root[data-theme='dark'] .card-icon-wrap {
+    background: color-mix(in oklab, var(--color-accent-soft) 60%, transparent);
+    color: var(--color-accent);
+  }
+
   .feature-card:hover .card-icon-wrap {
-    color: var(--color-accent-teal);
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] .feature-card:hover .card-icon-wrap {
+    color: var(--color-accent-pop);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -79,9 +148,13 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--color-accent-teal);
+    color: var(--color-on-accent);
     font-size: 0.75rem;
     font-weight: 600;
+  }
+
+  :root[data-theme='dark'] .eyebrow {
+    color: var(--color-accent-pop);
   }
 
   h3,
@@ -94,18 +167,23 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     font-weight: 400;
     font-size: 1.35rem;
     line-height: 1.25;
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] h3 {
+    color: var(--color-text-strong);
   }
 
   p:not(.eyebrow) {
-    color: var(--color-text-muted);
+    color: var(--color-on-accent);
     flex: 1;
   }
 
-  :global(.button) svg {
-    margin-inline-start: var(--space-1);
+  :root[data-theme='dark'] p:not(.eyebrow) {
+    color: var(--color-text-muted);
   }
 
-  :global(.button .ext-icon) {
+  .ext-icon {
     width: 0;
     opacity: 0;
     overflow: hidden;
@@ -114,12 +192,13 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    :global(.button .ext-icon) {
+    .ext-icon {
       transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
     }
   }
 
-  .feature-card:hover :global(.button .ext-icon) {
+  .feature-card:hover .ext-icon,
+  .feature-card:focus-visible .ext-icon {
     width: 14px;
     opacity: 1;
     margin-inline-start: var(--space-1);

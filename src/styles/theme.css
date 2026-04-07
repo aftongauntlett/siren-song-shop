@@ -1,29 +1,29 @@
 :root {
-  /* Mermaid palette — teal & purple */
-  --color-bg: #f5f3ff;
-  --color-bg-muted: #ede9fe;
-  --color-surface: #fdfcff;
-  --color-surface-strong: #f0ecff;
-  --color-surface-card: color-mix(
-    in oklab,
-    var(--color-surface) 88%,
-    transparent
-  );
+  /* Palette — blue-purple & amber */
+  --color-bg: #faf9fe;
+  --color-bg-muted: #f2effd;
+  --color-surface: #ffffff;
+  --color-surface-strong: #e8e4f4;
+  --color-surface-card: #6f6789;
   --color-text: #1e1b2e;
-  --color-text-strong: #0f0c1a;
-  --color-text-muted: #6b5f8a;
-  --color-accent: #825ac2;
-  --color-accent-soft: #ddd6fe;
-  --color-accent-strong: #381e61;
-  --color-accent-teal: #3a9990;
-  --color-accent-teal-soft: #a0c4c0;
+  --color-text-strong: #3c384a;
+  --color-text-muted: #544a70;
+  --color-accent: #5f557f;
+  --color-accent-soft: #d7d0e0;
+  --color-accent-strong: #3b3650;
+  --color-accent-pop: #1c1133;
+  --color-accent-pop-soft: #e9c9ef;
   --color-on-accent: #ffffff;
-  --color-border: #d0c8fd;
-  --color-border-soft: #ede9fe;
-  --focus-ring: 0 0 0 3px rgba(109, 40, 217, 0.3);
+  --color-border: #cec8f0;
+  --color-border-soft: #e8e4f4;
+  --color-tab-underline: #32626a;
+  --color-teal: #2a9d8f;
+  --color-danger: #e11d48;
+  --focus-ring: 0 0 0 3px rgba(123, 104, 192, 0.35);
 
   --font-body: "Nunito", "Avenir Next", "Segoe UI", sans-serif;
   --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-handwrite: "Dancing Script", "Segoe Script", cursive;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -42,18 +42,19 @@
   --radius-lg: 0.75rem;
   --radius-pill: 999px;
 
-  --shadow-soft: 0 12px 30px -20px rgba(109, 40, 217, 0.2);
+  --shadow-soft: 0 12px 30px -20px rgba(123, 104, 192, 0.22);
+  --shadow-button-primary: 0 4px 16px rgba(109, 40, 217, 0.3);
   --shadow-glow:
-    0 0 0 1px var(--color-border-soft), 0 8px 32px rgba(109, 40, 217, 0.1),
-    0 0 60px rgba(58, 153, 144, 0.05);
+    0 0 0 1px var(--color-border-soft), 0 8px 32px rgba(123, 104, 192, 0.12),
+    0 0 60px rgba(149, 108, 10, 0.06);
   --container-max: 72rem;
 }
 
 :root[data-theme="dark"] {
-  --color-bg: #0e0b1a;
-  --color-bg-muted: #1a1530;
+  --color-bg: #110b1a;
+  --color-bg-muted: #1d1530;
   --color-surface: #16122a;
-  --color-surface-strong: #221c3f;
+  --color-surface-strong: #251c3f;
   --color-surface-card: color-mix(
     in oklab,
     var(--color-surface) 92%,
@@ -65,16 +66,20 @@
   --color-accent: #9884d7;
   --color-accent-soft: #3b2a6e;
   --color-accent-strong: #c4b5fd;
-  --color-accent-teal: #2dd4bf;
-  --color-accent-teal-soft: #134e4a;
+  --color-accent-pop: #68f5f2;
+  --color-accent-pop-soft: #45134e;
   --color-on-accent: #0e0b1a;
   --color-border: #3b2d6e;
   --color-border-soft: #2a2050;
+  --color-tab-underline: #d88ee5;
+  --color-teal: #4ecdc4;
+  --color-danger: #fb7185;
   --focus-ring: 0 0 0 3px rgba(167, 139, 250, 0.35);
   --shadow-soft: 0 12px 30px -18px rgba(0, 0, 0, 0.6);
+  --shadow-button-primary: 0 4px 16px rgba(167, 139, 250, 0.28);
   --shadow-glow:
     0 0 0 1px var(--color-border), 0 8px 32px rgba(167, 139, 250, 0.2),
-    0 0 60px rgba(45, 212, 191, 0.08);
+    0 0 60px rgba(206, 45, 212, 0.08);
 }
 
 * {
@@ -88,7 +93,7 @@ body {
   background:
     radial-gradient(
       ellipse at 25% 100%,
-      color-mix(in oklab, var(--color-accent-teal-soft) 35%, transparent),
+      color-mix(in oklab, var(--color-accent-pop-soft) 35%, transparent),
       transparent 55%
     ),
     radial-gradient(
@@ -218,6 +223,9 @@ textarea:focus-visible {
 }
 [data-reveal][data-reveal-delay="3"] {
   transition-delay: 240ms;
+}
+[data-reveal][data-reveal-delay="4"] {
+  transition-delay: 320ms;
 }
 
 @media (min-width: 48rem) {

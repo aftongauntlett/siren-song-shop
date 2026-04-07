@@ -10,36 +10,67 @@ import ButtonLink from '../components/ButtonLink.astro';
   <main id="main-content" class="container">
     <section class="page-hero" aria-labelledby="about-heading">
       <p class="kicker">Our Story</p>
-      <h1 id="about-heading">A recommendation platform built on trust.</h1>
+      <h1 id="about-heading">A little bit about us</h1>
       <p class="intro">
-        Siren Song is a curated space for artists, makers, independent shops, tea, books, spirits,
-        and gifting resources — every pick personally vetted and editorially accountable.
+        Siren Song Shop is a curated space for artists, makers, independent shops, apothecaries, and other delightful discoveries — with every pick personally vetted.
       </p>
     </section>
 
     <section aria-labelledby="mission-heading" class="content-section">
       <h2 id="mission-heading" class="section-heading" data-reveal>What we believe</h2>
       <p class="section-copy" data-reveal data-reveal-delay="1">
-        Great recommendations have a human voice behind them. We don't publish anything we
-        wouldn't confidently give to a close friend. No affiliate pressure, no sponsored
-        placements, no algorithmic ranking — just honest taste and genuine care.
+        Great recommendations should have a human voice behind them. We do not publish anything
+        we would not confidently give to a close friend. No ad clutter, no sponsored placements,
+        no pay-to-play ranking. Just honest taste, practical context, and genuine care.
+      </p>
+      <div class="about-quote-wrap" data-reveal data-reveal-delay="2">
+        <p class="about-quote">
+          We are building the kind of directory we wished already existed: clean, accessible,
+          independent, and genuinely useful to real people.
+        </p>
+      </div>
+      <p class="section-copy" data-reveal data-reveal-delay="2">
+        We care deeply about keeping this platform welcoming and accessible so more people can
+        discover useful options without noise, pressure, or gatekeeping.
       </p>
     </section>
 
     <section aria-labelledby="process-heading" class="content-section">
       <h2 id="process-heading" class="section-heading" data-reveal>How picks make the list</h2>
       <p class="section-copy" data-reveal data-reveal-delay="1">
-        We look for things with a real story behind them — independent makers, considered craft,
-        and products that hold up over time. Every recommendation includes the rationale so you
-        can decide if it fits your world, not just ours.
+        We look for things with a real story behind them. Every recommendation is put through a
+        consistent set of checks before it earns a spot here.
       </p>
+      <ul class="vetting-grid" data-reveal data-reveal-delay="2">
+        <li>Personally vetted</li>
+        <li>Independently owned</li>
+        <li>Community-operated</li>
+        <li>No pay-to-play</li>
+        <li>Accountable</li>
+        <li>Ethically operated</li>
+        <li>Regularly reviewed</li>
+        <li>Honest context</li>
+      </ul>
+      <aside class="suggest-aside" aria-labelledby="suggest-heading" data-reveal data-reveal-delay="3">
+        <p class="suggest-eyebrow">Know something we should know?</p>
+        <h3 id="suggest-heading" class="suggest-heading">Recommend a shop or resource.</h3>
+        <p class="suggest-body">Know a maker, local org, or community resource that belongs here? We review every suggestion personally. You can recommend something you love, flag a resource worth sharing, or request that your own shop be considered for a listing.</p>
+        <a class="suggest-link" href="/contact">
+          Send us a note
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </aside>
     </section>
 
     <section aria-labelledby="support-heading" class="content-section support-section" data-reveal>
       <h2 id="support-heading" class="section-heading">Keep the lights on</h2>
       <p class="section-copy">
-        Siren Song is free to use and ad-free. If it's been useful to you, a small contribution
-        goes a long way!
+        Siren Song is free to use and intentionally ad-free, with no paid placements shaping what
+        gets featured. If this project has helped you discover something meaningful, a small
+        contribution helps cover hosting, upkeep, and the time it takes to keep every
+        recommendation thoughtful and up to date.
       </p>
       <div class="support-links">
         <ButtonLink href="https://ko-fi.com/prettyprettyprettygood" target="_blank" rel="noopener noreferrer">Ko-fi</ButtonLink>
@@ -53,13 +84,14 @@ import ButtonLink from '../components/ButtonLink.astro';
 <style>
   .page-hero {
     padding: var(--space-12) 0 var(--space-8);
+    text-align: center;
   }
 
   .kicker {
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-accent-teal);
+    color: var(--color-accent-pop);
     font-weight: 600;
     font-size: 0.8rem;
   }
@@ -74,29 +106,170 @@ import ButtonLink from '../components/ButtonLink.astro';
   }
 
   .intro {
-    margin: 0;
+    margin: 0 auto;
+    max-width: 62ch;
+    font-size: 1.08rem;
+    line-height: 1.75;
     color: var(--color-text-muted);
+  }
+
+  .about-quote-wrap {
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-8);
+    padding-top: var(--space-6);
     max-width: 56ch;
+    margin-inline: auto;
+    border-top: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
+  }
+
+  .about-quote-wrap::before {
+    content: '\201C';
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    line-height: 1;
+    color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+    margin-bottom: var(--space-2);
+  }
+
+  .about-quote {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-style: italic;
+    font-size: clamp(1.08rem, 2.1vw, 1.28rem);
+    line-height: 1.6;
+    color: var(--color-text-strong);
   }
 
   .content-section {
-    padding: var(--space-8) 0;
+    padding: var(--space-12) 0;
     border-top: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .content-section .section-copy {
+    max-width: 62ch;
+    margin-inline: auto;
   }
 
   .content-section .section-heading {
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
     transition: color 220ms ease;
   }
 
   .content-section:hover .section-heading {
-    color: var(--color-accent-teal);
+    color: var(--color-accent-pop);
+  }
+
+  .vetting-grid {
+    list-style: none;
+    margin: var(--space-8) auto 0;
+    padding: 0;
+    max-width: 72ch;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .vetting-grid li {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-strong);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 0.4rem 0.9rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vetting-grid li {
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .vetting-grid li:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-teal);
+      box-shadow: 0 8px 20px -16px color-mix(in oklab, var(--color-teal) 65%, transparent);
+    }
+  }
+
+  .suggest-aside {
+    margin-top: var(--space-16);
+    margin-inline: auto;
+    max-width: 72ch;
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-soft);
+    background: var(--color-surface);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .suggest-eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-teal);
+  }
+
+  .suggest-heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 400;
+    color: var(--color-text-strong);
+    line-height: 1.2;
+  }
+
+  .suggest-body {
+    margin: 0;
+    max-width: 56ch;
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    font-size: 0.95rem;
+  }
+
+  .suggest-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-2);
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-accent-soft);
+    padding-bottom: 0.1em;
+    transition: border-color 180ms ease, opacity 180ms ease;
+  }
+
+  .suggest-link:hover {
+    border-color: var(--color-accent);
+    opacity: 0.8;
+  }
+
+  .process-cta-text {
+    margin: 0;
+    max-width: 58ch;
+    color: var(--color-text-muted);
+    font-size: 0.97rem;
+    line-height: 1.75;
   }
 
   .support-links {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: center;
     gap: var(--space-3);
     margin-top: var(--space-4);
     margin-bottom: calc(-1 * var(--space-2));

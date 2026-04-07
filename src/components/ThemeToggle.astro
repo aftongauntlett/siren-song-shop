@@ -57,23 +57,26 @@
 
 <style>
   .theme-toggle {
-    border: none;
-    background: none;
+    border: 1px solid var(--color-border-soft);
+    background: transparent;
     color: var(--color-text-muted);
-    padding: 0;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    transition: color 180ms ease;
+    transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
   }
 
   .theme-toggle:hover {
-    color: var(--color-accent-teal);
+    color: var(--color-accent-pop);
+    border-color: var(--color-accent-pop);
   }
 
   :root:not([data-theme="dark"]) .theme-toggle:hover {
-    color: color-mix(in oklab, var(--color-accent-teal) 62%, var(--color-text-strong) 38%);
+    color: color-mix(in oklab, var(--color-accent-pop) 62%, var(--color-text-strong) 38%);
+    border-color: color-mix(in oklab, var(--color-accent-pop) 62%, var(--color-text-strong) 38%);
   }
 
   @media (prefers-reduced-motion: no-preference) {

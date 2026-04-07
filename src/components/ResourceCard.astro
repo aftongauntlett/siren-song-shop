@@ -5,58 +5,96 @@ interface Props {
   description: string;
   featured?: boolean;
   location?: string;
+  badges?: string[];
 }
 
-const { name, url, description, featured = false, location } = Astro.props;
+const { name, url, description, featured = false, location, badges = [] } = Astro.props;
 
-const displayUrl = new URL(url).hostname.replace(/^www\./, '');
+const _parsedUrl = new URL(url);
+const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathname !== '/' ? _parsedUrl.pathname.replace(/\/$/, '') : '');
 ---
 
-<article class:list={['resource-card', { 'resource-card--featured': featured }]}>
+<a
+  class:list={['resource-card', { 'resource-card--featured': featured }]}
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={`Visit ${name} (opens in new tab)`}
+>
   <div class="resource-card-body">
     <h3 class="resource-name">{name}</h3>
+    {badges.length > 0 && (
+      <ul class="resource-badges" aria-label={`${name} highlights`}>
+        {badges.map((badge) => (
+          <li class="resource-badge">
+            <svg class="resource-badge-icon" width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M13.333 2.667c-4.666 0-8 2.666-8 6.666a4 4 0 0 0 4 4c4 0 6.667-3.333 6.667-8v-2.666h-2.667Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M3.333 12.667 8 8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+            </svg>
+            {badge}
+          </li>
+        ))}
+      </ul>
+    )}
     {location && (
       <span class="resource-location" aria-label={`Location: ${location}`}>{location}</span>
     )}
     <p class="resource-description">{description}</p>
   </div>
-  <a
-    class="resource-link"
-    href={url}
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label={`Visit ${name} (opens in new tab)`}
-  >
+  <span class="resource-link" aria-hidden="true">
     {displayUrl}
     <svg class="resource-link-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
       <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
       <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
-  </a>
-</article>
+  </span>
+</a>
 
 <style>
   .resource-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-decoration: none;
     gap: var(--space-4);
     height: 100%;
     padding: var(--space-5) var(--space-6);
-    border: 1px solid var(--color-border-soft);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-lg);
     background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
-    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease;
+    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease, background-color 320ms ease;
+  }
+
+  .resource-card:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring), var(--shadow-glow);
+  }
+
+  :root[data-theme='dark'] .resource-card {
+    border-color: var(--color-border-soft);
   }
 
   .resource-card:hover {
     box-shadow: var(--shadow-glow);
-    border-color: var(--color-border);
+    border-color: rgba(255, 255, 255, 0.28);
     transform: translateY(-2px);
   }
 
+  :root:not([data-theme='dark']) .resource-card:hover {
+    background: color-mix(in oklab, var(--color-surface-card) 86%, black 14%);
+  }
+
+  :root[data-theme='dark'] .resource-card:hover {
+    border-color: var(--color-border);
+  }
+
   .resource-card--featured {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: color-mix(in oklab, var(--color-surface-card) 92%, white 8%);
+  }
+
+  :root[data-theme='dark'] .resource-card--featured {
     border-color: var(--color-accent-soft);
     background: color-mix(in oklab, var(--color-surface-card) 90%, var(--color-accent-soft));
   }
@@ -71,6 +109,45 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     margin: 0;
     font-size: 1.05rem;
     font-weight: 600;
+    color: var(--color-on-accent);
+  }
+
+  .resource-badges {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .resource-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    align-self: flex-start;
+    padding: 0.15rem 0.55rem;
+    border: 1px solid color-mix(in oklab, var(--color-on-accent) 25%, transparent);
+    border-radius: var(--radius-pill);
+    background: color-mix(in oklab, var(--color-accent-pop) 25%, transparent);
+    color: var(--color-on-accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+
+  .resource-badge-icon {
+    flex-shrink: 0;
+  }
+
+  :root[data-theme='dark'] .resource-badge {
+    border-color: color-mix(in oklab, var(--color-accent-pop) 35%, var(--color-border-soft));
+    background: color-mix(in oklab, var(--color-accent-pop) 10%, transparent);
+    color: var(--color-accent-pop);
+  }
+
+  :root[data-theme='dark'] .resource-name {
     color: var(--color-text-strong);
   }
 
@@ -79,21 +156,31 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     align-items: center;
     align-self: flex-start;
     padding: 0.15rem 0.55rem;
-    border: 1px solid color-mix(in oklab, var(--color-accent-teal) 35%, var(--color-border-soft));
+    border: 1px solid color-mix(in oklab, var(--color-on-accent) 25%, transparent);
     border-radius: var(--radius-pill);
-    background: color-mix(in oklab, var(--color-accent-teal) 10%, transparent);
-    color: var(--color-accent-teal);
+    background: color-mix(in oklab, var(--color-accent-pop) 25%, transparent);
+    color: var(--color-on-accent);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1.4;
   }
 
+  :root[data-theme='dark'] .resource-location {
+    border-color: color-mix(in oklab, var(--color-accent-pop) 35%, var(--color-border-soft));
+    background: color-mix(in oklab, var(--color-accent-pop) 10%, transparent);
+    color: var(--color-accent-pop);
+  }
+
   .resource-description {
     margin: 0;
     font-size: 0.925rem;
-    color: var(--color-text-muted);
+    color: var(--color-on-accent);
     line-height: 1.6;
+  }
+
+  :root[data-theme='dark'] .resource-description {
+    color: var(--color-text-muted);
   }
 
   .resource-link {
@@ -102,21 +189,24 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
     gap: var(--space-1);
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--color-accent-teal);
+    color: var(--color-on-accent);
     text-decoration: none;
     align-self: flex-end;
     justify-content: flex-end;
     transition: color 200ms ease;
   }
 
-  .resource-link:hover {
-    color: var(--color-accent);
+  :root[data-theme='dark'] .resource-link {
+    color: var(--color-accent-pop);
   }
 
-  .resource-link:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm, 2px);
+  .resource-link:hover {
+    color: var(--color-on-accent);
+    text-decoration: underline;
+  }
+
+  :root[data-theme='dark'] .resource-link:hover {
+    color: var(--color-accent);
   }
 
   .resource-link-icon {
@@ -134,7 +224,7 @@ const displayUrl = new URL(url).hostname.replace(/^www\./, '');
   }
 
   .resource-card:hover .resource-link-icon,
-  .resource-link:focus-visible .resource-link-icon {
+  .resource-card:focus-visible .resource-link-icon {
     width: 14px;
     opacity: 1;
     margin-inline-start: var(--space-1);

@@ -1,0 +1,57 @@
+---
+const chips = [
+  'Vegan Friendly',
+  'Ethical Sourcing',
+  'Independent Makers',
+  'Community First',
+] as const;
+---
+
+<section class="home-values" aria-label="Core commitments" data-reveal>
+  <ul class="values-list">
+    {chips.map((chip, i) => (
+      <li class="values-pill" data-reveal data-reveal-delay={String((i % 3) + 1) as '1' | '2' | '3'}>{chip}</li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .home-values {
+    margin-top: var(--space-6);
+  }
+
+  .values-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .values-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-strong);
+    font-size: 0.83rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 0.4rem 0.85rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .values-pill {
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .values-pill:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-accent);
+      box-shadow: 0 8px 20px -16px color-mix(in oklab, var(--color-accent) 65%, transparent);
+    }
+  }
+</style>

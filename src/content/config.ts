@@ -14,7 +14,7 @@ const resources = defineCollection({
   schema: z.object({
     name: z.string().min(1),
     url: z.string().url(),
-    category: z.enum(["orgs", "hiring", "charities", "communities"]),
+    category: z.enum(["orgs", "hiring", "charities", "communities", "support"]),
     description: z.string().min(1),
     featured: z.boolean().default(false),
   }),

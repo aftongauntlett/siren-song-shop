@@ -1,0 +1,133 @@
+---
+const curationCards = [
+  {
+    number: '01',
+    title: 'Discover',
+    body: 'We find things through lived experience: shops, events, makers, and spaces we actually use, visit, and trust.',
+  },
+  {
+    number: '02',
+    title: 'Vet',
+    body: 'Every pick is checked against our standards: plant-based, independent, and community-rooted.',
+  },
+  {
+    number: '03',
+    title: 'Recommend',
+    body: 'Only what we would confidently hand to a close friend makes the list. No paid placements, no filler.',
+  },
+] as const;
+---
+
+<section aria-labelledby="process-heading" class="process">
+  <h2 id="process-heading" class="section-heading" data-reveal>How Curation Works</h2>
+  <p class="section-copy" data-reveal data-reveal-delay="1">No committees. No shortcuts. Just deliberate, human curation.</p>
+  <ol class="process-list">
+    {curationCards.map((step, i) => (
+      <li class="step-card" data-reveal data-reveal-delay={String((i % 3) + 1) as '1' | '2' | '3'}>
+        <span class="step-number" aria-hidden="true">{step.number}</span>
+        <h3>{step.title}</h3>
+        <p>{step.body}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .process .section-heading,
+  .process .section-copy {
+    text-align: center;
+  }
+
+  .process .section-copy {
+    margin-inline: auto;
+    max-width: 62ch;
+  }
+
+  .process-list {
+    list-style: none;
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .step-card {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-card);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-5);
+    color: var(--color-on-accent);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step-card {
+      transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+    }
+
+    .step-number {
+      transition: color 280ms ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .step-card:hover .step-number {
+      color: var(--color-teal);
+    }
+  }
+
+  :root[data-theme='dark'] .step-card {
+    border-color: var(--color-border-soft);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  :root[data-theme='dark'] .step-card:hover {
+    border-color: var(--color-border);
+  }
+
+  .step-number {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2.1rem;
+    line-height: 1;
+    color: color-mix(in oklab, var(--color-on-accent) 44%, transparent);
+    margin-bottom: var(--space-2);
+  }
+
+  :root[data-theme='dark'] .step-number {
+    color: color-mix(in oklab, var(--color-text-strong) 62%, transparent);
+  }
+
+  .step-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] .step-card h3 {
+    color: var(--color-text-strong);
+  }
+
+  .step-card p {
+    margin: var(--space-2) 0 0;
+    color: var(--color-on-accent);
+    line-height: 1.65;
+  }
+
+  :root[data-theme='dark'] .step-card p {
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .process-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

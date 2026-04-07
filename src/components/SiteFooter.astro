@@ -1,8 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
 import MotionToggle from './MotionToggle.astro';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faBluesky, faInstagram, faFacebook } from '@fortawesome/free-brands-svg-icons';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -12,12 +10,6 @@ const navLinks = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ] as const;
-
-const mkViewBox = (def: IconDefinition) => `0 0 ${def.icon[0]} ${def.icon[1]}`;
-const mkPath = (def: IconDefinition): string => {
-  const d = def.icon[4];
-  return Array.isArray(d) ? d.join(' ') : d;
-};
 ---
 
 <footer class="site-footer">
@@ -32,42 +24,21 @@ const mkPath = (def: IconDefinition): string => {
           ))}
         </ul>
       </nav>
-      <ul class="social-list" aria-label="Follow us">
-        <li>
-          <a href="https://bsky.app" class="social-link" aria-label="Bluesky" rel="noopener noreferrer" target="_blank">
-            <svg width="20" height="20" viewBox={mkViewBox(faBluesky)} fill="currentColor" aria-hidden="true" focusable="false">
-              <path d={mkPath(faBluesky)} />
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a href="https://instagram.com" class="social-link" aria-label="Instagram" rel="noopener noreferrer" target="_blank">
-            <svg width="20" height="20" viewBox={mkViewBox(faInstagram)} fill="currentColor" aria-hidden="true" focusable="false">
-              <path d={mkPath(faInstagram)} />
-            </svg>
-          </a>
-        </li>
-        <li>
-          <a href="https://facebook.com" class="social-link" aria-label="Facebook" rel="noopener noreferrer" target="_blank">
-            <svg width="20" height="20" viewBox={mkViewBox(faFacebook)} fill="currentColor" aria-hidden="true" focusable="false">
-              <path d={mkPath(faFacebook)} />
-            </svg>
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Toggles row -->
-    <div class="footer-toggles" aria-label="Footer controls">
-      <ThemeToggle />
-      <MotionToggle />
+      <div class="footer-toggles" aria-label="Footer controls">
+        <ThemeToggle />
+        <MotionToggle />
+      </div>
     </div>
   </div>
 
   <!-- Bottom bar -->
   <div class="footer-bottom">
     <div class="container footer-bottom-inner">
-      <p>© {new Date().getFullYear()} Siren Song Shop</p>
+      <p class="footer-identity">
+        <span class="pride-flag" aria-hidden="true">🏳️‍🌈</span>
+        <span>woman-owned &amp; queer-friendly</span>
+      </p>
+      <p class="footer-copy">© {new Date().getFullYear()} Siren Song Shop</p>
       <span class="built-by">built by <a href="https://www.prettyprettyprettygood.org/" rel="noopener noreferrer" target="_blank">prettyprettyprettygood</a></span>
     </div>
   </div>
@@ -114,10 +85,10 @@ const mkPath = (def: IconDefinition): string => {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--space-4);
+    gap: var(--space-3);
     justify-content: center;
-    border-top: 1px solid var(--color-border-soft);
-    padding-top: var(--space-4);
+    border-bottom: 1px solid var(--color-border-soft);
+    padding-bottom: var(--space-4);
     width: 100%;
   }
 
@@ -136,7 +107,7 @@ const mkPath = (def: IconDefinition): string => {
 
   .footer-logo:hover,
   :root[data-theme="dark"] .footer-logo:hover {
-    color: var(--color-accent-teal);
+    color: var(--color-accent-pop);
   }
 
   .footer-tagline {
@@ -170,33 +141,7 @@ const mkPath = (def: IconDefinition): string => {
   }
 
   .footer-nav a:hover {
-    color: var(--color-accent-teal);
-  }
-
-  /* Social icon row */
-  .social-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: var(--space-4);
-  }
-
-  .social-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: var(--color-text-muted);
-    width: 2rem;
-    height: 2rem;
-    transition: color 200ms ease;
-  }
-
-  .social-link:hover {
-    color: var(--color-accent-teal);
+    color: var(--color-accent-pop);
   }
 
   /* Bottom bar */
@@ -209,34 +154,68 @@ const mkPath = (def: IconDefinition): string => {
   }
 
   :root:not([data-theme="dark"]) .site-footer .footer-nav a:hover {
-    color: color-mix(in oklab, var(--color-accent-teal) 62%, var(--color-text-strong) 38%);
+    color: color-mix(in oklab, var(--color-accent-pop) 62%, var(--color-text-strong) 38%);
   }
 
-  :root:not([data-theme="dark"]) .site-footer .social-link:hover {
-    color: color-mix(in oklab, var(--color-accent-teal) 62%, var(--color-text-strong) 38%);
-  }
   :root:not([data-theme="dark"]) .site-footer .footer-bottom {
     border-top: none;
   }
 
   .footer-bottom-inner {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
-    gap: var(--space-3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2) var(--space-5);
   }
 
-  .footer-bottom p {
+  .footer-copy {
     margin: 0;
     color: var(--color-text-muted);
     font-size: 0.8rem;
+    flex: 1 1 auto;
+    text-align: center;
+    order: 2;
+  }
+
+  .footer-identity {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    order: 1;
   }
 
   .built-by {
     color: var(--color-text-muted);
     font-size: 0.8rem;
     text-align: right;
-    justify-self: end;
+    white-space: nowrap;
+    order: 3;
+  }
+
+  @media (max-width: 480px) {
+    .footer-bottom-inner {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .footer-identity,
+    .footer-copy,
+    .built-by {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  .pride-flag {
+    font-size: 0.9rem;
+    line-height: 1;
   }
 
   .built-by a {

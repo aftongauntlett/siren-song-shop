@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ResourceCard from '../components/ResourceCard.astro';
+import TabTour from '../components/TabTour.astro';
 
 type LocalKindId = 'shops' | 'restaurants' | 'service' | 'visit';
 
@@ -27,23 +28,23 @@ interface LocalEntry {
 const categories: LocalKindTab[] = [
   {
     id: 'shops',
-    label: 'Shops',
-    description: 'Independent spots for everyday essentials, gifts, and practical local shopping.'
+    label: 'Local Shops',
+    description: 'Independent, community-rooted spots for everyday essentials, gifts, and good stuff made nearby.'
   },
   {
     id: 'restaurants',
-    label: 'Restaurants',
-    description: 'Places to eat and drink with local flavor and strong community roots.'
+    label: 'Eat & Gather',
+    description: 'Places to eat, drink, and linger with local flavor and people who give a damn about their food.'
   },
   {
     id: 'service',
-    label: 'Service',
-    description: 'Local organizations and services supporting jobs, care networks, and day-to-day resilience.'
+    label: 'Care & Mutual Aid',
+    description: 'Co-ops, nonprofits, and community orgs doing the real work of holding each other up.'
   },
   {
     id: 'visit',
-    label: 'Visit',
-    description: 'Local places and communities worth exploring in person.'
+    label: 'Worth the Trip',
+    description: 'Places that reward you for showing up in person — markets, gathering spots, and community spaces.'
   }
 ];
 
@@ -179,6 +180,36 @@ const localEntries: LocalEntry[] = [
     zip: '27705'
   },
   {
+    name: "Vimala's Curryblossom Cafe",
+    url: 'https://www.curryblossom.com/',
+    description:
+      'A beloved Chapel Hill institution serving vegetarian and vegan Indian food with a community pay-what-you-can ethos on Monday nights.',
+    kind: 'restaurants',
+    state: 'NC',
+    city: 'Chapel Hill',
+    zip: '27516'
+  },
+  {
+    name: 'Irregardless Cafe',
+    url: 'https://irregardless.com/',
+    description:
+      "One of the South's longest-running vegetarian-friendly restaurants, rooted in Raleigh since 1975 with plant-forward menus and live music.",
+    kind: 'restaurants',
+    state: 'NC',
+    city: 'Raleigh',
+    zip: '27601'
+  },
+  {
+    name: 'Durham Co-op Market',
+    url: 'https://durhamcoop.com/',
+    description:
+      'A community-owned grocery cooperative offering local, organic, and plant-friendly staples with strong member governance roots.',
+    kind: 'shops',
+    state: 'NC',
+    city: 'Durham',
+    zip: '27701'
+  },
+  {
     name: 'Fountain Bookstore',
     url: 'https://www.fountainbookstore.com/',
     description:
@@ -217,6 +248,36 @@ const localEntries: LocalEntry[] = [
     state: 'VA',
     city: 'Louisa',
     zip: '23093'
+  },
+  {
+    name: 'Ipanema Restaurant',
+    url: 'https://www.ipanemavcu.com/',
+    description:
+      'A Richmond vegetarian anchor with a rotating plant-forward menu and a long-standing local reputation for doing it right.',
+    kind: 'restaurants',
+    state: 'VA',
+    city: 'Richmond',
+    zip: '23220'
+  },
+  {
+    name: 'Nile Restaurant',
+    url: 'https://www.nileethiopian.com/',
+    description:
+      'An Ethiopian restaurant in Richmond with an expansive vegan menu rooted in injera and spiced lentils — a local plant-eater staple.',
+    kind: 'restaurants',
+    state: 'VA',
+    city: 'Richmond',
+    zip: '23220'
+  },
+  {
+    name: "Ellwood Thompson's Local Market",
+    url: 'https://www.ellwoodthompsons.com/',
+    description:
+      "Richmond's independent natural grocer with strong local sourcing, a full vegan section, and genuine community investment.",
+    kind: 'shops',
+    state: 'VA',
+    city: 'Richmond',
+    zip: '23221'
   },
   {
     name: 'Rainbow Grocery Cooperative',
@@ -338,17 +399,34 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     </section>
 
     <nav class="category-nav" aria-label="Browse local gem categories">
-      <div class="category-select-wrap">
-        <select
-          id="local-category-select"
-          class="category-select"
-          data-kind-select
-          aria-label="Local category"
+      <div class="category-dropdown" data-category-dropdown>
+        <button
+          type="button"
+          class="category-trigger"
+          data-category-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-label="Select local category"
         >
-          {categories.map((category) => (
-            <option value={category.id}>{category.label}</option>
+          <span data-category-value>{categories[0]?.label ?? ''}</span>
+          <svg class="category-trigger-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <ul class="category-options" data-category-options aria-label="Local categories" hidden>
+          {categories.map(({ id, label }, index) => (
+            <li>
+              <button
+                type="button"
+                class:list={['category-option', { 'category-option--active': index === 0 }]}
+                data-category-option
+                data-value={id}
+              >
+                {label}
+              </button>
+            </li>
           ))}
-        </select>
+        </ul>
       </div>
       <div class="category-list" role="tablist" aria-label="Local categories">
         {categories.map(({ id, label }, index) => (
@@ -369,6 +447,7 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
           </div>
         ))}
       </div>
+      <TabTour />
     </nav>
 
     {categories.map(({ id, label, description }, index) => {
@@ -395,7 +474,7 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
                   name={entry.name}
                   url={entry.url}
                   description={entry.description}
-                  location={`${entry.city}, ${entry.state} ${entry.zip}`}
+                  location={`${entry.city}, ${entry.state}`}
                 />
               </li>
             ))}
@@ -421,7 +500,11 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     const stateValueLabel = document.querySelector<HTMLElement>('[data-state-value]');
     const stateOptionsPanel = document.querySelector<HTMLElement>('[data-state-options]');
     const stateOptions = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-state-option]'));
-    const kindSelect = document.querySelector<HTMLSelectElement>('[data-kind-select]');
+    const categoryDropdown = document.querySelector<HTMLElement>('[data-category-dropdown]');
+    const categoryTrigger = document.querySelector<HTMLButtonElement>('[data-category-trigger]');
+    const categoryValueEl = document.querySelector<HTMLElement>('[data-category-value]');
+    const categoryOptionsPanel = document.querySelector<HTMLElement>('[data-category-options]');
+    const categoryOptionBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category-option]'));
     if (tabs.length === 0 || panels.length === 0) return;
     let selectedState = 'all';
 
@@ -487,9 +570,13 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
         panel.hidden = panel.dataset.kind !== kind;
       });
 
-      if (kindSelect && kindSelect.value !== kind) {
-        kindSelect.value = kind;
+      if (categoryValueEl) {
+        const activeOpt = categoryOptionBtns.find((opt) => opt.dataset.value === kind);
+        if (activeOpt) categoryValueEl.textContent = activeOpt.textContent?.trim() ?? kind;
       }
+      categoryOptionBtns.forEach((opt) => {
+        opt.classList.toggle('category-option--active', opt.dataset.value === kind);
+      });
 
       applyStateFilter();
     };
@@ -548,11 +635,58 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
       tab.dataset.kindBound = 'true';
     });
 
-    if (kindSelect && kindSelect.dataset.kindSelectBound !== 'true') {
-      kindSelect.addEventListener('change', () => {
-        setActiveKind(kindSelect.value);
+    const closeCategoryOptions = () => {
+      if (!categoryTrigger || !categoryOptionsPanel) return;
+      categoryOptionsPanel.hidden = true;
+      categoryTrigger.setAttribute('aria-expanded', 'false');
+      if (categoryDropdown) delete categoryDropdown.dataset.open;
+    };
+
+    const openCategoryOptions = () => {
+      if (!categoryTrigger || !categoryOptionsPanel) return;
+      categoryOptionsPanel.hidden = false;
+      categoryTrigger.setAttribute('aria-expanded', 'true');
+      if (categoryDropdown) categoryDropdown.dataset.open = 'true';
+    };
+
+    if (categoryTrigger && categoryOptionsPanel && categoryTrigger.dataset.categoryTriggerBound !== 'true') {
+      categoryTrigger.addEventListener('click', () => {
+        if (categoryOptionsPanel.hidden) openCategoryOptions();
+        else closeCategoryOptions();
       });
-      kindSelect.dataset.kindSelectBound = 'true';
+      categoryTrigger.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openCategoryOptions();
+        }
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeCategoryOptions();
+        }
+      });
+      categoryTrigger.dataset.categoryTriggerBound = 'true';
+    }
+
+    categoryOptionBtns.forEach((opt) => {
+      if (opt.dataset.categoryOptionBound === 'true') return;
+      opt.addEventListener('click', () => {
+        const value = opt.dataset.value;
+        if (!value) return;
+        setActiveKind(value);
+        closeCategoryOptions();
+      });
+      opt.dataset.categoryOptionBound = 'true';
+    });
+
+    if (categoryDropdown && categoryDropdown.dataset.categoryOutsideBound !== 'true') {
+      document.addEventListener('click', (event) => {
+        const target = event.target as Node;
+        if (!categoryDropdown.contains(target)) closeCategoryOptions();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeCategoryOptions();
+      });
+      categoryDropdown.dataset.categoryOutsideBound = 'true';
     }
 
     if (stateTrigger && stateOptionsPanel && stateTrigger.dataset.stateTriggerBound !== 'true') {
@@ -638,7 +772,7 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-accent-teal);
+    color: var(--color-accent-pop);
     font-weight: 600;
     font-size: 0.8rem;
   }
@@ -654,8 +788,8 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
 
   .intro {
     margin: 0;
+    margin-top: var(--space-5);
     color: var(--color-text-muted);
-    max-width: 56ch;
   }
 
   .filter-bar {
@@ -677,6 +811,7 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     position: relative;
     display: inline-flex;
     flex-direction: column;
+    width: 100%;
     min-width: 11.5rem;
   }
 
@@ -697,6 +832,12 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
 
     .intro {
       margin-top: var(--space-4);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .state-dropdown {
+      width: auto;
     }
   }
 
@@ -748,12 +889,18 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     z-index: 10;
     margin: 0;
     padding: 0.35rem;
-    border: 1px solid var(--color-border-soft);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-md);
-    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
-    box-shadow: 0 14px 28px -24px rgba(0, 0, 0, 0.42);
+    background: var(--color-surface-card);
+    box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+  }
+
+  :root[data-theme='dark'] .state-options {
+    border-color: var(--color-border-soft);
+    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+    box-shadow: 0 14px 28px -24px rgba(0, 0, 0, 0.42);
   }
 
   .state-option {
@@ -762,7 +909,7 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     border-radius: var(--radius-sm);
     padding: 0.45rem 0.6rem;
     background: transparent;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.75);
     text-align: left;
     font: inherit;
     font-weight: 600;
@@ -770,14 +917,31 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
   }
 
+  :root[data-theme='dark'] .state-option {
+    color: var(--color-text-muted);
+  }
+
   .state-option:hover,
   .state-option:focus-visible {
-    color: var(--color-text-strong);
-    background: var(--color-surface-strong);
+    color: var(--color-on-accent);
+    background: rgba(255, 255, 255, 0.14);
     outline: none;
   }
 
+  :root[data-theme='dark'] .state-option:hover,
+  :root[data-theme='dark'] .state-option:focus-visible {
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
+  }
+
   .state-option--active {
+    color: var(--color-on-accent);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  :root[data-theme='dark'] .state-option--active {
     color: var(--color-text-strong);
     background: var(--color-surface-strong);
     border-color: color-mix(in oklab, var(--color-accent-soft) 70%, var(--color-border-soft));
@@ -788,23 +952,124 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     margin: var(--space-2) 0 var(--space-4);
   }
 
-  .category-select-wrap {
+  .category-dropdown {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
     margin-bottom: var(--space-3);
   }
 
-  .category-select {
+  .category-trigger {
     width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
     border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface-card);
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--color-surface) 86%, transparent);
     color: var(--color-text-strong);
-    padding: 0.55rem 0.75rem;
+    padding: 0.5rem 0.85rem;
     font: inherit;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent-soft) 24%, transparent);
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
   }
 
-  .category-select:focus-visible {
+  .category-trigger:hover {
+    border-color: color-mix(in oklab, var(--color-accent-soft) 64%, var(--color-border-soft));
+    background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+  }
+
+  .category-trigger:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
+  }
+
+  .category-trigger-chevron {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: transform 180ms ease;
+  }
+
+  .category-dropdown[data-open='true'] .category-trigger-chevron {
+    transform: rotate(180deg);
+  }
+
+  .category-options {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 0.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-card);
+    box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  :root[data-theme='dark'] .category-options {
+    border-color: var(--color-border-soft);
+    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+    box-shadow: 0 14px 28px -24px rgba(0, 0, 0, 0.42);
+  }
+
+  .category-dropdown[data-open='true'] .category-options {
+    display: block;
+  }
+
+  .category-option {
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 0.45rem 0.6rem;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: left;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  :root[data-theme='dark'] .category-option {
+    color: var(--color-text-muted);
+  }
+
+  .category-option:hover,
+  .category-option:focus-visible {
+    color: var(--color-on-accent);
+    background: rgba(255, 255, 255, 0.14);
+    outline: none;
+  }
+
+  :root[data-theme='dark'] .category-option:hover,
+  :root[data-theme='dark'] .category-option:focus-visible {
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
+  }
+
+  .category-option--active {
+    color: var(--color-on-accent);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  :root[data-theme='dark'] .category-option--active {
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
+    border-color: color-mix(in oklab, var(--color-accent-soft) 70%, var(--color-border-soft));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent) 25%, transparent);
   }
 
   .category-list {
@@ -855,14 +1120,16 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
   .category-tab--active,
   .category-tab[aria-selected='true'] {
     background: color-mix(in oklab, var(--color-surface-strong) 86%, transparent);
-    border-bottom-color: var(--color-accent-teal);
+    border-bottom-color: var(--color-tab-underline);
     color: var(--color-text-strong);
   }
 
   :root:not([data-theme='dark']) .category-tab--active,
   :root:not([data-theme='dark']) .category-tab[aria-selected='true'] {
-    background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg) 30%);
-    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent-soft) 58%, var(--color-border-soft));
+    background: var(--color-surface-card);
+    border-bottom-color: var(--color-tab-underline);
+    color: var(--color-on-accent);
+    box-shadow: none;
   }
 
   .category-tab:focus-visible {
@@ -872,7 +1139,7 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
   }
 
   @media (min-width: 48rem) {
-    .category-select-wrap {
+    .category-dropdown {
       display: none;
     }
 
@@ -893,18 +1160,6 @@ const states = Array.from(new Set(localEntries.map((entry) => entry.state))).sor
     .category-list {
       display: none;
     }
-  }
-
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   .category-section {

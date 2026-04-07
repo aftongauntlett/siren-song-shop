@@ -1,0 +1,180 @@
+---
+import ButtonLink from './ButtonLink.astro';
+
+const shop = {
+  name: 'Cosmic Pocket',
+  category: 'Arts & Crafts',
+  url: 'https://www.instagram.com/cosmic.pocket/',
+  description:
+    'A multi-media artist and colorist based in Ohio, creating handmade original art sold directly through Instagram. Every piece is one-of-a-kind — no mass production, no middlemen.',
+  note: 'Our spotlight rotates. Check back to see who we\'re featuring next.',
+} as const;
+---
+
+<section aria-labelledby="spotlight-heading" class="shop-spotlight">
+  <p class="spotlight-kicker" data-reveal>shop spotlight</p>
+  <div class="spotlight-card" data-reveal data-reveal-delay="1">
+    <div class="spotlight-main">
+      <span class="spotlight-category" aria-label={`Category: ${shop.category}`}>{shop.category}</span>
+      <h2 id="spotlight-heading" class="spotlight-name">{shop.name}</h2>
+      <p class="spotlight-desc">{shop.description}</p>
+    </div>
+    <footer class="spotlight-footer">
+      <p class="spotlight-note">{shop.note}</p>
+      <ButtonLink href={shop.url} variant="ghost" target="_blank" rel="noopener noreferrer">
+        Visit the Shop
+        <svg class="visit-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </ButtonLink>
+    </footer>
+  </div>
+</section>
+
+<style>
+  .shop-spotlight {
+    /* section spacing handled by :global(section + section) */
+  }
+
+  .spotlight-kicker {
+    margin: 0 0 var(--space-4);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-teal);
+    font-weight: 700;
+    font-size: 0.75rem;
+  }
+
+  .spotlight-card {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 3px solid var(--color-teal);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-card);
+    box-shadow: var(--shadow-soft);
+    padding: var(--space-6) var(--space-6) var(--space-5);
+    color: var(--color-on-accent);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .spotlight-card {
+      transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
+    }
+
+    .spotlight-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+      border-left-color: var(--color-teal);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+  }
+
+  :root[data-theme='dark'] .spotlight-card {
+    border-color: var(--color-border-soft);
+    border-left-color: var(--color-teal);
+    background: var(--color-surface);
+  }
+
+  :root[data-theme='dark'] .spotlight-card:hover {
+    border-color: var(--color-border);
+    border-left-color: var(--color-teal);
+  }
+
+  .spotlight-category {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--color-on-accent) 70%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-on-accent) 30%, transparent);
+    border-radius: var(--radius-pill);
+    padding: 0.15rem 0.65rem;
+    margin-bottom: var(--space-3);
+  }
+
+  :root[data-theme='dark'] .spotlight-category {
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+  }
+
+  .spotlight-name {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+    line-height: 1.15;
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] .spotlight-name {
+    color: var(--color-text-strong);
+  }
+
+  .spotlight-desc {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.75;
+    color: color-mix(in oklab, var(--color-on-accent) 88%, transparent);
+  }
+
+  :root[data-theme='dark'] .spotlight-desc {
+    color: var(--color-text-muted);
+  }
+
+  .spotlight-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    border-top: 1px solid color-mix(in oklab, var(--color-on-accent) 15%, transparent);
+    padding-top: var(--space-4);
+  }
+
+  :root[data-theme='dark'] .spotlight-footer {
+    border-top-color: var(--color-border-soft);
+  }
+
+  .spotlight-note {
+    margin: 0;
+    font-size: 0.82rem;
+    font-style: italic;
+    color: color-mix(in oklab, var(--color-on-accent) 55%, transparent);
+  }
+
+  :root[data-theme='dark'] .spotlight-note {
+    color: color-mix(in oklab, var(--color-text-muted) 70%, transparent);
+  }
+
+  .visit-icon {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-inline-start: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .visit-icon {
+      transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
+    }
+  }
+
+  .spotlight-card:hover .visit-icon,
+  .spotlight-card:focus-visible .visit-icon {
+    width: 14px;
+    opacity: 1;
+    margin-inline-start: var(--space-1);
+  }
+
+  @media (min-width: 48rem) {
+    .spotlight-card {
+      padding: var(--space-8);
+    }
+  }
+</style>

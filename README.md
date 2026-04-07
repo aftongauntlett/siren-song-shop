@@ -19,6 +19,10 @@ npm run dev
 Open `http://localhost:4321` for the site.
 Open `http://localhost:4321/admin` for the editor.
 
+## Production
+
+Live site: https://www.sirensongshop.com/
+
 ## Scripts
 
 ```bash

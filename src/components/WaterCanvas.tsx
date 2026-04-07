@@ -147,7 +147,21 @@ export default function WaterCanvas() {
       }
     }
 
-    animFrameRef.current = requestAnimationFrame(tick);
+    if (!pausedRef.current) {
+      animFrameRef.current = requestAnimationFrame(tick);
+    }
+
+    // Restart loop if it was stopped (e.g. after motion preference change)
+    const themeObserver = new MutationObserver(() => {
+      if (!pausedRef.current && animFrameRef.current === 0) {
+        resize();
+        animFrameRef.current = requestAnimationFrame(tick);
+      }
+    });
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
 
     const isOverChrome = (e: MouseEvent) =>
       !!(
@@ -206,6 +220,7 @@ export default function WaterCanvas() {
 
     return () => {
       cancelAnimationFrame(animFrameRef.current);
+      themeObserver.disconnect();
       ro.disconnect();
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchmove", onTouchMove);

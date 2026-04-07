@@ -4,10 +4,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ResourceCard from '../components/ResourceCard.astro';
+import TabTour from '../components/TabTour.astro';
 
 const allResources = await getCollection('resources');
 
-type ResourceTabId = 'work-good' | 'community-living' | 'volunteer-donate';
+type ResourceTabId = 'work-good' | 'community-living' | 'volunteer-donate' | 'sliding-scale-support';
 
 const categories: { id: ResourceTabId; label: string; description: string }[] = [
   {
@@ -24,6 +25,11 @@ const categories: { id: ResourceTabId; label: string; description: string }[] = 
     id: 'volunteer-donate',
     label: 'Volunteer Or Donate',
     description: 'Organizations and causes where your time or money can do direct, practical good.'
+  },
+  {
+    id: 'sliding-scale-support',
+    label: 'Sliding Scale & Free Support',
+    description: 'Known, easy-to-use support resources including free lines, sliding-scale care options, and community-first LGBTQIA+ affirming help.'
   }
 ];
 
@@ -39,6 +45,10 @@ const byCategory = (id: ResourceTabId) => {
     return sortFeatured(allResources.filter((r) => r.data.category === 'communities'));
   }
 
+  if (id === 'sliding-scale-support') {
+    return sortFeatured(allResources.filter((r) => r.data.category === 'support'));
+  }
+
   return sortFeatured(
     allResources.filter((r) => r.data.category === 'orgs' || r.data.category === 'charities')
   );
@@ -47,7 +57,7 @@ const byCategory = (id: ResourceTabId) => {
 
 <BaseLayout
   title="Get Involved | Siren Song"
-  description="Find work worth doing, community living options, and practical ways to volunteer or donate."
+  description="Find work worth doing, community living options, practical ways to volunteer or donate, and sliding-scale/free support resources."
 >
   <SiteNav />
   <main id="main-content" class="container">
@@ -61,17 +71,34 @@ const byCategory = (id: ResourceTabId) => {
     </section>
 
     <nav class="category-nav" aria-label="Browse involvement categories">
-      <div class="category-select-wrap">
-        <select
-          id="resources-category-select"
-          class="category-select"
-          data-category-select
-          aria-label="Get involved category"
+      <div class="category-dropdown" data-category-dropdown>
+        <button
+          type="button"
+          class="category-trigger"
+          data-category-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-label="Select involvement category"
         >
-          {categories.map((category) => (
-            <option value={category.id}>{category.label}</option>
+          <span data-category-value>{categories[0]?.label ?? ''}</span>
+          <svg class="category-trigger-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <ul class="category-options" data-category-options aria-label="Get involved categories" hidden>
+          {categories.map(({ id, label }, index) => (
+            <li>
+              <button
+                type="button"
+                class:list={['category-option', { 'category-option--active': index === 0 }]}
+                data-category-option
+                data-value={id}
+              >
+                {label}
+              </button>
+            </li>
           ))}
-        </select>
+        </ul>
       </div>
       <div class="category-list" role="tablist" aria-label="Get involved categories">
         {categories.map(({ id, label }, index) => (
@@ -92,6 +119,7 @@ const byCategory = (id: ResourceTabId) => {
           </div>
         ))}
       </div>
+      <TabTour />
     </nav>
 
     {categories.map(({ id, label, description }, index) => {
@@ -140,7 +168,11 @@ const byCategory = (id: ResourceTabId) => {
   const initializeResourceTabs = () => {
     const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category-tab]'));
     const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-category-panel]'));
-    const categorySelect = document.querySelector<HTMLSelectElement>('[data-category-select]');
+    const categoryDropdown = document.querySelector<HTMLElement>('[data-category-dropdown]');
+    const categoryTrigger = document.querySelector<HTMLButtonElement>('[data-category-trigger]');
+    const categoryValueEl = document.querySelector<HTMLElement>('[data-category-value]');
+    const categoryOptionsPanel = document.querySelector<HTMLElement>('[data-category-options]');
+    const categoryOptionBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category-option]'));
     if (tabs.length === 0 || panels.length === 0) return;
 
     const getTabCategory = (tab: HTMLButtonElement) => tab.dataset.category;
@@ -157,9 +189,13 @@ const byCategory = (id: ResourceTabId) => {
         panel.hidden = panel.dataset.category !== category;
       });
 
-      if (categorySelect && categorySelect.value !== category) {
-        categorySelect.value = category;
+      if (categoryValueEl) {
+        const activeOpt = categoryOptionBtns.find((opt) => opt.dataset.value === category);
+        if (activeOpt) categoryValueEl.textContent = activeOpt.textContent?.trim() ?? category;
       }
+      categoryOptionBtns.forEach((opt) => {
+        opt.classList.toggle('category-option--active', opt.dataset.value === category);
+      });
     };
 
     const setActiveByIndex = (index: number) => {
@@ -216,11 +252,58 @@ const byCategory = (id: ResourceTabId) => {
       tab.dataset.categoryBound = 'true';
     });
 
-    if (categorySelect && categorySelect.dataset.categorySelectBound !== 'true') {
-      categorySelect.addEventListener('change', () => {
-        setActiveCategory(categorySelect.value);
+    const closeCategoryOptions = () => {
+      if (!categoryTrigger || !categoryOptionsPanel) return;
+      categoryOptionsPanel.hidden = true;
+      categoryTrigger.setAttribute('aria-expanded', 'false');
+      if (categoryDropdown) delete categoryDropdown.dataset.open;
+    };
+
+    const openCategoryOptions = () => {
+      if (!categoryTrigger || !categoryOptionsPanel) return;
+      categoryOptionsPanel.hidden = false;
+      categoryTrigger.setAttribute('aria-expanded', 'true');
+      if (categoryDropdown) categoryDropdown.dataset.open = 'true';
+    };
+
+    if (categoryTrigger && categoryOptionsPanel && categoryTrigger.dataset.categoryTriggerBound !== 'true') {
+      categoryTrigger.addEventListener('click', () => {
+        if (categoryOptionsPanel.hidden) openCategoryOptions();
+        else closeCategoryOptions();
       });
-      categorySelect.dataset.categorySelectBound = 'true';
+      categoryTrigger.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openCategoryOptions();
+        }
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closeCategoryOptions();
+        }
+      });
+      categoryTrigger.dataset.categoryTriggerBound = 'true';
+    }
+
+    categoryOptionBtns.forEach((opt) => {
+      if (opt.dataset.categoryOptionBound === 'true') return;
+      opt.addEventListener('click', () => {
+        const value = opt.dataset.value;
+        if (!value) return;
+        setActiveCategory(value);
+        closeCategoryOptions();
+      });
+      opt.dataset.categoryOptionBound = 'true';
+    });
+
+    if (categoryDropdown && categoryDropdown.dataset.categoryOutsideBound !== 'true') {
+      document.addEventListener('click', (event) => {
+        const target = event.target as Node;
+        if (!categoryDropdown.contains(target)) closeCategoryOptions();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeCategoryOptions();
+      });
+      categoryDropdown.dataset.categoryOutsideBound = 'true';
     }
 
     const firstTab = tabs.at(0);
@@ -246,7 +329,7 @@ const byCategory = (id: ResourceTabId) => {
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--color-accent-teal);
+    color: var(--color-accent-pop);
     font-weight: 600;
     font-size: 0.8rem;
   }
@@ -263,30 +346,130 @@ const byCategory = (id: ResourceTabId) => {
   .intro {
     margin: 0;
     color: var(--color-text-muted);
-    max-width: 56ch;
   }
 
   .category-nav {
     margin: var(--space-8) 0 var(--space-4);
   }
 
-  .category-select-wrap {
+  .category-dropdown {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
     margin-bottom: var(--space-3);
   }
 
-  .category-select {
+  .category-trigger {
     width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
     border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface-card);
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--color-surface) 86%, transparent);
     color: var(--color-text-strong);
-    padding: 0.55rem 0.75rem;
+    padding: 0.5rem 0.85rem;
     font: inherit;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent-soft) 24%, transparent);
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
   }
 
-  .category-select:focus-visible {
+  .category-trigger:hover {
+    border-color: color-mix(in oklab, var(--color-accent-soft) 64%, var(--color-border-soft));
+    background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+  }
+
+  .category-trigger:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
+  }
+
+  .category-trigger-chevron {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: transform 180ms ease;
+  }
+
+  .category-dropdown[data-open='true'] .category-trigger-chevron {
+    transform: rotate(180deg);
+  }
+
+  .category-options {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 0.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-card);
+    box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  :root[data-theme='dark'] .category-options {
+    border-color: var(--color-border-soft);
+    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+    box-shadow: 0 14px 28px -24px rgba(0, 0, 0, 0.42);
+  }
+
+  .category-dropdown[data-open='true'] .category-options {
+    display: block;
+  }
+
+  .category-option {
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 0.45rem 0.6rem;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: left;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  :root[data-theme='dark'] .category-option {
+    color: var(--color-text-muted);
+  }
+
+  .category-option:hover,
+  .category-option:focus-visible {
+    color: var(--color-on-accent);
+    background: rgba(255, 255, 255, 0.14);
+    outline: none;
+  }
+
+  :root[data-theme='dark'] .category-option:hover,
+  :root[data-theme='dark'] .category-option:focus-visible {
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
+  }
+
+  .category-option--active {
+    color: var(--color-on-accent);
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  :root[data-theme='dark'] .category-option--active {
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
+    border-color: color-mix(in oklab, var(--color-accent-soft) 70%, var(--color-border-soft));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent) 25%, transparent);
   }
 
   .category-list {
@@ -337,14 +520,16 @@ const byCategory = (id: ResourceTabId) => {
   .category-tab--active,
   .category-tab[aria-selected='true'] {
     background: color-mix(in oklab, var(--color-surface-strong) 86%, transparent);
-    border-bottom-color: var(--color-accent-teal);
+    border-bottom-color: var(--color-tab-underline);
     color: var(--color-text-strong);
   }
 
   :root:not([data-theme='dark']) .category-tab--active,
   :root:not([data-theme='dark']) .category-tab[aria-selected='true'] {
-    background: color-mix(in oklab, var(--color-surface) 70%, var(--color-bg) 30%);
-    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent-soft) 58%, var(--color-border-soft));
+    background: var(--color-surface-card);
+    border-bottom-color: var(--color-tab-underline);
+    color: var(--color-on-accent);
+    box-shadow: none;
   }
 
   .category-tab:focus-visible {
@@ -391,7 +576,7 @@ const byCategory = (id: ResourceTabId) => {
   }
 
   @media (min-width: 48rem) {
-    .category-select-wrap {
+    .category-dropdown {
       display: none;
     }
 
@@ -416,18 +601,6 @@ const byCategory = (id: ResourceTabId) => {
     .category-list {
       display: none;
     }
-  }
-
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   @media (min-width: 64rem) {

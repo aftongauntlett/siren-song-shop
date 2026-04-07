@@ -43,11 +43,17 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
 
 <style>
   .accordion-item {
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-md);
     background: var(--color-surface-card);
     padding: 0;
     overflow: hidden;
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] .accordion-item {
+    border-color: var(--color-border);
+    color: var(--color-text);
   }
 
   summary {
@@ -58,8 +64,12 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
     cursor: pointer;
     list-style: none;
     font-weight: 500;
-    color: var(--color-text-strong);
+    color: var(--color-on-accent);
     padding: var(--space-3) var(--space-4);
+  }
+
+  :root[data-theme='dark'] summary {
+    color: var(--color-text-strong);
   }
 
   summary::-webkit-details-marker {
@@ -68,12 +78,20 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
 
   .chevron {
     flex-shrink: 0;
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] .chevron {
     color: var(--color-text-muted);
   }
 
   @media (prefers-reduced-motion: no-preference) {
     .accordion-item {
       transition: box-shadow 320ms ease;
+    }
+
+    summary {
+      transition: background-color 200ms ease;
     }
 
     .chevron {
@@ -85,8 +103,16 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
     box-shadow: var(--shadow-glow);
   }
 
+  :root:not([data-theme='dark']) summary:hover {
+    background: color-mix(in oklab, var(--color-surface-card) 82%, black);
+  }
+
   summary:hover .chevron {
-    color: var(--color-accent-teal);
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] summary:hover .chevron {
+    color: var(--color-accent-pop);
   }
 
   details.is-open .chevron {
@@ -97,23 +123,39 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
     overflow: hidden;
   }
 
+  :root:not([data-theme='dark']) .accordion-body {
+    background: color-mix(in oklab, var(--color-surface-card) 82%, white 18%);
+  }
+
   p {
     margin: 0;
-    padding: 0 var(--space-4) var(--space-4);
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    color: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] p {
     color: var(--color-text-muted);
   }
 
   .accordion-link-row {
     padding-top: 0;
+    display: flex;
+    justify-content: flex-end;
   }
 
   :global(.accordion-link) {
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-sm);
     padding: 0.35rem 0.75rem;
     font-weight: 600;
+    color: var(--color-accent-pop);
+    background: color-mix(in oklab, var(--color-on-accent) 88%, transparent);
+    border-color: color-mix(in oklab, var(--color-on-accent) 65%, transparent);
+  }
+
+  :root[data-theme='dark'] :global(.accordion-link) {
     color: var(--color-accent);
     background: color-mix(in oklab, var(--color-accent-soft) 38%, transparent);
     border-color: var(--color-border);
@@ -127,14 +169,24 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
 
   :global(.accordion-link:hover) {
     transform: translateY(-1px);
+    border-color: var(--color-on-accent);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    background: var(--color-on-accent);
+  }
+
+  :root[data-theme='dark'] :global(.accordion-link:hover) {
     border-color: var(--color-border);
     box-shadow: 0 8px 18px rgba(109, 40, 217, 0.12);
     background: color-mix(in oklab, var(--color-accent-soft) 52%, transparent);
   }
 
   :global(.accordion-link:focus-visible) {
-    outline: 2px solid var(--color-accent-teal);
+    outline: 2px solid var(--color-on-accent);
     outline-offset: 2px;
+  }
+
+  :root[data-theme='dark'] :global(.accordion-link:focus-visible) {
+    outline-color: var(--color-accent-pop);
   }
 </style>
 

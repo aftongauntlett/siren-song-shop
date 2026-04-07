@@ -5,6 +5,10 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import FeatureCard from '../components/FeatureCard.astro';
 import AccordionItem from '../components/AccordionItem.astro';
+import HomeValuesChips from '../components/HomeValuesChips.astro';
+import HomePurposePanel from '../components/HomePurposePanel.astro';
+import HomeCurationSteps from '../components/HomeCurationSteps.astro';
+import HomeShopSpotlight from '../components/HomeShopSpotlight.astro';
 
 const previewCards = [
   {
@@ -53,14 +57,13 @@ const accordionItems: AccordionEntry[] = [
   },
   {
     title: 'Are your recommendations vegan-friendly?',
-    body: 'Yes — and it matters. We do not recommend products that use animal-derived materials or are tested on animals. Every pick here reflects a commitment to cruelty-free, plant-based, and ethically sourced goods.'
+    body: 'Yes. We prioritize shops that support vegan products, and we call out shops that are 100% vegan. We avoid farm or pet-focused picks unless they are clearly animal-protection aligned (for example, sanctuary, rescue or rehabilitation efforts).'
   },
-    {
-    title: 'Can I get a website like this for my project?',
-    body: 'Yes. If you are a shop, maker, or local project that needs a thoughtful site with personality, we can help.',
-    linkHref: 'https://prettyprettyprettygood.org',
-    linkLabel: 'Visit Pretty Pretty Pretty Good',
-    linkExternal: true as const
+  {
+    title: 'I know a shop that would be a great fit — can I suggest it?',
+    body: "Absolutely, please do. Whether you're a maker who'd like to be considered, or you just want to pass along something you love, we'd genuinely love to hear about it. Reach out through our contact page and tell us a little about the shop.",
+    linkHref: '/contact',
+    linkLabel: 'Get in touch',
   },
 ];
 ---
@@ -68,46 +71,52 @@ const accordionItems: AccordionEntry[] = [
 <BaseLayout title="Siren Song | Curated Recommendations">
   <SiteNav />
   <SiteHeader />
+  <div class="hero-section-divider" aria-hidden="true"></div>
   <main id="main-content" class="container">
     <section aria-labelledby="component-preview-heading" class="component-preview">
       <h2 id="component-preview-heading" class="section-heading" data-reveal>What We Believe In</h2>
-      <p class="section-copy" data-reveal data-reveal-delay="1">Everything here is something we'd say yes to in person. No algorithms, no sponsorships — just taste.</p>
+      <p class="section-copy" data-reveal data-reveal-delay="1">Everything here is something we'd say yes to in person. No sponsorships, no paid placements — just taste.</p>
       <div class="grid">
         <div data-reveal data-reveal-delay="1" class="card-cell">
           <FeatureCard {...previewCards[0]}>
-            <svg slot="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 3l1.8 4.5L18 9.3l-4.2 1.8L12 16l-1.8-4.9L6 9.3l4.2-1.8L12 3z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M19 3.5l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6.6-1.6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <svg slot="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </FeatureCard>
         </div>
         <div data-reveal data-reveal-delay="2" class="card-cell">
           <FeatureCard {...previewCards[1]}>
-            <svg slot="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M16 19v-1.2c0-1.9-1.6-3.5-3.5-3.5h-1c-1.9 0-3.5 1.6-3.5 3.5V19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M12 11.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M18.5 18.5V18c0-1.3-.9-2.4-2.2-2.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M17.8 10.7a2.4 2.4 0 1 0 0-4.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <svg slot="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </FeatureCard>
         </div>
         <div data-reveal data-reveal-delay="3" class="card-cell">
           <FeatureCard {...previewCards[2]}>
-            <svg slot="icon" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <rect x="3.5" y="5" width="17" height="11" rx="2" stroke="currentColor" stroke-width="1.5" />
-              <path d="M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-              <path d="M12 16v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <svg slot="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.159.69.159 1.006 0Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </FeatureCard>
         </div>
       </div>
+      <HomeValuesChips />
     </section>
+
+    <HomePurposePanel />
+
+    <HomeCurationSteps />
+
+    <HomeShopSpotlight />
 
     <section aria-labelledby="faq-heading" class="faq">
       <h2 id="faq-heading" class="section-heading" data-reveal>Quick FAQ</h2>
       <div class="faq-list">
         {accordionItems.map((item, i) => (
-          <div data-reveal data-reveal-delay={String(i + 1) as '1' | '2' | '3'}>
+          <div data-reveal data-reveal-delay={String(i + 1) as '1' | '2' | '3' | '4'}>
             <AccordionItem
               title={item.title}
               body={item.body}
@@ -124,13 +133,89 @@ const accordionItems: AccordionEntry[] = [
 </BaseLayout>
 
 <style>
-  .component-preview,
-  .faq {
-    margin-top: var(--space-12);
+  .hero-section-divider {
+    display: none;
+  }
+
+  :root:not([data-theme='dark']) .hero-section-divider {
+    display: block;
+    width: min(100% - 2rem, var(--container-max));
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-border-soft) 20%,
+      var(--color-accent-soft) 50%,
+      var(--color-border-soft) 80%,
+      transparent 100%
+    );
+  }
+
+  :root[data-theme='dark'] .hero-section-divider {
+    display: block;
+    width: min(100% - 2rem, var(--container-max));
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-border-soft) 20%,
+      var(--color-border) 50%,
+      var(--color-border-soft) 80%,
+      transparent 100%
+    );
+  }
+
+  main.container {
+    padding-bottom: var(--space-20);
+  }
+
+  :global(main.container > section + section) {
+    padding-top: clamp(var(--space-10), 6vw, 4.5rem);
+    position: relative;
+  }
+
+  :global(main.container > section + section::before) {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-bottom: clamp(var(--space-10), 6vw, 4.5rem);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-border-soft) 20%,
+      var(--color-accent-soft) 50%,
+      var(--color-border-soft) 80%,
+      transparent 100%
+    );
+  }
+
+  :global(:root[data-theme='dark'] main.container > section + section::before) {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-border-soft) 20%,
+      var(--color-border) 50%,
+      var(--color-border-soft) 80%,
+      transparent 100%
+    );
   }
 
   .component-preview {
     margin-top: var(--space-10);
+  }
+
+  .component-preview .section-heading,
+  .component-preview .section-copy,
+  .faq .section-heading,
+  .process .section-heading {
+    text-align: center;
+  }
+
+  .component-preview .section-copy {
+    margin-inline: auto;
+    max-width: 62ch;
   }
 
   .grid {

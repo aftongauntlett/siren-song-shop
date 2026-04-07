@@ -1,0 +1,371 @@
+---
+// One-time guided tab tour — bare glowing text that writes itself out, fine gold dust.
+---
+
+<div class="tab-tour" data-tab-tour aria-hidden="true">
+  <svg
+    class="tour-arrow"
+    width="44"
+    height="56"
+    viewBox="0 0 44 56"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      class="arrow-stem"
+      d="M 20,54 C 12,38 30,20 22,4"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      pathLength="100"
+    />
+    <path
+      class="arrow-head"
+      d="M 10,16 L 22,3 L 34,16"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      pathLength="100"
+    />
+  </svg>
+
+  <div class="tour-label" data-tour-label>
+    <canvas class="tour-dust" data-tour-dust aria-hidden="true"></canvas>
+    <p class="tour-text" data-tour-text>Psst, don't forget to check out the other sections.</p>
+  </div>
+</div>
+
+<style>
+  /* ── Gold tokens ─────────────────────────────────────────── */
+  .tab-tour {
+    --_g:    #7c5c05;
+    --_ghi:  #a07c14;
+    --_glow: rgba(170, 120, 8, 0.38);
+  }
+
+  :root[data-theme='dark'] .tab-tour {
+    --_g:    #eecf55;
+    --_ghi:  #fff8c0;
+    --_glow: rgba(238, 200, 70, 0.42);
+  }
+
+  /* ── Container ──────────────────────────────────────────── */
+  .tab-tour {
+    position: fixed;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+    transition:
+      opacity 400ms ease,
+      transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .tab-tour.tour-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .tab-tour.tour-exit {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+    transition: opacity 460ms ease, transform 460ms ease;
+  }
+
+  @media (max-width: 47.99rem) {
+    .tab-tour { display: none !important; }
+  }
+
+  /* ── Arrow ──────────────────────────────────────────────── */
+  .tour-arrow {
+    color: var(--_g);
+    filter:
+      drop-shadow(0 0 3px var(--_glow))
+      drop-shadow(0 0 9px var(--_glow));
+    flex-shrink: 0;
+  }
+
+  .arrow-stem,
+  .arrow-head {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arrow-stem,
+    .arrow-head { stroke-dashoffset: 0; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tour-visible .arrow-stem {
+      animation: arrow-draw 560ms cubic-bezier(0.4, 0, 0.2, 1) 160ms forwards;
+    }
+    .tour-visible .arrow-head {
+      animation: arrow-draw 300ms cubic-bezier(0.4, 0, 0.2, 1) 680ms forwards;
+    }
+  }
+
+  @keyframes arrow-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* ── Label wrapper ──────────────────────────────────────── */
+  .tour-label {
+    position: relative;
+    overflow: visible;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 0;
+  }
+
+  /* ── Dust canvas (sits behind text, bleeds out on all sides) */
+  .tour-dust {
+    position: absolute;
+    top: -28px;
+    left: -40px;
+    pointer-events: none;
+  }
+
+  /* ── Text ───────────────────────────────────────────────── */
+  .tour-text {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-family: var(--font-handwrite);
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: var(--_g);
+    text-shadow:
+      0 0 6px var(--_glow),
+      0 0 18px var(--_glow);
+    white-space: nowrap;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+  }
+</style>
+
+<!-- Global: per-char spans + tab pulse -->
+<style is:global>
+  .siren-tour-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(3px) rotate(-1deg);
+    transition:
+      opacity  200ms ease,
+      transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .siren-tour-char.on {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+
+  @keyframes siren-tab-tour-pulse {
+    0%, 100% { box-shadow: none; }
+    50% {
+      box-shadow:
+        0 0 0 4px rgba(210, 165, 20, 0.18),
+        0 0 14px rgba(210, 165, 20, 0.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    button[role='tab'][data-tour-target] {
+      animation: siren-tab-tour-pulse 2.2s ease-in-out infinite;
+    }
+  }
+</style>
+
+<script>
+  const TOUR_KEY = 'siren-tab-tour-v1';
+  const DISMISS_MS = 8_000;
+
+  const w = window as Window & { __sirenTabTourBound?: boolean };
+
+  function initTabTour(): void {
+    if (localStorage.getItem(TOUR_KEY) === 'seen') return;
+
+    const tour = document.querySelector<HTMLElement>('[data-tab-tour]');
+    if (!tour) return;
+
+    const tabList = document.querySelector<HTMLElement>('[role="tablist"]');
+    if (!tabList || getComputedStyle(tabList).display === 'none') return;
+
+    const tabs = Array.from(
+      tabList.querySelectorAll<HTMLButtonElement>('button[role="tab"]'),
+    );
+    if (tabs.length < 2) return;
+
+    const targetTab = tabs.at(-1);
+    if (!targetTab) return;
+
+    let dismissed = false;
+
+    const updatePosition = (): void => {
+      const r = targetTab.getBoundingClientRect();
+      tour.style.left = `${r.left + r.width / 2}px`;
+      tour.style.top  = `${r.bottom + 8}px`;
+    };
+
+    updatePosition();
+    targetTab.dataset.tourTarget = 'true';
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── handwrite animation ──────────────────────────────────
+    const textEl = tour.querySelector<HTMLElement>('[data-tour-text]');
+    if (textEl) {
+      const raw = textEl.textContent ?? '';
+      textEl.textContent = '';
+
+      let delay = 980; // starts after arrow draws in
+      for (const ch of raw) {
+        const span = document.createElement('span');
+        span.className = 'siren-tour-char';
+        span.textContent = ch === ' ' ? '\u00a0' : ch;
+        if (prefersReduced) {
+          span.classList.add('on');
+        } else {
+          // spaces get a longer pause — organic handwriting rhythm
+          const charDelay = ch === ' ' ? 95 : 48;
+          setTimeout(() => span.classList.add('on'), delay);
+          delay += charDelay;
+        }
+        textEl.appendChild(span);
+      }
+    }
+
+    // ── dust particles ───────────────────────────────────────
+    const canvas = tour.querySelector<HTMLCanvasElement>('[data-tour-dust]');
+    let rafId: number | undefined;
+
+    if (canvas && !prefersReduced) {
+      const label = canvas.parentElement;
+      if (label) {
+        // Size canvas after text spans are injected (opacity:0 preserves layout)
+        requestAnimationFrame(() => {
+          const lr = label.getBoundingClientRect();
+          const cw = Math.ceil(lr.width + 80);
+          const ch = Math.ceil(lr.height + 56);
+          canvas.width  = cw;
+          canvas.height = ch;
+
+          const isDark = document.documentElement.dataset.theme === 'dark';
+          // [r, g, b] - two tones of gold / white-gold
+          const tone1 = isDark ? [245, 208, 68]  : [155, 108, 6];
+          const tone2 = isDark ? [255, 251, 210]  : [195, 158, 55];
+
+          interface Particle {
+            x: number; y: number;
+            r: number;
+            vx: number; vy: number;
+            alpha: number; va: number;
+            tone: number[];
+          }
+
+          const COUNT = 60;
+          const particles: Particle[] = [];
+
+          const spawn = (): Particle => ({
+            x:     Math.random() * cw,
+            y:     Math.random() * ch,
+            r:     0.4 + Math.random() * 1.1,
+            vx:    (Math.random() - 0.5) * 0.15,
+            vy:    -0.12 - Math.random() * 0.28,
+            alpha: 0.08 + Math.random() * 0.6,
+            va:    (Math.random() * 0.014 + 0.004) * (Math.random() > 0.5 ? 1 : -1),
+            tone:  Math.random() > 0.45 ? tone1 : tone2,
+          });
+
+          for (let i = 0; i < COUNT; i++) particles.push(spawn());
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+
+          const tick = (): void => {
+            ctx.clearRect(0, 0, cw, ch);
+
+            for (let i = 0; i < particles.length; i++) {
+              const p = particles[i];
+              if (!p) continue;
+
+              p.x     += p.vx;
+              p.y     += p.vy;
+              p.alpha += p.va;
+
+              // Flip fade direction at boundaries
+              if (p.alpha <= 0.05 || p.alpha >= 0.85) p.va *= -1;
+
+              // Reset if drifted off the top
+              if (p.y < -6) {
+                particles[i] = spawn();
+                const np = particles[i];
+                if (np) np.y = ch + 6;
+                continue;
+              }
+
+              const [r, g, b] = p.tone;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(${r},${g},${b},${p.alpha.toFixed(2)})`;
+              ctx.fill();
+            }
+
+            rafId = requestAnimationFrame(tick);
+          };
+
+          tick();
+        });
+      }
+    }
+
+    // ── enter ────────────────────────────────────────────────
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => tour.classList.add('tour-visible'))
+    );
+
+    const dismiss = (): void => {
+      if (dismissed) return;
+      dismissed = true;
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+
+      localStorage.setItem(TOUR_KEY, 'seen');
+      window.removeEventListener('resize', handleEnvChange);
+      window.removeEventListener('scroll', handleEnvChange, true);
+      delete targetTab.dataset.tourTarget;
+
+      tour.classList.remove('tour-visible');
+      tour.classList.add('tour-exit');
+      setTimeout(() => tour.remove(), 520);
+    };
+
+    const handleEnvChange = (): void => {
+      if (dismissed) return;
+      if (getComputedStyle(tabList).display === 'none') { dismiss(); return; }
+      const rect = targetTab.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) { dismiss(); return; }
+      updatePosition();
+    };
+
+    window.addEventListener('resize', handleEnvChange, { passive: true });
+    window.addEventListener('scroll', handleEnvChange, { passive: true, capture: true });
+
+    tabs.forEach((tab: HTMLButtonElement) =>
+      tab.addEventListener('click', dismiss, { once: true })
+    );
+
+    setTimeout(dismiss, DISMISS_MS);
+  }
+
+  initTabTour();
+
+  if (!w.__sirenTabTourBound) {
+    document.addEventListener('astro:page-load', initTabTour);
+    w.__sirenTabTourBound = true;
+  }
+</script>
