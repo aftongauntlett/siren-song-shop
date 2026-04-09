@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 export default defineConfig({
   site: "https://sirensong.guide",
   output: "server",
-  adapter: vercel(),
+  adapter: vercel({ imageService: true }),
   integrations: [react(), sitemap()],
   vite: {
     build: {
