@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import ButtonLink from './ButtonLink.astro';
+import cosmicImg from '../../public/images/cosmic.jpg';
 
 const shop = {
   name: 'Cosmic Pocket',
@@ -7,28 +9,38 @@ const shop = {
   url: 'https://www.instagram.com/cosmic.pocket/',
   description:
     'A multi-media artist and colorist based in Ohio, creating handmade original art sold directly through Instagram. Every piece is one-of-a-kind — no mass production, no middlemen.',
-  note: 'Our spotlight rotates. Check back to see who we\'re featuring next.',
 } as const;
 ---
 
 <section aria-labelledby="spotlight-heading" class="shop-spotlight">
-  <p class="spotlight-kicker" data-reveal>shop spotlight</p>
-  <div class="spotlight-card" data-reveal data-reveal-delay="1">
-    <div class="spotlight-main">
-      <span class="spotlight-category" aria-label={`Category: ${shop.category}`}>{shop.category}</span>
-      <h2 id="spotlight-heading" class="spotlight-name">{shop.name}</h2>
-      <p class="spotlight-desc">{shop.description}</p>
+  <h2 id="spotlight-heading" class="section-heading" data-reveal>Shop Spotlight</h2>
+  <p class="section-copy spotlight-copy" data-reveal data-reveal-delay="1">One shop we're genuinely into right now. We rotate this out every now and then — this is just our current fave!</p>
+  <div class="spotlight-card" data-reveal data-reveal-delay="2">
+    <div class="spotlight-image-wrap">
+      <Image
+        src={cosmicImg}
+        alt="Three crocheted bunny plushies in pink, hot pink, and blue against a retro floral backdrop — handmade by Cosmic Pocket"
+        width={480}
+        height={480}
+        class="spotlight-image"
+      />
     </div>
-    <footer class="spotlight-footer">
-      <p class="spotlight-note">{shop.note}</p>
-      <ButtonLink href={shop.url} variant="ghost" target="_blank" rel="noopener noreferrer">
-        Visit the Shop
-        <svg class="visit-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </ButtonLink>
-    </footer>
+    <div class="spotlight-body">
+      <div class="spotlight-main">
+        <span class="spotlight-category" aria-label={`Category: ${shop.category}`}>{shop.category}</span>
+        <h3 class="spotlight-name">{shop.name}</h3>
+        <p class="spotlight-desc">{shop.description}</p>
+      </div>
+      <footer class="spotlight-footer">
+        <ButtonLink href={shop.url} variant="ghost" target="_blank" rel="noopener noreferrer">
+          Visit the Shop
+          <svg class="visit-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </ButtonLink>
+      </footer>
+    </div>
   </div>
 </section>
 
@@ -37,24 +49,46 @@ const shop = {
     /* section spacing handled by :global(section + section) */
   }
 
-  .spotlight-kicker {
-    margin: 0 0 var(--space-4);
+  .shop-spotlight > .section-heading,
+  .spotlight-copy {
     text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-teal);
-    font-weight: 700;
-    font-size: 0.75rem;
+  }
+
+  .shop-spotlight > .section-heading {
+    margin-bottom: var(--space-2);
+  }
+
+  .spotlight-copy {
+    margin-inline: auto;
+    max-width: 58ch;
+    margin-bottom: var(--space-6);
   }
 
   .spotlight-card {
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-left: 3px solid var(--color-teal);
     border-radius: var(--radius-lg);
     background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
-    padding: var(--space-6) var(--space-6) var(--space-5);
     color: var(--color-on-accent);
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: hidden;
+  }
+
+  .spotlight-image-wrap {
+    overflow: hidden;
+    max-height: 320px;
+  }
+
+  .spotlight-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .spotlight-body {
+    padding: var(--space-6) var(--space-6) var(--space-5);
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
@@ -68,20 +102,17 @@ const shop = {
     .spotlight-card:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-glow);
-      border-left-color: var(--color-teal);
       border-color: rgba(255, 255, 255, 0.28);
     }
   }
 
   :root[data-theme='dark'] .spotlight-card {
     border-color: var(--color-border-soft);
-    border-left-color: var(--color-teal);
     background: var(--color-surface);
   }
 
   :root[data-theme='dark'] .spotlight-card:hover {
     border-color: var(--color-border);
-    border-left-color: var(--color-teal);
   }
 
   .spotlight-category {
@@ -129,7 +160,7 @@ const shop = {
   .spotlight-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: var(--space-4);
     flex-wrap: wrap;
     border-top: 1px solid color-mix(in oklab, var(--color-on-accent) 15%, transparent);
@@ -140,15 +171,11 @@ const shop = {
     border-top-color: var(--color-border-soft);
   }
 
-  .spotlight-note {
-    margin: 0;
-    font-size: 0.82rem;
+  .spotlight-blurb {
+    margin: var(--space-3) 0 0;
+    font-size: 0.85rem;
     font-style: italic;
-    color: color-mix(in oklab, var(--color-on-accent) 55%, transparent);
-  }
-
-  :root[data-theme='dark'] .spotlight-note {
-    color: color-mix(in oklab, var(--color-text-muted) 70%, transparent);
+    color: var(--color-text-muted);
   }
 
   .visit-icon {
@@ -174,7 +201,21 @@ const shop = {
 
   @media (min-width: 48rem) {
     .spotlight-card {
+      grid-template-columns: 340px 1fr;
+    }
+
+    .spotlight-image-wrap {
+      max-height: none;
+    }
+
+    .spotlight-body {
       padding: var(--space-8);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .spotlight-card {
+      grid-template-columns: 400px 1fr;
     }
   }
 </style>

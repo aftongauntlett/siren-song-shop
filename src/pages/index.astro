@@ -12,25 +12,25 @@ import HomeShopSpotlight from '../components/HomeShopSpotlight.astro';
 
 const previewCards = [
   {
-    eyebrow: 'Curation',
-    title: 'Personally Vouched, Every Time',
-    description: 'No affiliate pressure, no sponsored slots. Every recommendation here is something the curator genuinely uses, loves, or would give to a close friend.',
-    href: '/about',
-    cta: 'Learn More'
-  },
-  {
-    eyebrow: 'Makers',
+    eyebrow: 'Shop',
     title: 'Independent Shops & Craft',
-    description: 'We spotlight small producers and values-led makers who bring real craft and story to what they make — not scale for its own sake.',
+    description: 'Browse our curated selection of independent shops and makers we love, with a focus on thoughtful craft, sustainability, and unique stories.',
     href: '/shop',
     cta: 'Browse the Wares'
   },
   {
+    eyebrow: 'Get Involved',
+    title: 'Work, Community & Mutual Aid',
+    description: 'Explore opportunities to get involved with our community, whether through job openings, local events, or mutual aid initiatives. We\'re building a network of support and connection.',
+    href: '/get-involved',
+    cta: 'Get Involved'
+  },
+  {
     eyebrow: 'Local',
-    title: 'Find Local Living & Work Paths',
-    description: 'Use the Local tab to discover nearby housing options, values-aligned jobs, and community-rooted opportunities with like-minded people.',
+    title: 'Local Picks Near You',
+    description: 'Discover local shops, makers, and resources in your area that align with our values. We\'re highlighting hidden gems and community-focused businesses across different regions.',
     href: '/local',
-    cta: 'Explore Local Finds'
+    cta: 'See Local Picks'
   }
 ] as const;
 
@@ -80,18 +80,18 @@ const accordionItems: AccordionEntry[] = [
         <div data-reveal data-reveal-delay="1" class="card-cell">
           <FeatureCard {...previewCards[0]}>
             <svg slot="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </FeatureCard>
         </div>
         <div data-reveal data-reveal-delay="2" class="card-cell">
           <FeatureCard {...previewCards[1]}>
             <svg slot="icon" width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
-              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
-              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
-              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="1.5" />
-              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </FeatureCard>
         </div>
@@ -106,11 +106,11 @@ const accordionItems: AccordionEntry[] = [
       <HomeValuesChips />
     </section>
 
+    <HomeShopSpotlight />
+
     <HomePurposePanel />
 
     <HomeCurationSteps />
-
-    <HomeShopSpotlight />
 
     <section aria-labelledby="faq-heading" class="faq">
       <h2 id="faq-heading" class="section-heading" data-reveal>Quick FAQ</h2>
