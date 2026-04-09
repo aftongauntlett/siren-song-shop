@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ContactForm from '../components/ContactForm.astro';
+import mermaidImg from '../assets/mermaid.jpg';
 ---
 
 <BaseLayout title="Contact | Siren Song Shop" description="Suggest a find or get in touch with the Siren Song Shop team.">
@@ -21,7 +22,7 @@ import ContactForm from '../components/ContactForm.astro';
     <div class="contact-layout">
       <div class="contact-image-wrap">
         <Image
-          src="/images/mermaid.jpg"
+          src={mermaidImg}
           alt="A watercolour mermaid illustration"
           width={700}
           height={900}
