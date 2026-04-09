@@ -1,0 +1,297 @@
+---
+import TabTour from './TabTour.astro';
+
+interface CategoryNavItem {
+  id: string;
+  label: string;
+}
+
+interface Props {
+  categories: CategoryNavItem[];
+  ariaLabel: string;
+  dropdownLabel: string;
+}
+
+const { categories, ariaLabel, dropdownLabel } = Astro.props as Props;
+---
+
+<nav class="category-nav" aria-label={ariaLabel} data-category-nav>
+  <div class="category-dropdown" data-category-dropdown>
+    <button
+      type="button"
+      class="category-trigger"
+      data-category-trigger
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-label={dropdownLabel}
+    >
+      <span data-category-value>{categories[0]?.label ?? ''}</span>
+      <svg class="category-trigger-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+    <div class="category-options" data-category-options role="menu" aria-label={ariaLabel} hidden>
+      {categories.map(({ id, label }, index) => (
+        <button
+          type="button"
+          class:list={['category-option', { 'category-option--active': index === 0 }]}
+          data-category-option
+          data-value={id}
+          role="menuitemradio"
+          aria-checked={index === 0 ? 'true' : 'false'}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  </div>
+  <div class="category-list" role="tablist" aria-label={ariaLabel}>
+    {categories.map(({ id, label }, index) => (
+      <div class="category-item">
+        <button
+          type="button"
+          class:list={['category-tab', { 'category-tab--active': index === 0 }]}
+          role="tab"
+          aria-selected={index === 0 ? 'true' : 'false'}
+          tabindex={index === 0 ? '0' : '-1'}
+          aria-controls={`${id}-panel`}
+          id={`${id}-tab`}
+          data-category-tab
+          data-category={id}
+        >
+          {label}
+        </button>
+      </div>
+    ))}
+  </div>
+  <TabTour />
+</nav>
+
+<script>
+  import { initializeCategoryTabs } from '../lib/categoryTabs';
+
+  const w = window as Window & { __sirenCategoryTabsHookBound?: boolean };
+
+  initializeCategoryTabs();
+
+  if (!w.__sirenCategoryTabsHookBound) {
+    document.addEventListener('astro:page-load', initializeCategoryTabs);
+    w.__sirenCategoryTabsHookBound = true;
+  }
+</script>
+
+<style>
+  .category-nav {
+    margin: var(--space-8) 0 var(--space-4);
+  }
+
+  .category-dropdown {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: var(--space-3);
+  }
+
+  .category-trigger {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-md);
+    background: color-mix(in oklab, var(--color-surface) 86%, transparent);
+    color: var(--color-text-strong);
+    padding: 0.5rem 0.85rem;
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent-soft) 24%, transparent);
+    transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+  }
+
+  .category-trigger:hover {
+    border-color: color-mix(in oklab, var(--color-accent-soft) 64%, var(--color-border-soft));
+    background: color-mix(in oklab, var(--color-surface) 92%, transparent);
+  }
+
+  .category-trigger:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .category-trigger-chevron {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: transform 180ms ease;
+  }
+
+  .category-dropdown[data-open='true'] .category-trigger-chevron {
+    transform: rotate(180deg);
+  }
+
+  .category-options {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 0.35rem;
+    border: 1px solid var(--color-menu-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-card);
+    box-shadow: var(--shadow-menu);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  :root[data-theme='dark'] .category-options {
+    border-color: var(--color-border-soft);
+    background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+    box-shadow: var(--shadow-menu-dark);
+  }
+
+  .category-dropdown[data-open='true'] .category-options {
+    display: block;
+  }
+
+  .category-option {
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 0.45rem 0.6rem;
+    background: transparent;
+    color: var(--color-menu-option-text);
+    text-align: left;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  :root[data-theme='dark'] .category-option {
+    color: var(--color-text-muted);
+  }
+
+  .category-option:hover,
+  .category-option:focus-visible {
+    color: var(--color-on-accent);
+    background: var(--color-menu-option-hover-bg);
+    outline: none;
+  }
+
+  :root[data-theme='dark'] .category-option:hover,
+  :root[data-theme='dark'] .category-option:focus-visible {
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
+  }
+
+  .category-option--active {
+    color: var(--color-on-accent);
+    background: var(--color-menu-option-active-bg);
+    border-color: var(--color-menu-option-active-border);
+    box-shadow: inset 0 0 0 1px var(--color-menu-option-active-shadow);
+  }
+
+  :root[data-theme='dark'] .category-option--active {
+    color: var(--color-text-strong);
+    background: var(--color-surface-strong);
+    border-color: color-mix(in oklab, var(--color-accent-soft) 70%, var(--color-border-soft));
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-accent) 25%, transparent);
+  }
+
+  .category-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  :root:not([data-theme='dark']) .category-list {
+    border-bottom-color: color-mix(in oklab, var(--color-accent-strong) 28%, var(--color-border-soft) 72%);
+  }
+
+  .category-item {
+    flex: 0 0 auto;
+  }
+
+  .category-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-4);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+  }
+
+  .category-tab:hover {
+    background: var(--color-surface-strong);
+    color: var(--color-text-strong);
+  }
+
+  :root:not([data-theme='dark']) .category-tab:hover {
+    background: color-mix(in oklab, var(--color-surface) 66%, var(--color-bg) 34%);
+  }
+
+  .category-tab--active,
+  .category-tab[aria-selected='true'] {
+    background: color-mix(in oklab, var(--color-surface-strong) 86%, transparent);
+    border-bottom-color: var(--color-tab-underline);
+    color: var(--color-text-strong);
+  }
+
+  :root:not([data-theme='dark']) .category-tab--active,
+  :root:not([data-theme='dark']) .category-tab[aria-selected='true'] {
+    background: var(--color-surface-card);
+    border-bottom-color: var(--color-tab-underline);
+    color: var(--color-on-accent);
+    box-shadow: none;
+  }
+
+  .category-tab:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (min-width: 48rem) {
+    .category-dropdown {
+      display: none;
+    }
+
+    .category-list {
+      overflow-x: visible;
+    }
+
+    .category-item {
+      flex: 1 1 auto;
+    }
+
+    .category-tab {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .category-list {
+      display: none;
+    }
+  }
+</style>

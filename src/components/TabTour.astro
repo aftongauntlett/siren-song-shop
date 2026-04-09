@@ -40,15 +40,15 @@
 <style>
   /* ── Gold tokens ─────────────────────────────────────────── */
   .tab-tour {
-    --_g:    #7c5c05;
-    --_ghi:  #a07c14;
-    --_glow: rgba(170, 120, 8, 0.38);
+    --_g: var(--color-tour-gold);
+    --_ghi: var(--color-tour-gold-highlight);
+    --_glow: var(--color-tour-glow);
   }
 
   :root[data-theme='dark'] .tab-tour {
-    --_g:    #eecf55;
-    --_ghi:  #fff8c0;
-    --_glow: rgba(238, 200, 70, 0.42);
+    --_g: var(--color-tour-gold-dark);
+    --_ghi: var(--color-tour-gold-highlight-dark);
+    --_glow: var(--color-tour-glow-dark);
   }
 
   /* ── Container ──────────────────────────────────────────── */
@@ -182,6 +182,8 @@
 </style>
 
 <script>
+  import { isReducedMotionEnabled } from '../lib/motion';
+
   const TOUR_KEY = 'siren-tab-tour-v1';
   const DISMISS_MS = 8_000;
 
@@ -189,6 +191,8 @@
 
   function initTabTour(): void {
     if (localStorage.getItem(TOUR_KEY) === 'seen') return;
+
+    const shouldReduceMotion = (): boolean => isReducedMotionEnabled();
 
     const tour = document.querySelector<HTMLElement>('[data-tab-tour]');
     if (!tour) return;
@@ -205,6 +209,8 @@
     if (!targetTab) return;
 
     let dismissed = false;
+    let dismissTimeoutId: ReturnType<typeof setTimeout> | undefined;
+    const charTimeoutIds: Array<ReturnType<typeof setTimeout>> = [];
 
     const updatePosition = (): void => {
       const r = targetTab.getBoundingClientRect();
@@ -215,7 +221,7 @@
     updatePosition();
     targetTab.dataset.tourTarget = 'true';
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced = shouldReduceMotion();
 
     // ── handwrite animation ──────────────────────────────────
     const textEl = tour.querySelector<HTMLElement>('[data-tour-text]');
@@ -233,7 +239,7 @@
         } else {
           // spaces get a longer pause — organic handwriting rhythm
           const charDelay = ch === ' ' ? 95 : 48;
-          setTimeout(() => span.classList.add('on'), delay);
+          charTimeoutIds.push(setTimeout(() => span.classList.add('on'), delay));
           delay += charDelay;
         }
         textEl.appendChild(span);
@@ -335,8 +341,11 @@
       if (rafId !== undefined) cancelAnimationFrame(rafId);
 
       localStorage.setItem(TOUR_KEY, 'seen');
+      if (dismissTimeoutId) clearTimeout(dismissTimeoutId);
+      charTimeoutIds.forEach((id) => clearTimeout(id));
       window.removeEventListener('resize', handleEnvChange);
       window.removeEventListener('scroll', handleEnvChange, true);
+      window.removeEventListener('siren-motion-change', handleMotionChange);
       delete targetTab.dataset.tourTarget;
 
       tour.classList.remove('tour-visible');
@@ -346,20 +355,34 @@
 
     const handleEnvChange = (): void => {
       if (dismissed) return;
+      if (shouldReduceMotion()) {
+        dismiss();
+        return;
+      }
       if (getComputedStyle(tabList).display === 'none') { dismiss(); return; }
       const rect = targetTab.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > window.innerHeight) { dismiss(); return; }
       updatePosition();
     };
 
+    const handleMotionChange = (event: Event): void => {
+      const reduced = (event as CustomEvent<{ reduced: boolean }>).detail.reduced;
+      if (reduced) {
+        dismiss();
+      }
+    };
+
     window.addEventListener('resize', handleEnvChange, { passive: true });
     window.addEventListener('scroll', handleEnvChange, { passive: true, capture: true });
+    window.addEventListener('siren-motion-change', handleMotionChange);
 
     tabs.forEach((tab: HTMLButtonElement) =>
       tab.addEventListener('click', dismiss, { once: true })
     );
 
-    setTimeout(dismiss, DISMISS_MS);
+    if (!prefersReduced) {
+      dismissTimeoutId = setTimeout(dismiss, DISMISS_MS);
+    }
   }
 
   initTabTour();

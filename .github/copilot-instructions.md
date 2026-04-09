@@ -10,14 +10,14 @@ Siren Song is a curated recommendation platform, not a storefront. Every recomme
 - No inline styles. All colors, spacing, and typography values MUST come from CSS custom properties in `src/styles/theme.css`.
 - Keep components small and single-responsibility.
 - Prefer `.astro` components unless interactivity explicitly requires framework islands.
-- Use Astro Content Collections for static content and Keystatic for editor-managed content.
+- Use Astro Content Collections and repository-managed content files for editorial content.
 
 ## TypeScript Rules
 
 - Strict mode is required. Do not use `any` or `@ts-ignore`.
 - All component props must be typed with interfaces.
 - All Astro frontmatter must be typed.
-- Use Zod schemas for all Keystatic collections and all API inputs.
+- Use Zod schemas for content validation and all API inputs.
 
 ## Accessibility Rules (WCAG 2.2 / Section 508)
 

@@ -11,7 +11,7 @@ const maxRequestsPerDayByEmail = 3;
 const minSubmissionTimeMs = 3_000;
 const maxSubmissionAgeMs = 2 * 60 * 60 * 1_000;
 
-const REASON_VALUES = [
+export const REASON_VALUES = [
   "request_add",
   "suggest_resource",
   "request_remove",
@@ -27,7 +27,7 @@ const REASON_LABELS: Record<Reason, string> = {
 };
 
 // --- Schema ---
-const contactSchema = z.object({
+export const contactSchema = z.object({
   name: z.string().trim().min(1).max(120),
   email: z.string().trim().toLowerCase().email().max(254),
   reason: z.enum(REASON_VALUES),
@@ -40,13 +40,13 @@ type GlobalWithStore = typeof globalThis & {
   __contactRateLimitStore?: Map<string, RateLimitEntry>;
 };
 
-const getRateLimitStore = (): Map<string, RateLimitEntry> => {
+export const getRateLimitStore = (): Map<string, RateLimitEntry> => {
   const scope = globalThis as GlobalWithStore;
   scope.__contactRateLimitStore ??= new Map();
   return scope.__contactRateLimitStore;
 };
 
-const pruneExpired = (
+export const pruneExpired = (
   store: Map<string, RateLimitEntry>,
   now: number,
 ): void => {
@@ -55,7 +55,11 @@ const pruneExpired = (
   }
 };
 
-const isRateLimited = (key: string, windowMs: number, max: number): boolean => {
+export const isRateLimited = (
+  key: string,
+  windowMs: number,
+  max: number,
+): boolean => {
   const now = Date.now();
   const store = getRateLimitStore();
   pruneExpired(store, now);
@@ -71,7 +75,7 @@ const isRateLimited = (key: string, windowMs: number, max: number): boolean => {
 };
 
 // --- Helpers ---
-const getClientIp = (request: Request): string | null => {
+export const getClientIp = (request: Request): string | null => {
   for (const header of [
     "x-forwarded-for",
     "x-real-ip",
@@ -84,7 +88,7 @@ const getClientIp = (request: Request): string | null => {
   return null;
 };
 
-const isSameOrigin = (request: Request): boolean => {
+export const isSameOrigin = (request: Request): boolean => {
   const requestOrigin = new URL(request.url).origin;
   const origin = request.headers.get("origin");
   const referer = request.headers.get("referer");
@@ -149,6 +153,10 @@ const reject = (
     new URL("/contact?contact=error#contact-form", request.url),
     303,
   );
+};
+
+export const __resetContactRateLimitStoreForTests = (): void => {
+  getRateLimitStore().clear();
 };
 
 // --- Handler ---

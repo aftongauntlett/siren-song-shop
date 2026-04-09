@@ -229,19 +229,5 @@ export default function WaterCanvas() {
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "fixed",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        display: "block",
-        pointerEvents: "none",
-        zIndex: 0,
-      }}
-      aria-hidden="true"
-    />
-  );
+  return <canvas ref={canvasRef} className="water-canvas" aria-hidden="true" />;
 }

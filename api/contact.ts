@@ -1,3 +1,7 @@
+// Legacy endpoint note:
+// This file supports older edge-function routing and should remain behaviorally
+// aligned with src/pages/api/contact.ts until removed in a dedicated migration.
+
 const resendApiUrl = "https://api.resend.com/emails";
 const suspiciousRedirectPath = "/?contact=error#contact";
 const resendTimeoutMs = 8000;

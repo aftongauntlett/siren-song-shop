@@ -9,7 +9,7 @@ interface Props {
   linkExternal?: boolean;
 }
 
-const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
+const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props as Props;
 ---
 
 <details class="accordion-item">
@@ -191,6 +191,12 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
 </style>
 
 <script>
+  import { isReducedMotionEnabled } from '../lib/motion';
+
+  const prefersReducedMotion = (): boolean => {
+    return isReducedMotionEnabled();
+  };
+
   function initAccordions() {
     document.querySelectorAll<HTMLDetailsElement>('details.accordion-item').forEach((details) => {
       if (details.dataset.jsInit) return;
@@ -200,9 +206,12 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
       const body = details.querySelector<HTMLElement>('.accordion-body');
       if (!summary || !body) return;
 
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
       summary.addEventListener('click', (e) => {
+        if (prefersReducedMotion()) {
+          details.classList.toggle('is-open', !details.open);
+          return;
+        }
+
         e.preventDefault();
 
         if (!details.open) {
@@ -241,8 +250,20 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props;
           });
         }
       });
+
+      details.addEventListener('toggle', () => {
+        if (prefersReducedMotion()) {
+          details.classList.toggle('is-open', details.open);
+        }
+      });
     });
   }
 
   initAccordions();
+
+  window.addEventListener('siren-motion-change', () => {
+    document.querySelectorAll<HTMLDetailsElement>('details.accordion-item').forEach((details) => {
+      details.classList.toggle('is-open', details.open);
+    });
+  });
 </script>

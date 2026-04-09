@@ -4,7 +4,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "A curated recommendation platform for genuinely loved finds." } = Astro.props;
+const { title, description = "A curated recommendation platform for genuinely loved finds." } = Astro.props as Props;
 import '../styles/theme.css';
 import WaterCanvas from '../components/WaterCanvas.tsx';
 ---

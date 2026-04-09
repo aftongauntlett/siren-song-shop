@@ -8,7 +8,7 @@ interface Props {
   badges?: string[];
 }
 
-const { name, url, description, featured = false, location, badges = [] } = Astro.props;
+const { name, url, description, featured = false, location, badges = [] } = Astro.props as Props;
 
 const _parsedUrl = new URL(url);
 const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathname !== '/' ? _parsedUrl.pathname.replace(/\/$/, '') : '');
@@ -59,7 +59,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     gap: var(--space-4);
     height: 100%;
     padding: var(--space-5) var(--space-6);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--color-card-border-soft);
     border-radius: var(--radius-lg);
     background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
@@ -77,7 +77,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
 
   .resource-card:hover {
     box-shadow: var(--shadow-glow);
-    border-color: rgba(255, 255, 255, 0.28);
+    border-color: var(--color-card-border-strong);
     transform: translateY(-2px);
   }
 
@@ -90,7 +90,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
   }
 
   .resource-card--featured {
-    border-color: rgba(255, 255, 255, 0.25);
+    border-color: var(--color-card-featured-border);
     background: color-mix(in oklab, var(--color-surface-card) 92%, white 8%);
   }
 

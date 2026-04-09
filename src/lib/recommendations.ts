@@ -39,7 +39,7 @@ const validateRecommendationGuardrails = (item: Recommendation) => {
 
   if (hasDisallowedTerm && !hasException) {
     throw new Error(
-      `Recommendation \"${item.title}\" violates curation guardrails.`,
+      `Recommendation "${item.title}" violates curation guardrails.`,
     );
   }
 };
