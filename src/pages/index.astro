@@ -76,6 +76,7 @@ const accordionItems: AccordionEntry[] = [
     <section aria-labelledby="component-preview-heading" class="component-preview">
       <h2 id="component-preview-heading" class="section-heading" data-reveal>What We Believe In</h2>
       <p class="section-copy" data-reveal data-reveal-delay="1">Everything here is something we'd say yes to in person. No sponsorships, no paid placements — just taste.</p>
+      <HomeValuesChips />
       <div class="grid">
         <div data-reveal data-reveal-delay="1" class="card-cell">
           <FeatureCard {...previewCards[0]}>
@@ -103,7 +104,6 @@ const accordionItems: AccordionEntry[] = [
           </FeatureCard>
         </div>
       </div>
-      <HomeValuesChips />
     </section>
 
     <HomeShopSpotlight />
@@ -211,6 +211,18 @@ const accordionItems: AccordionEntry[] = [
   .faq .section-heading,
   .process .section-heading {
     text-align: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :root[data-theme='dark'] .component-preview .section-heading,
+    :root[data-theme='dark'] .faq .section-heading {
+      transition: color 220ms ease;
+    }
+
+    :root[data-theme='dark'] .component-preview:hover .section-heading,
+    :root[data-theme='dark'] .faq:hover .section-heading {
+      color: var(--color-teal);
+    }
   }
 
   .component-preview .section-copy {

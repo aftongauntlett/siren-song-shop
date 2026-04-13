@@ -10,6 +10,7 @@ const maxRequestsPerDayByIp = 5;
 const maxRequestsPerDayByEmail = 3;
 const minSubmissionTimeMs = 3_000;
 const maxSubmissionAgeMs = 2 * 60 * 60 * 1_000;
+const redisTimeoutMs = 1_200;
 
 export const REASON_VALUES = [
   "request_add",
@@ -38,6 +39,16 @@ export const contactSchema = z.object({
 type RateLimitEntry = { count: number; resetAt: number };
 type GlobalWithStore = typeof globalThis & {
   __contactRateLimitStore?: Map<string, RateLimitEntry>;
+};
+
+type RedisConfig = {
+  url: string;
+  token: string;
+};
+
+const getRateLimitNamespace = (): string => {
+  const namespace = import.meta.env.RATE_LIMIT_NAMESPACE?.trim();
+  return namespace || "contact";
 };
 
 export const getRateLimitStore = (): Map<string, RateLimitEntry> => {
@@ -72,6 +83,111 @@ export const isRateLimited = (
   entry.count += 1;
   store.set(key, entry);
   return false;
+};
+
+const getRedisConfig = (): RedisConfig | null => {
+  const {
+    UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN,
+    KV_REST_API_URL,
+    KV_REST_API_TOKEN,
+  } = import.meta.env;
+
+  const url = UPSTASH_REDIS_REST_URL ?? KV_REST_API_URL;
+  const token = UPSTASH_REDIS_REST_TOKEN ?? KV_REST_API_TOKEN;
+  if (!url || !token) {
+    return null;
+  }
+
+  return {
+    url,
+    token,
+  };
+};
+
+const redisExec = async (
+  config: RedisConfig,
+  command: Array<string | number>,
+): Promise<unknown> => {
+  const timeoutController = new AbortController();
+  const timeoutId = setTimeout(() => {
+    timeoutController.abort("redis-timeout");
+  }, redisTimeoutMs);
+
+  let response: Response;
+  try {
+    response = await fetch(config.url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${config.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(command),
+      signal: timeoutController.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`redis_http_${response.status}:${message.slice(0, 200)}`);
+  }
+
+  return response.json();
+};
+
+const parseRedisNumberResult = (payload: unknown): number | null => {
+  if (typeof payload !== "object" || payload === null) {
+    return null;
+  }
+  const withResult = payload as { result?: unknown };
+  return typeof withResult.result === "number" ? withResult.result : null;
+};
+
+const isRateLimitedRedis = async (
+  key: string,
+  windowMs: number,
+  max: number,
+  redisConfigOverride?: RedisConfig | null,
+): Promise<boolean | null> => {
+  const config = redisConfigOverride ?? getRedisConfig();
+  if (!config) return null;
+
+  try {
+    const incrPayload = await redisExec(config, ["INCR", key]);
+    const count = parseRedisNumberResult(incrPayload);
+    if (count === null) {
+      throw new Error("redis_incr_unexpected_payload");
+    }
+
+    if (count === 1) {
+      await redisExec(config, ["PEXPIRE", key, windowMs]);
+    }
+
+    return count > max;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "unknown";
+    console.error("contact_rate_limit_redis_unavailable", { message });
+    return null;
+  }
+};
+
+export const checkRateLimit = async (
+  key: string,
+  windowMs: number,
+  max: number,
+  redisConfigOverride?: RedisConfig | null,
+): Promise<boolean> => {
+  const namespacedKey = `${getRateLimitNamespace()}:${key}`;
+  const redisResult = await isRateLimitedRedis(
+    namespacedKey,
+    windowMs,
+    max,
+    redisConfigOverride,
+  );
+  if (redisResult !== null) return redisResult;
+  return isRateLimited(namespacedKey, windowMs, max);
 };
 
 // --- Helpers ---
@@ -213,7 +329,7 @@ export const POST: APIRoute = async ({ request }) => {
   // Rate limiting
   if (clientIp) {
     if (
-      isRateLimited(
+      await checkRateLimit(
         `ip:${clientIp}:burst`,
         burstWindowMs,
         maxRequestsPerBurstByIp,
@@ -222,7 +338,11 @@ export const POST: APIRoute = async ({ request }) => {
       return reject(request, "burst_rate_limited", clientIp, 429);
     }
     if (
-      isRateLimited(`ip:${clientIp}:day`, dailyWindowMs, maxRequestsPerDayByIp)
+      await checkRateLimit(
+        `ip:${clientIp}:day`,
+        dailyWindowMs,
+        maxRequestsPerDayByIp,
+      )
     ) {
       return reject(request, "daily_ip_rate_limited", clientIp, 429);
     }
@@ -230,7 +350,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   const emailHash = await sha256Hex(email);
   if (
-    isRateLimited(
+    await checkRateLimit(
       `email:${emailHash}:day`,
       dailyWindowMs,
       maxRequestsPerDayByEmail,

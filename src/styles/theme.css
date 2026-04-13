@@ -18,6 +18,7 @@
   --color-border-soft: #e8e4f4;
   --color-tab-underline: #32626a;
   --color-teal: #2a9d8f;
+  --color-hover-warm: #f4cc5e;
   --color-danger: #e11d48;
   --color-menu-border: rgba(255, 255, 255, 0.15);
   --color-menu-option-text: rgba(255, 255, 255, 0.75);
@@ -38,7 +39,7 @@
 
   --font-body: "Nunito", "Avenir Next", "Segoe UI", sans-serif;
   --font-display: "Fraunces", "Iowan Old Style", serif;
-  --font-handwrite: "Dancing Script", "Segoe Script", cursive;
+  --font-handwrite: "Nothing You Could Do", "Segoe Script", cursive;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -234,6 +235,18 @@ textarea:focus-visible {
   }
   75% {
     transform: rotate(9deg) scale(1.05);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
   }
 }
 

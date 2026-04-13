@@ -127,6 +127,17 @@ import mermaidImg from '../assets/mermaid.jpg';
     flex-direction: column;
     align-items: center;
     gap: var(--space-3);
+    transition: box-shadow 320ms ease, transform 320ms ease;
+  }
+
+  .pppg-aside:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pppg-aside:hover {
+      transform: translateY(-2px);
+    }
   }
 
   .pppg-eyebrow {
@@ -176,5 +187,14 @@ import mermaidImg from '../assets/mermaid.jpg';
   .pppg-link:hover {
     border-color: var(--color-accent);
     opacity: 0.8;
+  }
+
+  :root[data-theme='dark'] .pppg-link {
+    color: var(--color-teal);
+    border-bottom-color: color-mix(in oklab, var(--color-teal) 35%, transparent);
+  }
+
+  :root[data-theme='dark'] .pppg-link:hover {
+    border-color: var(--color-teal);
   }
 </style>

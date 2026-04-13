@@ -1,6 +1,7 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   __resetContactRateLimitStoreForTests,
+  checkRateLimit,
   contactSchema,
   getClientIp,
   isRateLimited,
@@ -52,5 +53,25 @@ describe("contact API helpers", () => {
     });
 
     expect(getClientIp(request)).toBe("198.51.100.12");
+  });
+
+  it("falls back to in-memory limits when redis is unavailable", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockRejectedValue(new Error("redis unavailable"));
+
+    try {
+      const redisConfig = {
+        url: "https://redis.example.test",
+        token: "token",
+      };
+      const key = "ip:203.0.113.7:burst";
+
+      expect(await checkRateLimit(key, 1_000, 2, redisConfig)).toBe(false);
+      expect(await checkRateLimit(key, 1_000, 2, redisConfig)).toBe(false);
+      expect(await checkRateLimit(key, 1_000, 2, redisConfig)).toBe(true);
+    } finally {
+      fetchSpy.mockRestore();
+    }
   });
 });

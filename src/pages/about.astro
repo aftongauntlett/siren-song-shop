@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ButtonLink from '../components/ButtonLink.astro';
+import CatLottie from '../components/CatLottie.tsx';
+import wallArtImg from '../assets/wall-art.jpg';
 ---
 
 <BaseLayout title="About | Siren Song Shop" description="The story behind Siren Song Shop — a trust-first recommendation platform for things genuinely worth sharing.">
@@ -16,26 +19,39 @@ import ButtonLink from '../components/ButtonLink.astro';
       </p>
     </section>
 
-    <section aria-labelledby="mission-heading" class="content-section">
+    <section aria-labelledby="mission-heading" class="content-section mission-section">
       <h2 id="mission-heading" class="section-heading" data-reveal>What we believe</h2>
       <p class="section-copy" data-reveal data-reveal-delay="1">
         Great recommendations should have a human voice behind them. We do not publish anything
         we would not confidently give to a close friend. No ad clutter, no sponsored placements,
-        no pay-to-play ranking. Just honest taste, practical context, and genuine care.
+        no pay-to-play ranking. Just honest taste, practical context, and genuine care — and we
+        care deeply about keeping this space welcoming so more people can find useful options
+        without noise, pressure, or gatekeeping.
       </p>
-      <div class="about-quote-wrap" data-reveal data-reveal-delay="2">
-        <p class="about-quote">
-          We are building the kind of directory we wished already existed: clean, accessible,
-          independent, and genuinely useful to real people.
-        </p>
+      <div class="about-media" data-reveal data-reveal-delay="2">
+        <div class="about-quote-wrap" data-reveal data-reveal-delay="3">
+          <p class="about-quote">
+         Our loyalties are to the species and the planet. We speak for Earth. 
+          </p>
+          <p class="about-quote-author">Carl Sagan</p>
+        </div>
+        <div class="about-image-block" data-reveal data-reveal-delay="3">
+          <div class="about-image-wrap">
+            <Image
+              src={wallArtImg}
+              alt="A wall art portrait in an ornate frame"
+              class="about-image"
+            />
+          </div>
+          <p class="about-image-credit">
+            Credit:
+            <a href="https://instagram.com/anniespratt" target="_blank" rel="noopener noreferrer">Annie Spratt</a>
+          </p>
+        </div>
       </div>
-      <p class="section-copy" data-reveal data-reveal-delay="2">
-        We care deeply about keeping this platform welcoming and accessible so more people can
-        discover useful options without noise, pressure, or gatekeeping.
-      </p>
     </section>
 
-    <section aria-labelledby="process-heading" class="content-section">
+    <section aria-labelledby="process-heading" class="content-section process-section">
       <h2 id="process-heading" class="section-heading" data-reveal>How picks make the list</h2>
       <p class="section-copy" data-reveal data-reveal-delay="1">
         We look for things with a real story behind them. Every recommendation is put through a
@@ -76,6 +92,11 @@ import ButtonLink from '../components/ButtonLink.astro';
         <ButtonLink href="https://ko-fi.com/prettyprettyprettygood" target="_blank" rel="noopener noreferrer">Ko-fi</ButtonLink>
         <ButtonLink href="https://paypal.me/aftons" target="_blank" rel="noopener noreferrer" variant="ghost">PayPal</ButtonLink>
       </div>
+      <div class="cat-outer" aria-hidden="true">
+        <div class="cat-glow">
+          <CatLottie client:load src="/cat-loader.lottie" />
+        </div>
+      </div>
     </section>
   </main>
   <SiteFooter />
@@ -84,7 +105,6 @@ import ButtonLink from '../components/ButtonLink.astro';
 <style>
   .page-hero {
     padding: var(--space-12) 0 var(--space-8);
-    text-align: center;
   }
 
   .kicker {
@@ -106,60 +126,168 @@ import ButtonLink from '../components/ButtonLink.astro';
   }
 
   .intro {
-    margin: 0 auto;
-    max-width: 62ch;
+    margin: 0;
+    max-width: 72ch;
     font-size: 1.08rem;
     line-height: 1.75;
     color: var(--color-text-muted);
   }
 
-  .about-quote-wrap {
+  .about-media {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
     margin-top: var(--space-8);
-    margin-bottom: var(--space-8);
+    align-items: center;
+  }
+
+  @media (min-width: 48rem) {
+    .about-media {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-10);
+    }
+  }
+
+  .about-quote-wrap {
     padding-top: var(--space-6);
-    max-width: 56ch;
-    margin-inline: auto;
     border-top: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
   }
 
-  .about-quote-wrap::before {
+  @media (min-width: 48rem) {
+    .about-quote-wrap {
+      border-top: none;
+      border-right: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
+      padding-top: 0;
+      padding-right: var(--space-10);
+    }
+  }
+
+  .about-image-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-image-wrap {
+    border-radius: 1.5rem;
+    overflow: hidden;
+    transition: transform 260ms ease, box-shadow 260ms ease;
+    box-shadow:
+      0 0 0 1px var(--color-border-soft),
+      0 8px 32px rgba(109, 40, 217, 0.22),
+      0 0 80px rgba(109, 40, 217, 0.16),
+      0 0 120px rgba(13, 148, 136, 0.12);
+  }
+
+  :root:not([data-theme='dark']) .about-image-wrap {
+    box-shadow: 0 0 0 1px var(--color-border-soft);
+  }
+
+  .about-image {
+    width: 100%;
+    display: block;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 320ms ease;
+  }
+
+  .about-image-credit {
+    margin: var(--space-3) 0 0;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    text-align: center;
+  }
+
+  .about-image-credit a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-text-muted) 35%, transparent);
+    transition: border-color 180ms ease, opacity 180ms ease;
+  }
+
+  .about-image-credit a:hover {
+    border-color: color-mix(in oklab, var(--color-accent) 70%, transparent);
+    opacity: 1;
+  }
+
+  .about-image-credit a:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-bottom-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .about-image-wrap:hover {
+      transform: scale(1.012);
+    }
+
+    .about-image-wrap:hover .about-image {
+      transform: scale(1.02);
+    }
+  }
+
+  .about-quote-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-quote::before {
     content: '\201C';
     display: block;
     font-family: var(--font-display);
     font-size: 2.6rem;
     line-height: 1;
-    color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+    color: var(--color-text-strong);
     margin-bottom: var(--space-2);
   }
 
   .about-quote {
     margin: 0;
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-style: italic;
-    font-size: clamp(1.08rem, 2.1vw, 1.28rem);
+    font-family: var(--font-handwrite);
+    font-weight: 500;
+    font-style: normal;
+    font-size: clamp(1.6rem, 3.3vw, 2.2rem);
     line-height: 1.6;
+    color: var(--color-accent);
+  }
+
+  :root[data-theme='dark'] .about-quote {
+    color: var(--color-teal);
+  }
+
+  .about-quote-author {
+    margin: var(--space-3) 0 0;
     color: var(--color-text-strong);
+    font-family: var(--font-handwrite);
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-style: normal;
+    font-weight: 400;
+    text-align: right;
+  }
+
+  .about-quote-author::before {
+    content: '\2014\00a0';
   }
 
   .content-section {
     padding: var(--space-12) 0;
     border-top: 1px solid var(--color-border);
-    text-align: center;
-  }
-
-  .content-section .section-copy {
-    max-width: 62ch;
-    margin-inline: auto;
   }
 
   .content-section .section-heading {
     margin-bottom: var(--space-6);
-    transition: color 220ms ease;
   }
 
-  .content-section:hover .section-heading {
-    color: var(--color-accent-pop);
+  .mission-section .section-heading,
+  .mission-section .section-copy,
+  .process-section .section-heading,
+  .process-section .section-copy,
+  .support-section .section-heading,
+  .support-section .section-copy {
+    text-align: center;
   }
 
   .vetting-grid {
@@ -211,6 +339,17 @@ import ButtonLink from '../components/ButtonLink.astro';
     flex-direction: column;
     align-items: center;
     gap: var(--space-3);
+    transition: box-shadow 320ms ease, transform 320ms ease;
+  }
+
+  .suggest-aside:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .suggest-aside:hover {
+      transform: translateY(-2px);
+    }
   }
 
   .suggest-eyebrow {
@@ -258,12 +397,34 @@ import ButtonLink from '../components/ButtonLink.astro';
     opacity: 0.8;
   }
 
+  :root[data-theme='dark'] .suggest-link {
+    color: var(--color-teal);
+    border-bottom-color: color-mix(in oklab, var(--color-teal) 35%, transparent);
+  }
+
+  :root[data-theme='dark'] .suggest-link:hover {
+    border-color: var(--color-teal);
+  }
+
   .support-links {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-3);
     margin-top: var(--space-4);
-    margin-bottom: calc(-1 * var(--space-2));
+  }
+
+  .cat-outer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .cat-glow {
+    display: inline-flex;
+    margin-top: 5px;
+  }
+
+  :root[data-theme='dark'] .cat-glow {
+    background: radial-gradient(circle,rgba(255, 255, 255, 0.758) 48%, transparent 62%);
   }
 </style>
