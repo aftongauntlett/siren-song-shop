@@ -13,14 +13,14 @@ const curationCards = [
   {
     number: '03',
     title: 'Recommend',
-    body: 'We share honest, human recommendations with practical context, not just a list of options. We want to connect people with things they’ll love, not just things to browse.',
+    body: 'We share every pick with real context: why we love it, what to expect, and whether it\'s actually worth your time. No hype, no fluff, no BS.',
   },
 ] as const;
 ---
 
 <section aria-labelledby="process-heading" class="process">
   <h2 id="process-heading" class="section-heading" data-reveal>How Curation Works</h2>
-  <p class="section-copy" data-reveal data-reveal-delay="1">No committees. No shortcuts. Just deliberate, human curation.</p>
+  <p class="section-copy" data-reveal data-reveal-delay="1">Just two people, looking for things actually worth sharing.</p>
   <ol class="process-list">
     {curationCards.map((step, i) => (
       <li class="step-card" data-reveal data-reveal-delay={String((i % 3) + 1) as '1' | '2' | '3'}>

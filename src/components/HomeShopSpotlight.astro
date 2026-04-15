@@ -8,7 +8,7 @@ const shop = {
   category: 'Arts & Crafts',
   url: 'https://www.instagram.com/cosmic.pocket/',
   description:
-    'A multi-media artist and colorist based in Ohio, creating handmade original art sold directly through Instagram. Every piece is one-of-a-kind — no mass production, no middlemen.',
+    'A multi-media artist and colorist based in Ohio, creating handmade original art sold directly through Instagram. Every piece is one-of-a-kind. No mass production, no middlemen.',
 } as const;
 ---
 
@@ -99,10 +99,18 @@ const shop = {
       transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
     }
 
+    .spotlight-name {
+      transition: color 320ms ease;
+    }
+
     .spotlight-card:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-glow);
       border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .spotlight-card:hover .spotlight-name {
+      color: var(--color-hover-warm);
     }
   }
 
@@ -113,6 +121,10 @@ const shop = {
 
   :root[data-theme='dark'] .spotlight-card:hover {
     border-color: var(--color-border);
+  }
+
+  :root[data-theme='dark'] .spotlight-card:hover .spotlight-name {
+    color: var(--color-teal);
   }
 
   .spotlight-category {

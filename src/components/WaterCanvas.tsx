@@ -98,7 +98,9 @@ export default function WaterCanvas() {
       ctx.clearRect(0, 0, w, h);
 
       ambientTimerRef.current++;
+      const isDarkMode = document.documentElement.dataset.theme === "dark";
       if (
+        isDarkMode &&
         ambientTimerRef.current % ambientCadence === 0 &&
         particlesRef.current.length < maxParticles
       ) {

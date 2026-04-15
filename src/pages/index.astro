@@ -5,7 +5,6 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import FeatureCard from '../components/FeatureCard.astro';
 import AccordionItem from '../components/AccordionItem.astro';
-import HomeValuesChips from '../components/HomeValuesChips.astro';
 import HomePurposePanel from '../components/HomePurposePanel.astro';
 import HomeCurationSteps from '../components/HomeCurationSteps.astro';
 import HomeShopSpotlight from '../components/HomeShopSpotlight.astro';
@@ -14,21 +13,24 @@ const previewCards = [
   {
     eyebrow: 'Shop',
     title: 'Independent Shops & Craft',
-    description: 'Browse our curated selection of independent shops and makers we love, with a focus on thoughtful craft, sustainability, and unique stories.',
+    description: 'Shops and makers we actually buy from. Focused on craft, sustainability, and the people doing the work.',
+
     href: '/shop',
     cta: 'Browse the Wares'
   },
   {
     eyebrow: 'Get Involved',
     title: 'Work, Community & Mutual Aid',
-    description: 'Explore opportunities to get involved with our community, whether through job openings, local events, or mutual aid initiatives. We\'re building a network of support and connection.',
+    description: 'Job openings, local events, and mutual aid you can actually plug into. Real ways to find your people and contribute.',
+
     href: '/get-involved',
     cta: 'Get Involved'
   },
   {
     eyebrow: 'Local',
     title: 'Local Picks Near You',
-    description: 'Discover local shops, makers, and resources in your area that align with our values. We\'re highlighting hidden gems and community-focused businesses across different regions.',
+    description: 'Local shops, makers, and resources we\'d point a friend to. The good stuff that\'s easy to miss if you don\'t know where to look.',
+
     href: '/local',
     cta: 'See Local Picks'
   }
@@ -45,19 +47,25 @@ interface AccordionEntry {
 const accordionItems: AccordionEntry[] = [
   {
     title: 'Are these recommendations paid or sponsored?',
-    body: 'Never. Every pick is something we genuinely use, love, or would confidently give as a gift. No affiliate pressure, no sponsored placements — just honest taste.'
+    body: 'Never. Every pick is something we genuinely use, love, or would hand to a friend without hesitation. No affiliate deals, no paid placements, no brand relationships of any kind. We have nothing to gain from recommending something except the good feeling of pointing someone toward something real.',
+  },
+  {
+    title: 'Do you run ads or track me?',
+    body: 'No ads, no trackers, no analytics scripts watching what you click. We don\'t monetize your attention and we don\'t sell or share your data. The site exists because we want it to, not because it has to pay for itself through you.',
   },
   {
     title: 'How do you choose what makes the cut?',
-    body: 'We look for things with a real story behind them — independent makers, considered craft, and products that hold up over time. If we wouldn\'t recommend it to a close friend, it doesn\'t appear here.'
-  },
-  {
-    title: 'How often is new content added?',
-    body: 'Slowly and intentionally. We\'d rather have a shorter list of things we truly believe in than a long one padded with noise. New guides and picks are added when they\'ve earned their place.'
+    body: 'We look for things with a real story: independent makers, good craft, and products that hold up over time. If we wouldn\'t recommend it to a close friend, it doesn\'t appear here. We add new picks slowly and intentionally — a shorter list we truly believe in beats a long one padded with noise.',
   },
   {
     title: 'Are your recommendations vegan-friendly?',
-    body: 'Yes. We prioritize shops that support vegan products, and we call out shops that are 100% vegan. We avoid farm or pet-focused picks unless they are clearly animal-protection aligned (for example, sanctuary, rescue or rehabilitation efforts).'
+    body: 'Yes. We prioritize shops that support vegan products, and we call out shops that are 100% vegan. We avoid farm or pet-focused picks unless they are clearly animal-protection aligned (for example, sanctuary, rescue or rehabilitation efforts).',
+  },
+  {
+    title: 'What\'s the "Get Involved" section?',
+    body: 'It\'s for people who want to do something, not just buy something. You\'ll find ethical job listings, intentional communities and cohousing directories, ways to volunteer or donate, and sliding-scale or free support resources. It\'s the same values that drive the shop recommendations (mutual care and community first), just pointed outward.',
+    linkHref: '/get-involved',
+    linkLabel: 'Browse Get Involved',
   },
   {
     title: 'I know a shop that would be a great fit — can I suggest it?',
@@ -73,10 +81,11 @@ const accordionItems: AccordionEntry[] = [
   <SiteHeader />
   <div class="hero-section-divider" aria-hidden="true"></div>
   <main id="main-content" class="container">
+    <HomePurposePanel />
+
     <section aria-labelledby="component-preview-heading" class="component-preview">
-      <h2 id="component-preview-heading" class="section-heading" data-reveal>What We Believe In</h2>
-      <p class="section-copy" data-reveal data-reveal-delay="1">Everything here is something we'd say yes to in person. No sponsorships, no paid placements — just taste.</p>
-      <HomeValuesChips />
+      <h2 id="component-preview-heading" class="section-heading" data-reveal>What's Here</h2>
+      <p class="section-copy" data-reveal data-reveal-delay="1">Three sections, all built around the same idea — pointing you toward things and people actually worth your time.</p>
       <div class="grid">
         <div data-reveal data-reveal-delay="1" class="card-cell">
           <FeatureCard {...previewCards[0]}>
@@ -107,8 +116,6 @@ const accordionItems: AccordionEntry[] = [
     </section>
 
     <HomeShopSpotlight />
-
-    <HomePurposePanel />
 
     <HomeCurationSteps />
 
