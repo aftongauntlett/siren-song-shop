@@ -63,7 +63,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     border-radius: var(--radius-lg);
     background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
-    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease, background-color 320ms ease;
+    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease;
   }
 
   .resource-card:focus-visible {
@@ -81,17 +81,13 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     transform: translateY(-2px);
   }
 
-  :root:not([data-theme='dark']) .resource-card:hover {
-    background: color-mix(in oklab, var(--color-surface-card) 86%, black 14%);
-  }
-
   :root[data-theme='dark'] .resource-card:hover {
     border-color: var(--color-border);
   }
 
   .resource-card--featured {
     border-color: var(--color-card-featured-border);
-    background: color-mix(in oklab, var(--color-surface-card) 92%, white 8%);
+    background: color-mix(in oklab, var(--color-surface-card) 92%, var(--color-surface) 8%);
   }
 
   :root[data-theme='dark'] .resource-card--featured {
@@ -109,7 +105,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     margin: 0;
     font-size: 1.05rem;
     font-weight: 600;
-    color: var(--color-on-accent);
+    color: var(--color-card-text);
   }
 
   .resource-badges {
@@ -127,24 +123,24 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     gap: 0.25rem;
     align-self: flex-start;
     padding: 0.15rem 0.55rem;
-    border: 1px solid color-mix(in oklab, var(--color-hover-warm) 55%, transparent);
+    border: 1px solid var(--color-chip-border);
     border-radius: var(--radius-pill);
-    background: color-mix(in oklab, var(--color-hover-warm) 18%, transparent);
-    color: var(--color-hover-warm);
+    background: var(--color-chip-bg);
+    color: var(--color-chip-text);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1.4;
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+
+  .resource-badge:hover {
+    background: color-mix(in oklab, var(--color-accent) 14%, transparent);
+    border-color: var(--color-accent-soft);
   }
 
   .resource-badge-icon {
     flex-shrink: 0;
-  }
-
-  :root[data-theme='dark'] .resource-badge {
-    border-color: color-mix(in oklab, var(--color-accent-pop) 35%, var(--color-border-soft));
-    background: color-mix(in oklab, var(--color-accent-pop) 10%, transparent);
-    color: var(--color-accent-pop);
   }
 
   :root[data-theme='dark'] .resource-name {
@@ -156,26 +152,26 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     align-items: center;
     align-self: flex-start;
     padding: 0.15rem 0.55rem;
-    border: 1px solid color-mix(in oklab, var(--color-hover-warm) 55%, transparent);
+    border: 1px solid var(--color-chip-border);
     border-radius: var(--radius-pill);
-    background: color-mix(in oklab, var(--color-hover-warm) 18%, transparent);
-    color: var(--color-hover-warm);
+    background: var(--color-chip-bg);
+    color: var(--color-chip-text);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1.4;
+    transition: background-color 180ms ease, border-color 180ms ease;
   }
 
-  :root[data-theme='dark'] .resource-location {
-    border-color: color-mix(in oklab, var(--color-accent-pop) 35%, var(--color-border-soft));
-    background: color-mix(in oklab, var(--color-accent-pop) 10%, transparent);
-    color: var(--color-accent-pop);
+  .resource-location:hover {
+    background: color-mix(in oklab, var(--color-accent) 14%, transparent);
+    border-color: var(--color-accent-soft);
   }
 
   .resource-description {
     margin: 0;
     font-size: 0.925rem;
-    color: var(--color-on-accent);
+    color: var(--color-card-text-muted);
     line-height: 1.6;
   }
 
@@ -189,7 +185,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     gap: var(--space-1);
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--color-hover-warm);
+    color: var(--color-hover-accent);
     text-decoration: none;
     align-self: flex-end;
     justify-content: flex-end;
@@ -201,7 +197,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
   }
 
   .resource-link:hover {
-    color: var(--color-on-accent);
+    color: var(--color-tab-underline);
     text-decoration: underline;
   }
 

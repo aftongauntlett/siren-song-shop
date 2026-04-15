@@ -1,10 +1,10 @@
 :root {
-  /* Palette — blue-purple & amber */
+  /* Palette — blue-purple & teal */
   --color-bg: #faf9fe;
   --color-bg-muted: #f2effd;
   --color-surface: #ffffff;
   --color-surface-strong: #e8e4f4;
-  --color-surface-card: #6f6789;
+  --color-surface-card: #e8e4f4;
   --color-text: #1e1b2e;
   --color-text-strong: #3c384a;
   --color-text-muted: #544a70;
@@ -17,24 +17,45 @@
   --color-border: #cec8f0;
   --color-border-soft: #e8e4f4;
   --color-tab-underline: #32626a;
-  --color-teal: #2a9d8f;
+  --color-teal: #1e7a72;
   --color-hover-warm: #f4cc5e;
   --color-danger: #e11d48;
-  --color-menu-border: rgba(255, 255, 255, 0.15);
-  --color-menu-option-text: rgba(255, 255, 255, 0.75);
-  --color-menu-option-hover-bg: rgba(255, 255, 255, 0.14);
-  --color-menu-option-active-bg: rgba(255, 255, 255, 0.2);
-  --color-menu-option-active-border: rgba(255, 255, 255, 0.3);
-  --color-menu-option-active-shadow: rgba(255, 255, 255, 0.12);
+  --color-menu-border: rgba(95, 85, 127, 0.2);
+  --color-menu-option-text: var(--color-text-muted);
+  --color-menu-option-hover-bg: var(--color-surface-strong);
+  --color-menu-option-active-bg: color-mix(
+    in oklab,
+    var(--color-accent) 12%,
+    var(--color-surface-card)
+  );
+  --color-menu-option-active-border: rgba(95, 85, 127, 0.3);
+  --color-menu-option-active-shadow: rgba(95, 85, 127, 0.12);
   --color-tour-gold: #7c5c05;
   --color-tour-gold-highlight: #a07c14;
   --color-tour-glow: rgba(170, 120, 8, 0.38);
-  --color-card-border-soft: rgba(255, 255, 255, 0.15);
-  --color-card-border-strong: rgba(255, 255, 255, 0.28);
-  --color-card-featured-border: rgba(255, 255, 255, 0.25);
+  --color-card-border-soft: rgba(95, 85, 127, 0.2);
+  --color-card-border-strong: rgba(95, 85, 127, 0.38);
+  --color-card-featured-border: rgba(95, 85, 127, 0.3);
+  --color-card-text: var(--color-text-strong);
+  --color-card-text-muted: var(--color-text-muted);
   --shadow-menu: 0 14px 28px -12px rgba(0, 0, 0, 0.35);
   --shadow-menu-dark: 0 14px 28px -24px rgba(0, 0, 0, 0.42);
   --shadow-card-cta: 0 2px 12px rgba(0, 0, 0, 0.15);
+  --shadow-button-hover: 0 8px 18px rgba(0, 0, 0, 0.18);
+  --shadow-nav-scrolled: 0 6px 24px -20px rgba(0, 0, 0, 0.35);
+  --shadow-image-glow: 0 0 0 1px var(--color-border-soft);
+  --shadow-tour-pulse:
+    0 0 0 4px rgba(210, 165, 20, 0.18), 0 0 14px rgba(210, 165, 20, 0.1);
+  --color-hover-accent: var(--color-teal);
+  --color-card-hover-bg: color-mix(
+    in oklab,
+    var(--color-surface-card) 78%,
+    var(--color-accent) 22%
+  );
+  --color-lottie-spotlight: transparent;
+  --color-chip-text: var(--color-text-muted);
+  --color-chip-border: var(--color-border);
+  --color-chip-bg: color-mix(in oklab, var(--color-accent) 8%, transparent);
   --focus-ring: 0 0 0 3px rgba(123, 104, 192, 0.35);
 
   --font-body: "Nunito", "Avenir Next", "Segoe UI", sans-serif;
@@ -80,7 +101,7 @@
   --color-text: #e2deff;
   --color-text-strong: #f0ecff;
   --color-text-muted: #a89fd0;
-  --color-accent: #9884d7;
+  --color-accent: #ab9ae3;
   --color-accent-soft: #3b2a6e;
   --color-accent-strong: #c4b5fd;
   --color-accent-pop: #68f5f2;
@@ -88,6 +109,17 @@
   --color-on-accent: #0e0b1a;
   --color-border: #3b2d6e;
   --color-border-soft: #2a2050;
+  --color-card-text: var(--color-text);
+  --color-card-text-muted: var(--color-text-muted);
+  --color-hover-accent: var(--color-teal);
+  --color-lottie-spotlight: rgba(255, 255, 255, 0.76);
+  --color-chip-text: var(--color-text-muted);
+  --color-chip-border: var(--color-border-soft);
+  --color-chip-bg: color-mix(in oklab, var(--color-accent) 10%, transparent);
+  --shadow-button-hover: 0 8px 18px rgba(109, 40, 217, 0.14);
+  --shadow-image-glow:
+    0 0 0 1px var(--color-border-soft), 0 8px 32px rgba(109, 40, 217, 0.22),
+    0 0 80px rgba(109, 40, 217, 0.16), 0 0 120px rgba(13, 148, 136, 0.12);
   --color-tab-underline: #d88ee5;
   --color-teal: #4ecdc4;
   --color-danger: #fb7185;

@@ -43,12 +43,12 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props a
 
 <style>
   .accordion-item {
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--color-card-border-soft);
     border-radius: var(--radius-md);
     background: var(--color-surface-card);
     padding: 0;
     overflow: hidden;
-    color: var(--color-on-accent);
+    color: var(--color-card-text);
   }
 
   :root[data-theme='dark'] .accordion-item {
@@ -64,7 +64,7 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props a
     cursor: pointer;
     list-style: none;
     font-weight: 500;
-    color: var(--color-on-accent);
+    color: var(--color-card-text);
     padding: var(--space-3) var(--space-4);
   }
 
@@ -78,7 +78,7 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props a
 
   .chevron {
     flex-shrink: 0;
-    color: var(--color-on-accent);
+    color: var(--color-card-text-muted);
   }
 
   :root[data-theme='dark'] .chevron {
@@ -103,12 +103,19 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props a
     box-shadow: var(--shadow-glow);
   }
 
-  :root:not([data-theme='dark']) summary:hover {
-    background: color-mix(in oklab, var(--color-surface-card) 82%, black);
+  :root:not([data-theme='dark']) summary:hover,
+  :root:not([data-theme='dark']) details[open] summary,
+  :root:not([data-theme='dark']) details.is-open summary {
+    background: var(--color-card-hover-bg);
+  }
+
+  :root[data-theme='dark'] details[open] summary,
+  :root[data-theme='dark'] details.is-open summary {
+    background: var(--color-surface-strong);
   }
 
   summary:hover .chevron {
-    color: var(--color-on-accent);
+    color: var(--color-card-text);
   }
 
   :root[data-theme='dark'] summary:hover .chevron {
@@ -124,13 +131,13 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props a
   }
 
   :root:not([data-theme='dark']) .accordion-body {
-    background: color-mix(in oklab, var(--color-surface-card) 82%, white 18%);
+    background: color-mix(in oklab, var(--color-surface-card) 82%, var(--color-surface) 18%);
   }
 
   p {
     margin: 0;
     padding: var(--space-3) var(--space-4) var(--space-4);
-    color: var(--color-on-accent);
+    color: var(--color-card-text-muted);
   }
 
   :root[data-theme='dark'] p {
@@ -170,13 +177,13 @@ const { title, body, linkHref, linkLabel, linkExternal = false } = Astro.props a
   :global(.accordion-link:hover) {
     transform: translateY(-1px);
     border-color: var(--color-on-accent);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-button-hover);
     background: var(--color-on-accent);
   }
 
   :root[data-theme='dark'] :global(.accordion-link:hover) {
     border-color: var(--color-border);
-    box-shadow: 0 8px 18px rgba(109, 40, 217, 0.12);
+    box-shadow: var(--shadow-button-hover);
     background: color-mix(in oklab, var(--color-accent-soft) 52%, transparent);
   }
 

@@ -49,8 +49,8 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
     padding: var(--space-6) var(--space-5);
-    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease, background-color 320ms ease;
-    color: var(--color-on-accent);
+    transition: box-shadow 320ms ease, border-color 320ms ease, transform 320ms ease;
+    color: var(--color-card-text);
   }
 
   .feature-card:focus-visible {
@@ -66,10 +66,6 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     box-shadow: var(--shadow-glow);
     border-color: var(--color-card-border-strong);
     transform: translateY(-2px);
-  }
-
-  :root:not([data-theme='dark']) .feature-card:hover {
-    background: color-mix(in oklab, var(--color-surface-card) 86%, black 14%);
   }
 
   :root[data-theme='dark'] .feature-card:hover {
@@ -90,14 +86,14 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
   }
 
   :root:not([data-theme='dark']) .feature-cta {
-    background: var(--color-menu-option-hover-bg);
-    border-color: var(--color-menu-option-active-border);
-    color: var(--color-on-accent);
+    background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+    border-color: color-mix(in oklab, var(--color-accent) 28%, transparent);
+    color: var(--color-accent-strong);
   }
 
   :root:not([data-theme='dark']) .feature-card:hover .feature-cta {
-    background: var(--color-menu-option-active-bg);
-    border-color: color-mix(in oklab, var(--color-on-accent) 70%, transparent);
+    background: color-mix(in oklab, var(--color-accent) 18%, transparent);
+    border-color: color-mix(in oklab, var(--color-accent) 42%, transparent);
     box-shadow: var(--shadow-card-cta);
   }
 
@@ -120,8 +116,8 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: color-mix(in oklab, var(--color-on-accent) 18%, transparent);
-    color: var(--color-on-accent);
+    background: color-mix(in oklab, var(--color-accent) 12%, transparent);
+    color: var(--color-accent);
     transition: color 200ms ease;
   }
 
@@ -131,7 +127,7 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
   }
 
   .feature-card:hover .card-icon-wrap {
-    color: var(--color-hover-warm);
+    color: var(--color-hover-accent);
   }
 
   :root[data-theme='dark'] .feature-card:hover .card-icon-wrap {
@@ -142,13 +138,14 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     .feature-card:hover .card-icon-wrap > :global(svg) {
       animation: wiggle 420ms ease;
     }
+
   }
 
   .eyebrow {
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--color-on-accent);
+    color: var(--color-accent);
     font-size: 0.75rem;
     font-weight: 600;
   }
@@ -167,7 +164,7 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     font-weight: 400;
     font-size: 1.35rem;
     line-height: 1.25;
-    color: var(--color-on-accent);
+    color: var(--color-card-text);
   }
 
   :root[data-theme='dark'] h3 {
@@ -175,7 +172,7 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
   }
 
   p:not(.eyebrow) {
-    color: var(--color-on-accent);
+    color: var(--color-card-text-muted);
     flex: 1;
   }
 

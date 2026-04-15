@@ -14,7 +14,7 @@ const shop = {
 
 <section aria-labelledby="spotlight-heading" class="shop-spotlight">
   <h2 id="spotlight-heading" class="section-heading" data-reveal>Shop Spotlight</h2>
-  <p class="section-copy spotlight-copy" data-reveal data-reveal-delay="1">One shop we're genuinely into right now. We rotate this out every now and then — this is just our current fave!</p>
+  <p class="section-copy spotlight-copy" data-reveal data-reveal-delay="1">One shop we're genuinely into right now. We rotate this out every now and then - this is just our current fave!</p>
   <div class="spotlight-card" data-reveal data-reveal-delay="2">
     <div class="spotlight-image-wrap">
       <Image
@@ -65,11 +65,11 @@ const shop = {
   }
 
   .spotlight-card {
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--color-card-border-soft);
     border-radius: var(--radius-lg);
     background: var(--color-surface-card);
     box-shadow: var(--shadow-soft);
-    color: var(--color-on-accent);
+    color: var(--color-card-text);
     display: grid;
     grid-template-columns: 1fr;
     overflow: hidden;
@@ -99,19 +99,12 @@ const shop = {
       transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
     }
 
-    .spotlight-name {
-      transition: color 320ms ease;
-    }
-
     .spotlight-card:hover {
       transform: translateY(-2px);
       box-shadow: var(--shadow-glow);
-      border-color: rgba(255, 255, 255, 0.28);
+      border-color: var(--color-card-border-strong);
     }
 
-    .spotlight-card:hover .spotlight-name {
-      color: var(--color-hover-warm);
-    }
   }
 
   :root[data-theme='dark'] .spotlight-card {
@@ -123,18 +116,15 @@ const shop = {
     border-color: var(--color-border);
   }
 
-  :root[data-theme='dark'] .spotlight-card:hover .spotlight-name {
-    color: var(--color-teal);
-  }
-
   .spotlight-category {
     display: inline-block;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: color-mix(in oklab, var(--color-on-accent) 70%, transparent);
-    border: 1px solid color-mix(in oklab, var(--color-on-accent) 30%, transparent);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    background: color-mix(in oklab, var(--color-accent) 6%, transparent);
     border-radius: var(--radius-pill);
     padding: 0.15rem 0.65rem;
     margin-bottom: var(--space-3);
@@ -151,7 +141,7 @@ const shop = {
     font-weight: 400;
     font-size: clamp(1.7rem, 3.5vw, 2.4rem);
     line-height: 1.15;
-    color: var(--color-on-accent);
+    color: var(--color-card-text);
   }
 
   :root[data-theme='dark'] .spotlight-name {
@@ -162,7 +152,7 @@ const shop = {
     margin: 0;
     font-size: 1rem;
     line-height: 1.75;
-    color: color-mix(in oklab, var(--color-on-accent) 88%, transparent);
+    color: var(--color-card-text-muted);
   }
 
   :root[data-theme='dark'] .spotlight-desc {
@@ -175,7 +165,7 @@ const shop = {
     justify-content: flex-end;
     gap: var(--space-4);
     flex-wrap: wrap;
-    border-top: 1px solid color-mix(in oklab, var(--color-on-accent) 15%, transparent);
+    border-top: 1px solid color-mix(in oklab, var(--color-text-strong) 12%, transparent);
     padding-top: var(--space-4);
   }
 
@@ -229,5 +219,12 @@ const shop = {
     .spotlight-card {
       grid-template-columns: 400px 1fr;
     }
+  }
+
+  /* Ghost button inside a light-mode card: hover would otherwise turn the same
+     lavender as the card surface. Keep it white; signal hover via border + shadow only. */
+  :root:not([data-theme='dark']) .spotlight-footer :global(.button-ghost:hover) {
+    background: var(--color-surface);
+    border-color: var(--color-accent);
   }
 </style>

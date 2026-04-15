@@ -12,40 +12,40 @@ import wallArtImg from '../assets/wall-art.jpg';
   <SiteNav />
   <main id="main-content" class="container">
     <section class="page-hero" aria-labelledby="about-heading">
-      <p class="kicker">Our Story</p>
-      <h1 id="about-heading">A little bit about us</h1>
-      <p class="intro">
-        Siren Song Shop is a small space for artists, makers, independent shops, apothecaries, and things we keep wanting to point people toward. Every pick is personally vetted.
-      </p>
-    </section>
-
-    <section aria-labelledby="mission-heading" class="content-section mission-section">
-      <h2 id="mission-heading" class="section-heading" data-reveal>What we believe</h2>
-      <p class="section-copy" data-reveal data-reveal-delay="1">
-        We don't publish anything we wouldn't give to a close friend. No ad clutter, no sponsored placements, no pay-to-play ranking. Just honest taste and practical context, in a space that's meant to feel low-pressure and easy to use.
-      </p>
-      <div class="about-media" data-reveal data-reveal-delay="2">
-        <div class="about-quote-wrap" data-reveal data-reveal-delay="3">
-          <p class="about-quote">
-         Our loyalties are to the species and the planet. We speak for Earth. 
-          </p>
-          <p class="about-quote-author">Carl Sagan</p>
+      <div class="hero-text">
+        <p class="kicker">Our Story</p>
+        <h1 id="about-heading">Why we built this</h1>
+        <p class="intro">
+          Two lifelong friends kept running into the same wall — where do you actually find things worth supporting? So we built Siren Song Shop: a small, honest space for independent makers, underrepresented creators, and businesses that put people and the planet first.
+        </p>
+        <p class="intro">
+          No ads, no sponsored placements, no pay-to-play. Just the things we'd genuinely hand to a friend — and the hope that someone finds exactly what they needed.
+        </p>
+      </div>
+      <div class="hero-image-col">
+        <div class="hero-image-wrap">
+          <Image
+            src={wallArtImg}
+            alt="Street art on a brick wall reading 'Everything has beauty, but not everyone can see it'"
+            class="hero-image"
+            width={520}
+            height={580}
+          />
         </div>
-        <div class="about-image-block" data-reveal data-reveal-delay="3">
-          <div class="about-image-wrap">
-            <Image
-              src={wallArtImg}
-              alt="A wall art portrait in an ornate frame"
-              class="about-image"
-            />
-          </div>
-          <p class="about-image-credit">
-            Credit:
-            <a href="https://instagram.com/anniespratt" target="_blank" rel="noopener noreferrer">Annie Spratt</a>
-          </p>
-        </div>
+        <p class="hero-image-credit">
+          Photo: <a href="https://instagram.com/anniespratt" target="_blank" rel="noopener noreferrer">Annie Spratt</a>
+        </p>
       </div>
     </section>
+
+    <div class="quote-break content-section">
+      <figure class="about-epigraph" data-reveal>
+        <blockquote class="about-quote">
+          Our loyalties are to the species and the planet. We speak for Earth.
+        </blockquote>
+        <figcaption class="about-quote-author">Carl Sagan</figcaption>
+      </figure>
+    </div>
 
     <section aria-labelledby="process-heading" class="content-section process-section">
       <h2 id="process-heading" class="section-heading" data-reveal>How picks make the list</h2>
@@ -101,6 +101,63 @@ import wallArtImg from '../assets/wall-art.jpg';
 <style>
   .page-hero {
     padding: var(--space-12) 0 var(--space-8);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  @media (min-width: 56rem) {
+    .page-hero {
+      grid-template-columns: 1fr 480px;
+      gap: var(--space-12);
+    }
+  }
+
+  .hero-image-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .hero-image-credit {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    text-align: center;
+  }
+
+  .hero-image-credit a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-text-muted) 35%, transparent);
+    transition: border-color 180ms ease;
+  }
+
+  .hero-image-credit a:hover {
+    border-color: color-mix(in oklab, var(--color-accent) 70%, transparent);
+  }
+
+  .hero-image-wrap {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px var(--color-border-soft),
+      0 8px 32px rgba(109, 40, 217, 0.22),
+      0 0 80px rgba(109, 40, 217, 0.16),
+      0 0 120px rgba(13, 148, 136, 0.12);
+  }
+
+  :root:not([data-theme='dark']) .hero-image-wrap {
+    box-shadow: 0 0 0 1px var(--color-border-soft);
+  }
+
+  .hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
   }
 
   .kicker {
@@ -129,105 +186,14 @@ import wallArtImg from '../assets/wall-art.jpg';
     color: var(--color-text-muted);
   }
 
-  .about-media {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-    margin-top: var(--space-8);
-    align-items: center;
+  .intro + .intro {
+    margin-top: var(--space-4);
   }
 
-  @media (min-width: 48rem) {
-    .about-media {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-10);
-    }
-  }
-
-  .about-quote-wrap {
-    padding-top: var(--space-6);
-    border-top: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
-  }
-
-  @media (min-width: 48rem) {
-    .about-quote-wrap {
-      border-top: none;
-      border-right: 1px solid color-mix(in oklab, var(--color-border) 75%, transparent);
-      padding-top: 0;
-      padding-right: var(--space-10);
-    }
-  }
-
-  .about-image-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .about-image-wrap {
-    border-radius: 1.5rem;
-    overflow: hidden;
-    transition: transform 260ms ease, box-shadow 260ms ease;
-    box-shadow:
-      0 0 0 1px var(--color-border-soft),
-      0 8px 32px rgba(109, 40, 217, 0.22),
-      0 0 80px rgba(109, 40, 217, 0.16),
-      0 0 120px rgba(13, 148, 136, 0.12);
-  }
-
-  :root:not([data-theme='dark']) .about-image-wrap {
-    box-shadow: 0 0 0 1px var(--color-border-soft);
-  }
-
-  .about-image {
-    width: 100%;
-    display: block;
-    height: auto;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 320ms ease;
-  }
-
-  .about-image-credit {
-    margin: var(--space-3) 0 0;
-    font-size: 0.82rem;
-    color: var(--color-text-muted);
-    font-style: italic;
+  .about-epigraph {
+    margin: 0 auto;
+    max-width: 48ch;
     text-align: center;
-  }
-
-  .about-image-credit a {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px solid color-mix(in oklab, var(--color-text-muted) 35%, transparent);
-    transition: border-color 180ms ease, opacity 180ms ease;
-  }
-
-  .about-image-credit a:hover {
-    border-color: color-mix(in oklab, var(--color-accent) 70%, transparent);
-    opacity: 1;
-  }
-
-  .about-image-credit a:focus-visible {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 2px;
-    border-bottom-color: transparent;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .about-image-wrap:hover {
-      transform: scale(1.012);
-    }
-
-    .about-image-wrap:hover .about-image {
-      transform: scale(1.02);
-    }
-  }
-
-  .about-quote-wrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
   }
 
   .about-quote::before {
@@ -277,8 +243,6 @@ import wallArtImg from '../assets/wall-art.jpg';
     margin-bottom: var(--space-6);
   }
 
-  .mission-section .section-heading,
-  .mission-section .section-copy,
   .process-section .section-heading,
   .process-section .section-copy,
   .support-section .section-heading,

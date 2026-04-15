@@ -86,11 +86,11 @@ import mermaidImg from '../assets/mermaid.jpg';
   .contact-image-wrap {
     border-radius: 1.5rem;
     overflow: hidden;
-    box-shadow:
-      0 0 0 1px var(--color-border-soft),
-      0 8px 32px rgba(109, 40, 217, 0.22),
-      0 0 80px rgba(109, 40, 217, 0.16),
-      0 0 120px rgba(13, 148, 136, 0.12);
+    box-shadow: var(--shadow-image-glow);
+  }
+
+  :root:not([data-theme='dark']) .contact-image-wrap {
+    box-shadow: 0 0 0 1px var(--color-border-soft);
   }
 
   .contact-image {

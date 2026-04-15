@@ -5,7 +5,6 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import FeatureCard from '../components/FeatureCard.astro';
 import AccordionItem from '../components/AccordionItem.astro';
-import HomePurposePanel from '../components/HomePurposePanel.astro';
 import HomeCurationSteps from '../components/HomeCurationSteps.astro';
 import HomeShopSpotlight from '../components/HomeShopSpotlight.astro';
 
@@ -81,11 +80,9 @@ const accordionItems: AccordionEntry[] = [
   <SiteHeader />
   <div class="hero-section-divider" aria-hidden="true"></div>
   <main id="main-content" class="container">
-    <HomePurposePanel />
-
     <section aria-labelledby="component-preview-heading" class="component-preview">
       <h2 id="component-preview-heading" class="section-heading" data-reveal>What's Here</h2>
-      <p class="section-copy" data-reveal data-reveal-delay="1">Three sections, all built around the same idea — pointing you toward things and people actually worth your time.</p>
+      <p class="section-copy" data-reveal data-reveal-delay="1">Three sections, all built around the same idea - pointing you toward things and people actually worth your time.</p>
       <div class="grid">
         <div data-reveal data-reveal-delay="1" class="card-cell">
           <FeatureCard {...previewCards[0]}>
@@ -113,6 +110,9 @@ const accordionItems: AccordionEntry[] = [
           </FeatureCard>
         </div>
       </div>
+      <p class="section-about-link" data-reveal>
+        Curious who's behind this? <a href="/about">Read our story →</a>
+      </p>
     </section>
 
     <HomeShopSpotlight />
@@ -235,6 +235,35 @@ const accordionItems: AccordionEntry[] = [
   .component-preview .section-copy {
     margin-inline: auto;
     max-width: 62ch;
+  }
+
+  .section-about-link {
+    margin: var(--space-6) 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .section-about-link a {
+    color: var(--color-accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-accent) 35%, transparent);
+    padding-bottom: 0.1em;
+    transition: border-color 180ms ease, opacity 180ms ease;
+  }
+
+  .section-about-link a:hover {
+    border-color: var(--color-accent);
+    opacity: 0.8;
+  }
+
+  :root[data-theme='dark'] .section-about-link a {
+    color: var(--color-teal);
+    border-bottom-color: color-mix(in oklab, var(--color-teal) 35%, transparent);
+  }
+
+  :root[data-theme='dark'] .section-about-link a:hover {
+    border-color: var(--color-teal);
   }
 
   .grid {
