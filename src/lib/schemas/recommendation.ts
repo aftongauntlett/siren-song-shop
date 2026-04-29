@@ -8,23 +8,15 @@ export const recommendationCategorySchema = z.enum([
   "clothing",
 ]);
 
-export const recommendationVeganSupportSchema = z.enum([
-  "supports-vegan-products",
-  "fully-vegan-shop",
-]);
-
 export const recommendationSchema = z.object({
   title: z.string().min(1),
   category: recommendationCategorySchema,
   url: z.string().url(),
   excerpt: z.string().min(12),
-  veganSupport: recommendationVeganSupportSchema,
+  isFullyVegan: z.boolean().optional(),
 });
 
 export type RecommendationCategory = z.infer<
   typeof recommendationCategorySchema
->;
-export type RecommendationVeganSupport = z.infer<
-  typeof recommendationVeganSupportSchema
 >;
 export type Recommendation = z.infer<typeof recommendationSchema>;

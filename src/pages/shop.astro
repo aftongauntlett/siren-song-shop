@@ -81,7 +81,7 @@ const byCategory = (category: RecommendationCategory) =>
                     name={item.title}
                     url={item.url}
                     description={item.excerpt}
-                    badges={item.veganSupport === 'fully-vegan-shop' ? ['100% Vegan Shop'] : []}
+                    badges={item.isFullyVegan ? ['100% Vegan'] : []}
                   />
                 </li>
               ))}

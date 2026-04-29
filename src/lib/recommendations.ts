@@ -51,7 +51,44 @@ const recommendations: Recommendation[] = [
     url: "https://cocoapink.net/",
     excerpt:
       "A playful indie fragrance and body-care shop with giant scent catalogs and serious cozy energy.",
-    veganSupport: "supports-vegan-products",
+  },
+  {
+    title: "Alkemia",
+    category: "bath-body",
+    url: "https://alkemiaperfumes.com/",
+    excerpt:
+      "Our alchemies are experimental perfumes blended intuitively for the season and with no written recipe. We release a new one every month.",
+    isFullyVegan: true,
+  },
+  {
+    title: "Little & Grim",
+    category: "bath-body",
+    url: "https://www.littleandgrim.com/",
+    excerpt:
+      "Handmade perfume, soap, and sundries for the weird and wonderful. A small, fully vegan indie shop with a huge catalog of unique scents and products.",
+    isFullyVegan: true,
+  },
+  {
+    title: "Fyrinnae",
+    category: "bath-body",
+    url: "https://fyrinnae.com/",
+    excerpt:
+      "A small indie cosmetics company with a huge catalog of cruelty-free, vegan-friendly makeup and body products.",
+    isFullyVegan: true,
+  },
+  {
+    title: "Loreworks",
+    category: "bath-body",
+    url: "https://www.realmoflore.com/",
+    excerpt:
+      "A small-batch indie perfumery with a huge catalog of cruelty-free, vegan-friendly bath and body scents inspired by folklore, history, and the natural world.",
+  },
+  {
+    title: "Hexennacht",
+    category: "bath-body",
+    url: "https://www.hexennacht.com/",
+    excerpt:
+      "Small-batch, cruelty-free perfumes, incense, and body care products are almost entirely vegan - with just a few exceptions made.",
   },
   {
     title: "Spoonflower",
@@ -59,7 +96,6 @@ const recommendations: Recommendation[] = [
     url: "https://www.spoonflower.com/",
     excerpt:
       "A maker-friendly marketplace for custom fabric and craft materials with tons of artist-made patterns.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "Rancho Gordo",
@@ -67,7 +103,15 @@ const recommendations: Recommendation[] = [
     url: "https://www.ranchogordo.com/",
     excerpt:
       "A beloved pantry source for heirloom beans and staples that make plant-forward cooking feel grounded and generous.",
-    veganSupport: "fully-vegan-shop",
+    isFullyVegan: true,
+  },
+  {
+    title: "UNLIMEAT",
+    category: "food-drinks",
+    url: "https://unlimeat.co/",
+    excerpt:
+      "Plant-Based Meat, Balanced Meal, Trendy Korean Dessert, K-Food. Explore bold, authentic Korean flavors with our plant-based meats, including vegan kimbap, bulgogi, and Korean fried chicken. Available in stores nationwide.",
+    isFullyVegan: true,
   },
   {
     title: "Rishi Tea",
@@ -75,7 +119,6 @@ const recommendations: Recommendation[] = [
     url: "https://rishi-tea.com/",
     excerpt:
       "Consistent, high-quality tea with clear sourcing and blends that hold up for both daily and ritual cups.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "Powell's Books",
@@ -83,7 +126,6 @@ const recommendations: Recommendation[] = [
     url: "https://www.powells.com/",
     excerpt:
       "An iconic independent bookstore with deep, thoughtfully curated catalogs and reliable picks beyond algorithmic bestsellers.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "Bookshop.org",
@@ -91,7 +133,13 @@ const recommendations: Recommendation[] = [
     url: "https://bookshop.org/",
     excerpt:
       "A practical way to buy books online while still supporting independent bookstores.",
-    veganSupport: "supports-vegan-products",
+  },
+  {
+    title: "Birds Before the Storm",
+    category: "media",
+    url: "https://margaretkilljoy.substack.com/",
+    excerpt:
+      "Individual and community preparedness. Memoirs of an anarchist life. Reflections on history. Click to read Birds Before the Storm, by Margaret Killjoy, a Substack publication with tens of thousands of subscribers.",
   },
   {
     title: "Known Supply",
@@ -99,7 +147,6 @@ const recommendations: Recommendation[] = [
     url: "https://knownsupply.com/",
     excerpt:
       "An everyday basics brand with transparent maker stories and a cleaner approach to wardrobe staples.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "The Peach Fuzz",
@@ -107,7 +154,6 @@ const recommendations: Recommendation[] = [
     url: "https://shop.thepeachfuzz.co/",
     excerpt:
       "Artist-made hair claws, accessories, and novelties with genuine anti-capitalist energy — 10% of every sale goes directly to mutual aid and community orgs.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "GheeBeans Crafty",
@@ -115,7 +161,6 @@ const recommendations: Recommendation[] = [
     url: "https://gheebeanscrafty.com/",
     excerpt:
       "Handmade crochet plushies — emotional support shrimp, sardines, banana slugs — and downloadable patterns. Charming in the best possible way.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "Cosmic Pocket",
@@ -123,7 +168,6 @@ const recommendations: Recommendation[] = [
     url: "https://www.instagram.com/cosmic.pocket/",
     excerpt:
       "A multi-media artist and colorist creating handmade original art in Ohio, sold through Instagram.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "Hot Mango Undies",
@@ -131,7 +175,6 @@ const recommendations: Recommendation[] = [
     url: "https://hotmangoundies.bigcartel.com/",
     excerpt:
       "Made-to-order undies and bralettes in fun, rotating fabrics. Small-batch and personal in a way that mass-produced basics never are.",
-    veganSupport: "supports-vegan-products",
   },
   {
     title: "Firestorm Books",
@@ -139,7 +182,6 @@ const recommendations: Recommendation[] = [
     url: "https://firestorm.coop/",
     excerpt:
       "A collectively-owned radical bookstore and community event space in Asheville, NC, building grassroots movements in Southern Appalachia since 2008.",
-    veganSupport: "supports-vegan-products",
   },
 ];
 
