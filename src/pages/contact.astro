@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ContactForm from '../components/ContactForm.astro';
+import ButtonLink from '../components/ButtonLink.astro';
 import mermaidImg from '../assets/mermaid.jpg';
 ---
 
@@ -31,9 +32,22 @@ import mermaidImg from '../assets/mermaid.jpg';
       <ContactForm />
     </div>
 
+    <aside class="discord-aside" aria-labelledby="discord-heading">
+      <p class="discord-eyebrow">Community</p>
+      <h2 id="discord-heading" class="discord-heading">We have a Discord.</h2>
+      <p class="discord-body">It's small on purpose. Come hang out, suggest finds, or just say hello.</p>
+      <ButtonLink href="https://discord.gg/7t8R99ng" target="_blank" rel="noopener noreferrer">
+        Join the Discord
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </ButtonLink>
+    </aside>
+
     <aside class="pppg-aside" aria-labelledby="pppg-heading">
       <p class="pppg-eyebrow">While you're here</p>
-      <h2 id="pppg-heading" class="pppg-heading">Need a site like this one?</h2>
+      <h2 id="pppg-heading" class="pppg-heading">Want a site like this one?</h2>
       <p class="pppg-body">We build thoughtful websites for artists, makers, and organisations doing good work — on sliding-scale fees, because good design shouldn't cost what most small orgs can afford. If that's you, we'd love to talk.</p>
       <a class="pppg-link" href="https://prettyprettyprettygood.org" target="_blank" rel="noopener noreferrer" aria-label="Visit Pretty Pretty Pretty Good (opens in new tab)">
         Learn more at Pretty Pretty Pretty Good
@@ -115,8 +129,51 @@ import mermaidImg from '../assets/mermaid.jpg';
     }
   }
 
+  .discord-aside {
+    margin: var(--space-8) 0 0;
+    padding: var(--space-8);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-soft);
+    background: var(--color-surface);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .discord-eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-accent-pop);
+  }
+
+  :root:not([data-theme='dark']) .discord-eyebrow {
+    color: var(--color-accent);
+  }
+
+  .discord-heading {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 400;
+    color: var(--color-text-strong);
+    line-height: 1.2;
+  }
+
+  .discord-body {
+    margin: 0;
+    max-width: 48ch;
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    font-size: 0.95rem;
+  }
+
   .pppg-aside {
-    margin: var(--space-16) 0 var(--space-16);
+    margin-top: var(--space-8);
     padding: var(--space-8);
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border-soft);
