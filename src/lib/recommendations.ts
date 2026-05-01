@@ -98,6 +98,21 @@ const recommendations: Recommendation[] = [
       "A maker-friendly marketplace for custom fabric and craft materials with tons of artist-made patterns.",
   },
   {
+    title: "Southern Exposure Seed Exchange",
+    category: "food-drinks",
+    url: "https://www.southernexposure.com/",
+    excerpt:
+      "A worker-owned cooperative offering heirloom and open-pollinated seeds suited to the South and Mid-Atlantic, with deep roots in seed sovereignty and regional food traditions since 1982.",
+    isFullyVegan: true,
+  },
+  {
+    title: "Black Farmers Index",
+    category: "food-drinks",
+    url: "https://blackfarmersindex.com/",
+    excerpt:
+      "A searchable directory of Black farmers, growers, and food producers across the US — built to make it easier to find and directly support Black-owned agricultural businesses near you.",
+  },
+  {
     title: "Rancho Gordo",
     category: "food-drinks",
     url: "https://www.ranchogordo.com/",
@@ -119,6 +134,13 @@ const recommendations: Recommendation[] = [
     url: "https://rishi-tea.com/",
     excerpt:
       "Consistent, high-quality tea with clear sourcing and blends that hold up for both daily and ritual cups.",
+  },
+  {
+    title: "TheStoryGraph",
+    category: "media",
+    url: "https://thestorygraph.com/",
+    excerpt:
+      "A reading tracker and book recommendation platform that's genuinely independent from Amazon — with mood-based stats, detailed trigger warnings, and community lists that go well beyond what Goodreads ever offered.",
   },
   {
     title: "Powell's Books",
