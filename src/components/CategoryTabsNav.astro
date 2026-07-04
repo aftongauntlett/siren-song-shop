@@ -10,12 +10,13 @@ interface Props {
   categories: CategoryNavItem[];
   ariaLabel: string;
   dropdownLabel: string;
+  wide?: boolean;
 }
 
-const { categories, ariaLabel, dropdownLabel } = Astro.props as Props;
+const { categories, ariaLabel, dropdownLabel, wide = false } = Astro.props as Props;
 ---
 
-<nav class="category-nav" aria-label={ariaLabel} data-category-nav>
+<nav class="category-nav" aria-label={ariaLabel} data-category-nav data-wide={wide}>
   <div class="category-dropdown" data-category-dropdown>
     <button
       type="button"
@@ -291,6 +292,17 @@ const { categories, ariaLabel, dropdownLabel } = Astro.props as Props;
 
   @media (max-width: 47.99rem) {
     .category-list {
+      display: none;
+    }
+  }
+
+  /* Navs with more/longer labels need extra room before the tab row fits without crowding. */
+  @media (min-width: 48rem) and (max-width: 63.99rem) {
+    [data-category-nav][data-wide='true'] .category-dropdown {
+      display: inline-flex;
+    }
+
+    [data-category-nav][data-wide='true'] .category-list {
       display: none;
     }
   }

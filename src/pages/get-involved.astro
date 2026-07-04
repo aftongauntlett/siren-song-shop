@@ -8,7 +8,13 @@ import CategoryTabsNav from '../components/CategoryTabsNav.astro';
 
 const allResources = await getCollection('resources');
 
-type ResourceTabId = 'work-good' | 'community-living' | 'volunteer-donate' | 'sliding-scale-support';
+type ResourceTabId =
+  | 'work-good'
+  | 'community-living'
+  | 'volunteer-donate'
+  | 'sliding-scale-support'
+  | 'art-artists'
+  | 'wild-yards';
 
 const categories: { id: ResourceTabId; label: string; description: string }[] = [
   {
@@ -30,6 +36,16 @@ const categories: { id: ResourceTabId; label: string; description: string }[] = 
     id: 'sliding-scale-support',
     label: 'Sliding Scale & Free Support',
     description: 'Known, easy-to-access support including free lines, sliding-scale care, and LGBTQIA+ affirming help.'
+  },
+  {
+    id: 'art-artists',
+    label: 'Art Worth Following',
+    description: 'Artists and studios worth a follow — mostly Instagram, mostly small and independent.'
+  },
+  {
+    id: 'wild-yards',
+    label: 'Native Plants & Wild Yards',
+    description: 'Wildflower gardens, natural yards, and native-plant resources for growing something a little wilder.'
   }
 ];
 
@@ -47,6 +63,14 @@ const byCategory = (id: ResourceTabId) => {
 
   if (id === 'sliding-scale-support') {
     return sortFeatured(allResources.filter((r) => r.data.category === 'support'));
+  }
+
+  if (id === 'art-artists') {
+    return sortFeatured(allResources.filter((r) => r.data.category === 'art'));
+  }
+
+  if (id === 'wild-yards') {
+    return sortFeatured(allResources.filter((r) => r.data.category === 'nature'));
   }
 
   return sortFeatured(
@@ -73,6 +97,7 @@ const byCategory = (id: ResourceTabId) => {
       categories={categories.map(({ id, label }) => ({ id, label }))}
       ariaLabel="Get involved categories"
       dropdownLabel="Select involvement category"
+      wide
     />
 
     {categories.map(({ id, label, description }, index) => {
