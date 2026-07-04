@@ -1,4 +1,6 @@
 ---
+import ButtonLink from './ButtonLink.astro';
+
 const curationCards = [
   {
     number: '01',
@@ -30,6 +32,9 @@ const curationCards = [
       </li>
     ))}
   </ol>
+  <div class="process-cta" data-reveal>
+    <ButtonLink href="/contact" variant="ghost">Recommend a Shop</ButtonLink>
+  </div>
 </section>
 
 <style>
@@ -122,5 +127,11 @@ const curationCards = [
     .process-list {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+  }
+
+  .process-cta {
+    display: flex;
+    justify-content: center;
+    margin: var(--space-6) 0 0;
   }
 </style>

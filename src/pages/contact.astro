@@ -5,7 +5,8 @@ import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ContactForm from '../components/ContactForm.astro';
 import ButtonLink from '../components/ButtonLink.astro';
-import mermaidImg from '../assets/mermaid.jpg';
+import ExternalLinkIcon from '../components/ExternalLinkIcon.astro';
+import allMadHereImg from '../assets/all-mad-here.jpg';
 ---
 
 <BaseLayout title="Contact | Siren Song Shop" description="Suggest a find or get in touch with the Siren Song Shop team.">
@@ -20,14 +21,19 @@ import mermaidImg from '../assets/mermaid.jpg';
     </section>
 
     <div class="contact-layout">
-      <div class="contact-image-wrap">
-        <Image
-          src={mermaidImg}
-          alt="A watercolour mermaid illustration"
-          width={700}
-          height={900}
-          class="contact-image"
-        />
+      <div class="contact-image-col">
+        <div class="contact-image-wrap">
+          <Image
+            src={allMadHereImg}
+            alt="A neon sign reading 'We're All Mad Here' glowing against a wall of purple leaves"
+            width={700}
+            height={900}
+            class="contact-image"
+          />
+        </div>
+        <p class="contact-image-credit">
+          Photo: <a href="https://unsplash.com/@derickray" target="_blank" rel="noopener noreferrer">Derick McKinney</a>
+        </p>
       </div>
       <ContactForm />
     </div>
@@ -36,15 +42,13 @@ import mermaidImg from '../assets/mermaid.jpg';
       <p class="discord-eyebrow">Community</p>
       <h2 id="discord-heading" class="discord-heading">We have a Discord.</h2>
       <p class="discord-body">It's small on purpose. Come hang out, suggest finds, or just say hello.</p>
-      <ButtonLink href="https://discord.gg/7t8R99ng" target="_blank" rel="noopener noreferrer">
+      <ButtonLink href="https://discord.gg/7t8R99ng" target="_blank" rel="noopener noreferrer" class="discord-button">
         Join the Discord
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <ExternalLinkIcon class="discord-icon" />
       </ButtonLink>
     </aside>
 
+    <!--
     <aside class="pppg-aside" aria-labelledby="pppg-heading">
       <p class="pppg-eyebrow">While you're here</p>
       <h2 id="pppg-heading" class="pppg-heading">Want a site like this one?</h2>
@@ -57,6 +61,7 @@ import mermaidImg from '../assets/mermaid.jpg';
         </svg>
       </a>
     </aside>
+    -->
   </main>
   <SiteFooter />
 </BaseLayout>
@@ -97,10 +102,37 @@ import mermaidImg from '../assets/mermaid.jpg';
     padding-bottom: var(--space-16);
   }
 
+  .contact-image-col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
   .contact-image-wrap {
+    flex: 1;
+    min-height: 0;
     border-radius: 1.5rem;
     overflow: hidden;
     box-shadow: var(--shadow-image-glow);
+  }
+
+  .contact-image-credit {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    text-align: center;
+  }
+
+  .contact-image-credit a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-text-muted) 35%, transparent);
+    transition: border-color 180ms ease;
+  }
+
+  .contact-image-credit a:hover {
+    border-color: color-mix(in oklab, var(--color-accent) 70%, transparent);
   }
 
   :root:not([data-theme='dark']) .contact-image-wrap {
@@ -130,7 +162,7 @@ import mermaidImg from '../assets/mermaid.jpg';
   }
 
   .discord-aside {
-    margin: var(--space-8) 0 0;
+    margin: var(--space-8) 0 var(--space-16);
     padding: var(--space-8);
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-border-soft);
@@ -170,6 +202,27 @@ import mermaidImg from '../assets/mermaid.jpg';
     color: var(--color-text-muted);
     line-height: 1.75;
     font-size: 0.95rem;
+  }
+
+  :global(.discord-icon) {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-inline-start: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.discord-icon) {
+      transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
+    }
+  }
+
+  :global(.discord-button:hover .discord-icon),
+  :global(.discord-button:focus-visible .discord-icon) {
+    width: 14px;
+    opacity: 1;
+    margin-inline-start: var(--space-1);
   }
 
   .pppg-aside {

@@ -139,8 +139,17 @@ export default function WaterCanvas() {
           p.y,
           radius * 2.5,
         );
-        grad.addColorStop(0, `hsla(${p.hue}, ${p.saturation}%, 72%, ${alpha})`);
-        grad.addColorStop(1, `hsla(${p.hue}, ${p.saturation - 10}%, 58%, 0)`);
+        const saturation = isDarkMode ? p.saturation : p.saturation - 25;
+        const innerLightness = isDarkMode ? 72 : 88;
+        const outerLightness = isDarkMode ? 58 : 78;
+        grad.addColorStop(
+          0,
+          `hsla(${p.hue}, ${saturation}%, ${innerLightness}%, ${alpha})`,
+        );
+        grad.addColorStop(
+          1,
+          `hsla(${p.hue}, ${saturation - 10}%, ${outerLightness}%, 0)`,
+        );
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius * 2.5, 0, Math.PI * 2);

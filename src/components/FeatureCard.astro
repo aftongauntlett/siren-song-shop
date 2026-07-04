@@ -1,4 +1,6 @@
 ---
+import ExternalLinkIcon from './ExternalLinkIcon.astro';
+
 interface Props {
   eyebrow: string;
   title: string;
@@ -26,12 +28,7 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
   <p>{description}</p>
   <span class="feature-cta" aria-hidden="true">
     {cta}
-    {external && (
-      <svg class="ext-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-    )}
+    {external && <ExternalLinkIcon class="ext-icon" />}
   </span>
 </a>
 
@@ -180,7 +177,7 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
     color: var(--color-text-muted);
   }
 
-  .ext-icon {
+  :global(.ext-icon) {
     width: 0;
     opacity: 0;
     overflow: hidden;
@@ -189,13 +186,13 @@ const { eyebrow, title, description, href, cta, external = false } = Astro.props
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .ext-icon {
+    :global(.ext-icon) {
       transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
     }
   }
 
-  .feature-card:hover .ext-icon,
-  .feature-card:focus-visible .ext-icon {
+  .feature-card:hover :global(.ext-icon),
+  .feature-card:focus-visible :global(.ext-icon) {
     width: 14px;
     opacity: 1;
     margin-inline-start: var(--space-1);

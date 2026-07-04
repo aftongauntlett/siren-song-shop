@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import ButtonLink from './ButtonLink.astro';
+import ExternalLinkIcon from './ExternalLinkIcon.astro';
 import cosmicImg from '../assets/cosmic.jpg';
 
 const shop = {
@@ -34,10 +35,7 @@ const shop = {
       <footer class="spotlight-footer">
         <ButtonLink href={shop.url} variant="ghost" target="_blank" rel="noopener noreferrer">
           Visit the Shop
-          <svg class="visit-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+          <ExternalLinkIcon class="visit-icon" />
         </ButtonLink>
       </footer>
     </div>
@@ -180,7 +178,7 @@ const shop = {
     color: var(--color-text-muted);
   }
 
-  .visit-icon {
+  :global(.visit-icon) {
     width: 0;
     opacity: 0;
     overflow: hidden;
@@ -189,13 +187,13 @@ const shop = {
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .visit-icon {
+    :global(.visit-icon) {
       transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
     }
   }
 
-  .spotlight-card:hover .visit-icon,
-  .spotlight-card:focus-visible .visit-icon {
+  .spotlight-card:hover :global(.visit-icon),
+  .spotlight-card:focus-visible :global(.visit-icon) {
     width: 14px;
     opacity: 1;
     margin-inline-start: var(--space-1);

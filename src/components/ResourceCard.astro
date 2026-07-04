@@ -1,4 +1,6 @@
 ---
+import ExternalLinkIcon from './ExternalLinkIcon.astro';
+
 interface Props {
   name: string;
   url: string;
@@ -45,10 +47,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
   </div>
   <span class="resource-link" aria-hidden="true">
     {displayUrl}
-    <svg class="resource-link-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M6 3h7v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-      <path d="M10 6L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
+    <ExternalLinkIcon class="resource-link-icon" />
   </span>
 </a>
 
@@ -214,7 +213,7 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
     color: var(--color-accent);
   }
 
-  .resource-link-icon {
+  :global(.resource-link-icon) {
     width: 0;
     opacity: 0;
     overflow: hidden;
@@ -223,13 +222,13 @@ const displayUrl = _parsedUrl.hostname.replace(/^www\./, '') + (_parsedUrl.pathn
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .resource-link-icon {
+    :global(.resource-link-icon) {
       transition: width 220ms ease, opacity 220ms ease, margin-inline-start 220ms ease;
     }
   }
 
-  .resource-card:hover .resource-link-icon,
-  .resource-card:focus-visible .resource-link-icon {
+  .resource-card:hover :global(.resource-link-icon),
+  .resource-card:focus-visible :global(.resource-link-icon) {
     width: 14px;
     opacity: 1;
     margin-inline-start: var(--space-1);

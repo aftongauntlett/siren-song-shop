@@ -40,6 +40,7 @@ const navLinks = [
       </p>
       <p class="footer-copy">© {new Date().getFullYear()} Siren Song Shop</p>
       <span class="built-by">built by <a href="https://www.prettyprettyprettygood.org/" rel="noopener noreferrer" target="_blank">prettyprettyprettygood</a></span>
+      <span class="footer-kofi"><a href="https://ko-fi.com/prettyprettyprettygood" rel="noopener noreferrer" target="_blank">Support on Ko-fi</a></span>
     </div>
   </div>
 </footer>
@@ -199,7 +200,8 @@ const navLinks = [
 
     .footer-identity,
     .footer-copy,
-    .built-by {
+    .built-by,
+    .footer-kofi {
       justify-content: center;
       text-align: center;
     }
@@ -218,5 +220,25 @@ const navLinks = [
 
   .built-by a:hover {
     color: var(--color-text-strong);
+  }
+
+  .footer-kofi {
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    text-align: right;
+    white-space: nowrap;
+    order: 4;
+  }
+
+  .footer-kofi a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-text-muted) 35%, transparent);
+    transition: color 180ms ease, border-color 180ms ease;
+  }
+
+  .footer-kofi a:hover {
+    color: var(--color-accent-pop);
+    border-color: color-mix(in oklab, var(--color-accent-pop) 70%, transparent);
   }
 </style>
