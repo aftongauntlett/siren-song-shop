@@ -47,7 +47,7 @@ Current recommendation ecosystems are saturated with dropshipped, low-trust list
 
 - Home page featuring curated recommendation cards
 - Gift guide/editorial section backed by Astro Content Collections
-- Contact API endpoint with input validation and Resend email delivery
+- Contact form submitted directly to Formspree, protected by Cloudflare Turnstile
 - Theme token system in `src/styles/theme.css`
 - Reusable Astro component architecture in `src/components/`
 
@@ -62,7 +62,7 @@ Current recommendation ecosystems are saturated with dropshipped, low-trust list
 ## Success Metrics
 
 - Editorial publishing workflow usable without code changes
-- Submissions reliably delivered through Resend
+- Submissions reliably delivered through Formspree
 - Build, lint, and tests pass in CI
 - Users can discover recommendations quickly and trust the voice behind them
 

@@ -1,5 +1,6 @@
 ---
 const contactStatus = Astro.url.searchParams.get('contact');
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <section id="contact-form" aria-labelledby="contact-heading" class="contact">
@@ -20,14 +21,14 @@ const contactStatus = Astro.url.searchParams.get('contact');
   )}
 
   {contactStatus !== 'sent' && (
-    <form action="/api/contact" method="post">
-      {/* Honeypot — visually hidden, must remain empty */}
+    <form action="https://formspree.io/f/mykrgjyk" method="post">
+      {/* Honeypot — visually hidden, must remain empty. Formspree ignores submissions where this is filled. */}
       <div class="hp-field" aria-hidden="true">
-        <label for="project-url">
+        <label for="gotcha-field">
           Leave this blank
           <input
-            id="project-url"
-            name="project-url"
+            id="gotcha-field"
+            name="_gotcha"
             type="text"
             autocomplete="off"
             tabindex="-1"
@@ -35,7 +36,8 @@ const contactStatus = Astro.url.searchParams.get('contact');
         </label>
       </div>
 
-      <input type="hidden" id="form-started-at" name="form-started-at" value="" />
+      <input type="hidden" name="_next" value="/contact?contact=sent#contact-form" />
+      <input type="hidden" name="_subject" value="New message via Siren Song contact form" />
 
       <div class="field">
         <label for="name">
@@ -80,25 +82,25 @@ const contactStatus = Astro.url.searchParams.get('contact');
             <ul class="select-options">
               <li>
                 <label class="option-label">
-                  <input type="radio" name="reason" value="request_add" class="option-radio" required />
+                  <input type="radio" name="reason" value="Request shop be added" class="option-radio" required />
                   Request your shop be added
                 </label>
               </li>
               <li>
                 <label class="option-label">
-                  <input type="radio" name="reason" value="suggest_resource" class="option-radio" />
+                  <input type="radio" name="reason" value="Suggest a shop or resource" class="option-radio" />
                   Suggest a shop or resource
                 </label>
               </li>
               <li>
                 <label class="option-label">
-                  <input type="radio" name="reason" value="request_remove" class="option-radio" />
+                  <input type="radio" name="reason" value="Request a shop be removed / report a shop" class="option-radio" />
                   Request a shop be removed / report a shop
                 </label>
               </li>
               <li>
                 <label class="option-label">
-                  <input type="radio" name="reason" value="general" class="option-radio" />
+                  <input type="radio" name="reason" value="General question" class="option-radio" />
                   General question
                 </label>
               </li>
@@ -148,20 +150,27 @@ const contactStatus = Astro.url.searchParams.get('contact');
         </button>
       </fieldset>
 
+      <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+
       <button type="submit" id="contact-submit">Send message</button>
     </form>
   )}
 </section>
 
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 <script>
-  const startedAtField = document.getElementById('form-started-at') as HTMLInputElement | null;
-  if (startedAtField) startedAtField.value = String(Date.now());
+  declare global {
+    interface Window {
+      turnstile?: { reset: (widget?: string | HTMLElement) => void };
+    }
+  }
 
   // Custom select
   const sel = document.getElementById('reason-select') as HTMLDetailsElement | null;
   const display = sel?.querySelector('.select-display');
   const radios = document.querySelectorAll<HTMLInputElement>('input[name="reason"]');
-  const form = document.querySelector<HTMLFormElement>('form[action="/api/contact"]');
+  const form = document.querySelector<HTMLFormElement>('#contact-form form');
   const submitButton = document.getElementById('contact-submit') as HTMLButtonElement | null;
   const statusEl = document.getElementById('contact-status') as HTMLDivElement | null;
   const statusMessageEl = document.getElementById('contact-status-message') as HTMLParagraphElement | null;
@@ -230,7 +239,6 @@ const contactStatus = Astro.url.searchParams.get('contact');
         method: 'POST',
         body: new FormData(form),
         headers: {
-          'x-contact-ajax': '1',
           Accept: 'application/json',
         },
       });
@@ -245,6 +253,7 @@ const contactStatus = Astro.url.searchParams.get('contact');
         submitButton.textContent = 'Message sent';
       }
     } catch {
+      window.turnstile?.reset();
       showStatus('Something went wrong sending your message. Please try again in a moment.', 'error');
       if (submitButton) {
         submitButton.disabled = false;
